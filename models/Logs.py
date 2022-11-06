@@ -1,6 +1,6 @@
 from mongoengine import *
 
 class Logs(DynamicDocument):
-  code = StringField()
+  data = DynamicField()
 
   meta = {"db_alias": "ministryDB"}

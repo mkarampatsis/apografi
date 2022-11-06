@@ -18,7 +18,7 @@ class FekDoc(EmbeddedDocument):
   issue = StringField()
   
 
-class Foreis(Document):
+class Organizations(Document):
   code = StringField(required=True, unique=True)
   preferredLabel = StringField()
   alternativeLabels = ListField(StringField(max_length=200))
@@ -31,5 +31,6 @@ class Foreis(Document):
   foundationDate = DateTimeField(null=True)
   terminationDate = DateTimeField(null=True)
   foundationFek = EmbeddedDocumentField(FekDoc)
+  organization_units = IntField()
   
   meta = {"db_alias": "ministryDB"}

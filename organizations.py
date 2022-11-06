@@ -116,7 +116,7 @@ def batch_run():
 
     for organization in organizations:
         code = organization['code']
-        processForeis(code, organizationTypes, unitTypes, functionalAreas, functions, organizations)
+        processOrganizations(code, organizationTypes, unitTypes, functionalAreas, functions, organizations)
     
     log['end'] = datetime.now()
     Logs(data=log).save()

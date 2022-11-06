@@ -17,7 +17,7 @@ APOGRAFI = "https://hr.apografi.gov.gr/api/public"
 APOGRAFI_DICTS = f"{APOGRAFI}/metadata/dictionary"
 
 URL_ALL_FOREIS = f"{APOGRAFI}/organizations"
-URL_MONADES = f"{APOGRAFI}/organizations"
+URL_MONADES = f"{APOGRAFI}/organizational-units?organizationCode=%s"
 
 URL_ORGANIZATIONTYPES = f"{APOGRAFI_DICTS}/OrganizationTypes"
 URL_UNITTYPES = f"{APOGRAFI_DICTS}/UnitTypes"
@@ -33,12 +33,13 @@ def processForeis(code, organizationTypes, unitTypes, functionalAreas, functions
     organizationType = [x for x in organizationTypes if x['id'] == forea_details['organizationType']]
     forea_details['organizationType']=organizationType[0]
 
-    # for x in foreis:
-    #     if x['code'] == forea_details['subOrganizationOf']:
-    #         print (">>",x)
     if forea_details.get('subOrganizationOf'):
-        subOrganizationOf = [x for x in foreis if x['code'] == forea_details['subOrganizationOf']]
-        forea_details['subOrganizationOf']={'code': subOrganizationOf[0]['code'], 'preferredLabel': subOrganizationOf[0]['preferredLabel']}
+        subOrganizationOf = requests.get(url=URL_DETAIL_FOREA %forea_details['subOrganizationOf']).json()['data']
+        forea_details['subOrganizationOf']={'code': subOrganizationOf['code'], 'preferredLabel': subOrganizationOf['preferredLabel']}
+        # print (forea_details)
+        # sys.exit()
+        # subOrganizationOf = [x for x in foreis if x['code'] == forea_details['subOrganizationOf']]
+        # forea_details['subOrganizationOf']={'code': subOrganizationOf[0]['code'], 'preferredLabel': subOrganizationOf[0]['preferredLabel']}
 
     purposeArray = []
     if forea_details.get('purpose'):
@@ -77,8 +78,8 @@ def processForeis(code, organizationTypes, unitTypes, functionalAreas, functions
         #diff = DeepDiff(foreas, item, exclude_paths=["root['foundationDate']", "root['terminationDate']"])
         diff = DeepDiff(foreas, item)
         if diff:
-            # Logs(**diff).save()
-            print(diff)
+            Logs(**diff).save()
+            #print(diff)
         
         # sys.exit()
         Foreis.objects(code=forea_details['code']).update_one(**item)

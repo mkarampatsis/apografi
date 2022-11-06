@@ -28,7 +28,7 @@ URL_DETAIL_FOREA  = f"{APOGRAFI}/organizations/%s"
 def processForeis(code, organizationTypes, unitTypes, functionalAreas, functions, foreis):
     forea_details = requests.get(url=URL_DETAIL_FOREA %code).json()['data']
 
-    print (forea_details)
+    # print (forea_details)
         
     organizationType = [x for x in organizationTypes if x['id'] == forea_details['organizationType']]
     forea_details['organizationType']=organizationType[0]
@@ -68,8 +68,10 @@ def processForeis(code, organizationTypes, unitTypes, functionalAreas, functions
         
         foreas = json.loads(foreas.to_json())
         del foreas["_id"]
-        date = datetime.fromtimestamp(int(foreas["foundationDate"]['$date'])/1000).strftime('%Y-%m-%d')
-        foreas['foundationDate'] = date
+
+        if foreas.get("foundationDate"):
+            date = datetime.fromtimestamp(int(foreas["foundationDate"]['$date'])/1000).strftime('%Y-%m-%d')
+            foreas['foundationDate'] = date
         
         if foreas.get("terminationDate"):
             date = datetime.fromtimestamp(int(foreas["terminationDate"]['$date'])/1000).strftime('%Y-%m-%d')

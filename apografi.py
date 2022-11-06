@@ -1,7 +1,14 @@
 # importing the requests library
 import requests
-from models.Foreis import Foreis
+import json
+import sys
 from connection import get_database
+from pprint import *
+from deepdiff import DeepDiff
+from datetime import datetime
+
+from models.Foreis import Foreis
+from models.Logs import Logs
 
 dbname = get_database()
 
@@ -41,7 +48,6 @@ for forea in foreis:
         purposeArray.append(purpose[0])
         
     forea_details['purpose']=purposeArray
-    print (forea_details)
     item = {
         "code" : forea_details['code'],
         "preferredLabel" : forea_details['preferredLabel'],
@@ -57,4 +63,27 @@ for forea in foreis:
         "foundationFek" : forea_details['foundationFek'] if forea_details.get('foundationFek') else {}
     }
 
-    Foreis(**item).save()
+    try:
+        foreas = Foreis.objects.get(code=forea_details['code'])
+        print ("Foreas %s exist" %forea_details['code'])
+        
+        foreas = json.loads(foreas.to_json())
+        del foreas["_id"]
+        date = datetime.fromtimestamp(int(foreas["foundationDate"]['$date'])/1000).strftime('%Y-%m-%d')
+        foreas['foundationDate'] = date
+        
+        if foreas.get("terminationDate"):
+            date = datetime.fromtimestamp(int(foreas["terminationDate"]['$date'])/1000).strftime('%Y-%m-%d')
+            foreas['terminationDate'] = date
+
+        #diff = DeepDiff(foreas, item, exclude_paths=["root['foundationDate']", "root['terminationDate']"])
+        diff = DeepDiff(foreas, item)
+        if diff:
+            # Logs(**diff).save()
+            print(diff)
+        
+        # sys.exit()
+        Foreis.objects(code=forea_details['code']).update_one(**item)
+    except Foreis.DoesNotExist:
+        print("Foreas %s is new" %forea_details['code'])
+        Foreis(**item).save()

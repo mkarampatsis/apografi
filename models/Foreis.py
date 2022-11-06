@@ -33,16 +33,3 @@ class Foreis(Document):
   foundationFek = EmbeddedDocumentField(FekDoc)
   
   meta = {"db_alias": "ministryDB"}
-  
-  # try:
-  #   foreis = {
-  #     # "email": "username@somewhere.com",
-  #     "first_name": "It's supercalifragilisticexpialidocious even though the sound of it",
-  #     "last_name": "is something quite atrocious if you say it loud enough you'll always sound precocious",
-  #   }
-  #   User(**user).save()
-  # except ValidationError as exc:
-  #   print("Εντοπίστηκαν λάθη ορθότητας στα πεδία:")
-  
-  # for field, message in exc.errors.items():
-  #   print("{}: {}".format(field, message))

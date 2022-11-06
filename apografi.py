@@ -13,14 +13,15 @@ from models.Logs import Logs
 dbname = get_database()
 
 # api-endpoints
-URL_ALL_FOREIS = "https://hr.apografi.gov.gr/api/public/organizations"
-URL_MONADES = "https://hr.apografi.gov.gr/api/public/organizations"
+APOGRAFI = "https://hr.apografi.gov.gr/api/public"
+URL_ALL_FOREIS = f"{APOGRAFI}/organizations"
+URL_MONADES = f"{APOGRAFI}/organizations"
 
-URL_ORGANIZATIONTYPES="https://hr.apografi.gov.gr/api/public//metadata/dictionary/OrganizationTypes"
-URL_UNITTYPES="https://hr.apografi.gov.gr/api/public//metadata/dictionary/UnitTypes"
-URL_FUNCTIONALAREAS="https://hr.apografi.gov.gr/api/public//metadata/dictionary/FunctionalAreas"
-URL_FUNCTIONS="https://hr.apografi.gov.gr/api/public//metadata/dictionary/Functions"
-URL_DETAIL_FOREA ="https://hr.apografi.gov.gr/api/public/organizations/%s"
+URL_ORGANIZATIONTYPES = f"{APOGRAFI}/metadata/dictionary/OrganizationTypes"
+URL_UNITTYPES = f"{APOGRAFI}/metadata/dictionary/UnitTypes"
+URL_FUNCTIONALAREAS = f"{APOGRAFI}/metadata/dictionary/FunctionalAreas"
+URL_FUNCTIONS = f"{APOGRAFI}/metadata/dictionary/Functions"
+URL_DETAIL_FOREA  = f"{APOGRAFI}/organizations/%s"
 
 organizationTypes = requests.get(url=URL_ORGANIZATIONTYPES).json()['data']
 unitTypes = requests.get(url=URL_UNITTYPES).json()['data']

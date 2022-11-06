@@ -13,16 +13,6 @@ from models.Logs import Logs
 
 dbname = get_database()
 
-# api-endpoints
-URL_ALL_FOREIS = "https://hr.apografi.gov.gr/api/public/organizations"
-URL_MONADES = "https://hr.apografi.gov.gr/api/public/organizations"
-
-URL_ORGANIZATIONTYPES="https://hr.apografi.gov.gr/api/public//metadata/dictionary/OrganizationTypes"
-URL_UNITTYPES="https://hr.apografi.gov.gr/api/public//metadata/dictionary/UnitTypes"
-URL_FUNCTIONALAREAS="https://hr.apografi.gov.gr/api/public//metadata/dictionary/FunctionalAreas"
-URL_FUNCTIONS="https://hr.apografi.gov.gr/api/public//metadata/dictionary/Functions"
-URL_DETAIL_FOREA ="https://hr.apografi.gov.gr/api/public/organizations/%s"
-
 def processForeis(code, organizationTypes, unitTypes, functionalAreas, functions, foreis):
     forea_details = requests.get(url=URL_DETAIL_FOREA %code).json()['data']
 

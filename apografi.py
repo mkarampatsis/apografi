@@ -6,6 +6,7 @@ from connection import get_database
 from pprint import *
 from deepdiff import DeepDiff
 from datetime import datetime
+from datetime import timedelta
 import argparse
 
 from models.Foreis import Foreis
@@ -70,7 +71,11 @@ def processForeis(code, organizationTypes, unitTypes, functionalAreas, functions
         del foreas["_id"]
 
         if foreas.get("foundationDate"):
-            date = datetime.fromtimestamp(int(foreas["foundationDate"]['$date'])/1000).strftime('%Y-%m-%d')
+            if foreas["foundationDate"]["$date"]:
+                date = (datetime(1970, 1, 1) + timedelta(seconds=(int(foreas["foundationDate"]['$date'])/1000))).strftime('%Y-%m-%d')
+                sys.exit()
+            else:
+                date = datetime.fromtimestamp(int(foreas["foundationDate"]['$date'])/1000).strftime('%Y-%m-%d')
             foreas['foundationDate'] = date
         
         if foreas.get("terminationDate"):

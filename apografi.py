@@ -22,7 +22,7 @@ URL_MONADES = f"{APOGRAFI}/organizations"
 URL_ORGANIZATIONTYPES = f"{APOGRAFI_DICTS}/OrganizationTypes"
 URL_UNITTYPES = f"{APOGRAFI_DICTS}/UnitTypes"
 URL_FUNCTIONALAREAS = f"{APOGRAFI_DICTS}/FunctionalAreas"
-URL_FUNCTIONS = f"{APOGRAFI}_DICTS/Functions"
+URL_FUNCTIONS = f"{APOGRAFI_DICTS}/Functions"
 URL_DETAIL_FOREA  = f"{APOGRAFI}/organizations/%s"
 
 organizationTypes = requests.get(url=URL_ORGANIZATIONTYPES).json()['data']

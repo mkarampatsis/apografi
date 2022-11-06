@@ -14,13 +14,15 @@ dbname = get_database()
 
 # api-endpoints
 APOGRAFI = "https://hr.apografi.gov.gr/api/public"
+APOGRAFI_DICTS = f"{APOGRAFI}/metadata/dictionary"
+
 URL_ALL_FOREIS = f"{APOGRAFI}/organizations"
 URL_MONADES = f"{APOGRAFI}/organizations"
 
-URL_ORGANIZATIONTYPES = f"{APOGRAFI}/metadata/dictionary/OrganizationTypes"
-URL_UNITTYPES = f"{APOGRAFI}/metadata/dictionary/UnitTypes"
-URL_FUNCTIONALAREAS = f"{APOGRAFI}/metadata/dictionary/FunctionalAreas"
-URL_FUNCTIONS = f"{APOGRAFI}/metadata/dictionary/Functions"
+URL_ORGANIZATIONTYPES = f"{APOGRAFI_DICTS}/OrganizationTypes"
+URL_UNITTYPES = f"{APOGRAFI_DICTS}/UnitTypes"
+URL_FUNCTIONALAREAS = f"{APOGRAFI_DICTS}/FunctionalAreas"
+URL_FUNCTIONS = f"{APOGRAFI}_DICTS/Functions"
 URL_DETAIL_FOREA  = f"{APOGRAFI}/organizations/%s"
 
 organizationTypes = requests.get(url=URL_ORGANIZATIONTYPES).json()['data']

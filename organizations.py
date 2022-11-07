@@ -35,13 +35,14 @@ def processOrganizations(code, organizationTypes, unitTypes, functionalAreas, fu
     organization_details['organizationType']=organizationType[0]
 
     if organization_details.get('subOrganizationOf'):
-        subOrganizationOf = requests.get(url=URL_DETAIL_ORGANIZATION %organization_details['subOrganizationOf']).json()['data']
+        subOrganizationOf = [x for x in organizations if x['code'] == organization_details['subOrganizationOf']]
+        if not subOrganizationOf:
+            subOrganizationOf = requests.get(url=URL_DETAIL_ORGANIZATION %organization_details['subOrganizationOf']).json()['data']
+        
         organization_details['subOrganizationOf']={'code': subOrganizationOf['code'], 'preferredLabel': subOrganizationOf['preferredLabel']}
         # print (organization_details)
         # sys.exit()
-        # subOrganizationOf = [x for x in organizations if x['code'] == organization_details['subOrganizationOf']]
-        # organization_details['subOrganizationOf']={'code': subOrganizationOf[0]['code'], 'preferredLabel': subOrganizationOf[0]['preferredLabel']}
-
+        
     purposeArray = []
     if organization_details.get('purpose'):
         purpose = [x for x in functions if x['id'] in organization_details['purpose']]

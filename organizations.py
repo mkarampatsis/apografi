@@ -48,14 +48,15 @@ def processOrganizations(code, organizationTypes, unitTypes, functionalAreas, fu
     if organization_details.get('purpose'):
         purpose = [x for x in functions if x['id'] in organization_details['purpose']]
         purposeArray.append(purpose[0])
-    
+    organization_details['purpose']=purposeArray
+
     organization_units = requests.get(url=URL_ORGANIZATIONS_UNITS %code).json()
     if organization_units.get('data'):
         organization_units = len(organization_units['data'])
     else:
         organization_units=0
 
-    organization_details['purpose']=purposeArray
+    
     
     item = {
         "code" : organization_details['code'],
@@ -97,9 +98,8 @@ def processOrganizations(code, organizationTypes, unitTypes, functionalAreas, fu
         if diff:
             Logs(data=str(diff)).save()
             #print(diff)
-        
-        # sys.exit()
-        Organizations.objects(code=organization_details['code']).update_one(**item)
+            # sys.exit()
+            Organizations.objects(code=organization_details['code']).update_one(**item)
     except Organizations.DoesNotExist:
         print("Organization %s is new" %organization_details['code'])
         Organizations(**item).save()

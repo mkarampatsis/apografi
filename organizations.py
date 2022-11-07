@@ -38,8 +38,9 @@ def processOrganizations(code, organizationTypes, unitTypes, functionalAreas, fu
         subOrganizationOf = [x for x in organizations if x['code'] == organization_details['subOrganizationOf']]
         if not subOrganizationOf:
             subOrganizationOf = requests.get(url=URL_DETAIL_ORGANIZATION %organization_details['subOrganizationOf']).json()['data']
-        
-        organization_details['subOrganizationOf']={'code': subOrganizationOf['code'], 'preferredLabel': subOrganizationOf['preferredLabel']}
+            organization_details['subOrganizationOf']={'code': subOrganizationOf['code'], 'preferredLabel': subOrganizationOf['preferredLabel']}
+        else:
+            organization_details['subOrganizationOf']={'code': subOrganizationOf[0]['code'], 'preferredLabel': subOrganizationOf[0]['preferredLabel']}
         # print (organization_details)
         # sys.exit()
         
@@ -117,6 +118,7 @@ def batch_run():
 
     for organization in organizations:
         code = organization['code']
+        print(code)
         processOrganizations(code, organizationTypes, unitTypes, functionalAreas, functions, organizations)
     
     log['end'] = datetime.now()

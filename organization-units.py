@@ -85,7 +85,7 @@ def processOrganizations(organization, unitTypes, functions):
         Organization_Units(**item).save()
 
 def batch_iterator():
-    organizations = Organization_Units.objects(organization_units>0)
+    organizations = Organization_Units.objects(organization_units__gt=1)
     for organization in organizations:
         yield organization
 

@@ -55,7 +55,8 @@ def processOrganizations(organization, unitTypes, functions):
         unit.pop('telephone', None)
         unit.pop('url', None)
         unit.pop('mainAddress', None)
-
+        unit.pop('secondaryAddresses', None)
+        
         # print(unit)   
     
     item = {

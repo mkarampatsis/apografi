@@ -36,8 +36,13 @@ def processOrganizations(organization, unitTypes, functions):
 
         purposeArray = []
         if unit.get('purpose'):
-            purpose = [x for x in functions if x['id'] in unit['purpose']]
-            purposeArray.append(purpose[0])
+            for u in unit['purpose']:
+                purpose = [x for x in functions if x['id'] == u]
+                if purpose:
+                    purposeArray.append(purpose[0])
+                else:
+                    purposeArray.append({'id': u, 'description': 'NotExist'})
+                            
         unit['purpose']=purposeArray
 
         if unit.get('supervisorUnitCode'):
@@ -63,7 +68,8 @@ def processOrganizations(organization, unitTypes, functions):
         "description" : organization['description'],
         "units":organization_units
     }
-    print(item)
+    # print(item)
+    # sys.exit()
     try:
         organization = Organization_Units.objects.get(code=code)
         print ("Organization %s exist" %code)
@@ -85,8 +91,7 @@ def processOrganizations(organization, unitTypes, functions):
         Organization_Units(**item).save()
 
 def batch_iterator():
-    organizations = Organization_Units.objects(organization_units__gt=1)
-    organizations=json.loads(organizations.to_json())
+    organizations = Organizations.objects(organization_units__gt=1)
     for organization in organizations:
         yield organization
 
@@ -100,6 +105,7 @@ def batch_run():
 
     for item in batch_iterator():
         organization = json.loads(item.to_json())
+        # print (item)
         code = organization['code']
         print(code)
         processOrganizations(organization, unitTypes, functions)

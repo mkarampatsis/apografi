@@ -86,6 +86,7 @@ def processOrganizations(organization, unitTypes, functions):
 
 def batch_iterator():
     organizations = Organization_Units.objects(organization_units__gt=1)
+    organizations=json.loads(organizations.to_json())
     for organization in organizations:
         yield organization
 

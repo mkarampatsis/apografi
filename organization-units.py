@@ -83,9 +83,9 @@ def processOrganizations(organization, unitTypes, functions):
         if diff:
             Logs(data=str(diff)).save()
             #print(diff)
+            # sys.exit()
+            Organization_Units.objects(code=code).update_one(**item)
         
-        # sys.exit()
-        Organization_Units.objects(code=code).update_one(**item)
     except Organization_Units.DoesNotExist:
         print("Organization %s is new" %code)
         Organization_Units(**item).save()

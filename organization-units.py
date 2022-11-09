@@ -82,7 +82,7 @@ def processOrganizations(organization, unitTypes, functions):
         diff = DeepDiff(organization, item)
         # print (diff)
         if diff:
-            Logs(data=str(diff)).save()
+            Logs(data=diff).save()
             #print(diff)
             # sys.exit()
             Organization_Units.objects(code=code).update_one(**item)

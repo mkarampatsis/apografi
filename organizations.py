@@ -94,9 +94,9 @@ def processOrganizations(code, organizationTypes, unitTypes, functionalAreas, fu
 
         #diff = DeepDiff(organization, item, exclude_paths=["root['foundationDate']", "root['terminationDate']"])
         diff = DeepDiff(organization, item)
-        # print (diff)
+        print (diff)
         if diff:
-            Logs(data=str(diff)).save()
+            Logs(data=diff).save()
             #print(diff)
             # sys.exit()
             Organizations.objects(code=organization_details['code']).update_one(**item)

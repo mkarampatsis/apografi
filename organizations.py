@@ -64,13 +64,13 @@ def processOrganizations(code, organizationTypes, unitTypes, functionalAreas, fu
         "alternativeLabels" : organization_details['alternativeLabels'] if organization_details.get('alternativeLabels') else [],
         "purpose" : organization_details['purpose'],
         "identifier" : organization_details['identifier'] if organization_details.get('identifier') else '',
-        "subOrganizationOf" : organization_details['subOrganizationOf'] if organization_details.get('subOrganizationOf') else {},
+        "subOrganizationOf" : organization_details['subOrganizationOf'] if organization_details.get('subOrganizationOf') else None,
         "organizationType"  : organization_details['organizationType'],
         "description" : organization_details['description'] if organization_details.get('description') else '',
         "status" : organization_details['status'] if organization_details.get('status') else '',
         "foundationDate" : organization_details['foundationDate'] if organization_details.get('foundationDate') else None,
         "terminationDate" : organization_details['terminationDate'] if organization_details.get('terminationDate') else None,
-        "foundationFek" : organization_details['foundationFek'] if organization_details.get('foundationFek') else {},
+        "foundationFek" : organization_details['foundationFek'] if organization_details.get('foundationFek') else None,
         "organization_units":organization_units
     }
 

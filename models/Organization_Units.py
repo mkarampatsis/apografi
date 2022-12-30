@@ -20,6 +20,31 @@ class supervisorUnitCodeDoc(EmbeddedDocument):
   code = StringField()
   preferredLabel = StringField()
 
+class CountryDoc(EmbeddedDocument):
+  id = IntField()
+  description = StringField()
+  
+class CityDoc(EmbeddedDocument):
+  id = IntField()
+  description = StringField()
+  parentId = IntField()
+
+class SpatialDoc(EmbeddedDocument):
+  country = EmbeddedDocumentField(CountryDoc)
+  city = EmbeddedDocumentField(CityDoc)
+
+class MainAddressDoc(EmbeddedDocument):
+  fullAddress = StringField()
+  postCode = StringField()
+  country = EmbeddedDocumentField(CountryDoc)  
+  city = EmbeddedDocumentField(CityDoc)
+
+class SecondaryAddressesDoc(EmbeddedDocument):
+  fullAddress = StringField()
+  postCode = StringField()
+  country = EmbeddedDocumentField(CountryDoc)  
+  city = EmbeddedDocumentField(CityDoc)
+
 class Units(EmbeddedDocument):
   code = StringField()
   organizationCode = StringField()
@@ -29,6 +54,12 @@ class Units(EmbeddedDocument):
   description = StringField()
   unitType = EmbeddedDocumentField(UnitTypeDoc)
   supervisorUnitCode = EmbeddedDocumentField(supervisorUnitCodeDoc, null=True)
+  spatial = EmbeddedDocumentListField(SpatialDoc)
+  email = StringField()
+  telephone = StringField()
+  url = StringField()
+  mainAddress = EmbeddedDocumentField(MainAddressDoc)
+  secondaryAddresses = EmbeddedDocumentListField(SecondaryAddressesDoc)
  
 class Organization_Units(Document):
   code = StringField(required=True, unique=True)

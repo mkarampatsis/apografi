@@ -30,6 +30,8 @@ def processOrganizations(organization, unitTypes, functions, countries, cities):
   code = organization['code']
   organization_units = requests.get(url=URL_ORGANIZATION_UNITS %code).json()['data']
 
+  # print(">>>",organization)
+
   for unit in organization_units:
     # print(unit)
     unitType = [x for x in unitTypes if x['id'] == unit['unitType']]

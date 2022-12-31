@@ -58,7 +58,7 @@ class Organizations(Document):
   purpose = EmbeddedDocumentListField(PurposeDoc)
   spatial = EmbeddedDocumentListField(SpatialDoc)
   identifier = StringField()
-  subOrganizationOf = EmbeddedDocumentField(SubOrganizationDoc)
+  subOrganizationOf = EmbeddedDocumentField(SubOrganizationDoc, null=True)
   organizationType  = EmbeddedDocumentField(OrganizationDoc)
   description = StringField()
   status = StringField()

@@ -60,28 +60,28 @@ def processOrganizations(organization, unitTypes, functions, countries, cities):
     spatialArray = []
     if unit.get('spatial'):
       for s in unit.get('spatial'):
-        spatialCountry = [x for x in countries if x['id'] == s['countryId']]
-        spatialCity = [x for x in cities if x['id'] == s['countryId']]
-        if not spatialCountry or not spatialCity:
-          spatialArray.append({ 'country': {'id': 0, 'description':'NotExist'}, 'city': {'id': 0, 'description':'NotExist', 'parentId':17238} })
-        else:
-          spatialArray.append({ 'country': spatialCountry[0], 'city': spatialCity[0] })
+        country = [x for x in countries if x['id'] == s['countryId']]
+        city = [x for x in cities if x['id'] == s['countryId']]
+        spatialArray.append({ 
+          'country': country[0] if country else None, 
+          'city': city[0] if city else None 
+        })
     unit['spatial']=spatialArray
 
     if unit.get('mainAddress'):
       if unit['mainAddress'].get('adminUnitLevel1'):
-        mainCountry = [x for x in countries if x['id'] == unit['mainAddress']['adminUnitLevel1']]
+        country = [x for x in countries if x['id'] == unit['mainAddress']['adminUnitLevel1']]
       else: 
-        mainCountry = None  
+        country = None  
       if unit['mainAddress'].get('adminUnitLevel2'):
-        mainCity = [x for x in cities if x['id'] == unit['mainAddress']['adminUnitLevel2']]
+        city = [x for x in cities if x['id'] == unit['mainAddress']['adminUnitLevel2']]
       else:
-        mainCity = None
+        city = None
       unit['mainAddress']={ 
         'fullAddress':unit['mainAddress']['fullAddress'] if unit['mainAddress'].get('fullAddress') else None, 
         'postCode':unit['mainAddress']['postCode'] if unit['mainAddress'].get('postCode') else None, 
-        'country': mainCountry[0] if mainCountry else None, 
-        'city': mainCity[0] if mainCity else None
+        'country': country[0] if country else None, 
+        'city': city[0] if city else None
       }
     else:
       unit['mainAddress'] = None
@@ -89,22 +89,20 @@ def processOrganizations(organization, unitTypes, functions, countries, cities):
     secondaryAddressesArray = []    
     if unit.get('secondaryAddresses'):
       for s in unit.get('secondaryAddresses'):
-        mainCountry = [x for x in countries if x['id'] == s['adminUnitLevel1']]
-        mainCity = [x for x in cities if x['id'] == s['adminUnitLevel2']]
-        if not mainCountry or not mainCity:
-          secondaryAddressesArray.append({ 
-            'fullAddress':s['fullAddress'], 
-            'postCode':s['postCode'], 
-            'country': 'NotExist', 
-            'city': 'NotExist'
-          })
+        if s.get('adminUnitLevel1'):
+          country = [x for x in countries if x['id'] == s['adminUnitLevel1']]
         else:
-          secondaryAddressesArray.append({ 
-            'fullAddress':s['fullAddress'], 
-            'postCode':s['postCode'], 
-            'country': mainCountry[0], 
-            'city': mainCity[0]
-          })
+          country = None
+        if s.get('adminUnitLevel2'):
+          city = [x for x in cities if x['id'] == s['adminUnitLevel2']]
+        else:
+          city = None
+        secondaryAddressesArray.append({ 
+          'fullAddress':s['fullAddress'] if s.get('fullAddress') else None, 
+          'postCode':s['postCode'] if s.get('postCode') else None, 
+          'country': country[0] if country else None, 
+          'city': city[0] if city else None
+        })
     unit['secondaryAddresses']=secondaryAddressesArray
 
     unit.pop('identifier', None)

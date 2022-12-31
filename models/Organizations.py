@@ -14,8 +14,8 @@ class CityDoc(EmbeddedDocument):
   parentId = IntField()
 
 class SpatialDoc(EmbeddedDocument):
-  country = EmbeddedDocumentField(CountryDoc)
-  city = EmbeddedDocumentField(CityDoc)
+  country = EmbeddedDocumentField(CountryDoc, null=True)
+  city = EmbeddedDocumentField(CityDoc, null=True)
 
 class OrganizationDoc(EmbeddedDocument):
   id = IntField()

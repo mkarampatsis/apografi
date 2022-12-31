@@ -88,8 +88,8 @@ def processOrganizations(code, organizationTypes, unitTypes, functionalAreas, fu
   secondaryAddressesArray = []    
   if organization_details.get('secondaryAddresses'):
     for s in organization_details.get('secondaryAddresses'):
-      mainCountry = [x for x in countries if x['id'] == organization_details['secondaryAddresses']['adminUnitLevel1']]
-      mainCity = [x for x in cities if x['id'] == organization_details['secondaryAddresses']['adminUnitLevel2']]
+      mainCountry = [x for x in countries if x['id'] == s['adminUnitLevel1']]
+      mainCity = [x for x in cities if x['id'] == s['adminUnitLevel2']]
       if not mainCountry or not mainCity:
         secondaryAddressesArray.append({ 
           'fullAddress':s['fullAddress'], 

@@ -123,8 +123,6 @@ def processOrganizations(code, organizationTypes, unitTypes, functionalAreas, fu
     "mainAddress": organization_details['mainAddress'] if organization_details.get('mainAddress') else None,
     "secondaryAddresses": organization_details['secondaryAddresses']
   }
-
-  # print("2>>",item)
   
   try:
     organization = Organizations.objects.get(code=organization_details['code'])

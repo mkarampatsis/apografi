@@ -1,0 +1,1112 @@
+<!-- dbdrv: none --> 
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <title>Importing Responses to RFQs</title>
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=windows-1252">
+<!-- $Header: RFQ-Quote-Help.htm 120.3 2008/11/03 09:06:33 irasoolm ship $ -->
+  <meta content="MSHTML 6.00.2900.3086" name="GENERATOR">
+</head>
+<body style="background-color: rgb(255, 255, 255);" lang="EN-US">
+<center>
+<p align="right"><font face="Arial, Helvetica, sans-serif"><b>Document
+version: 1</b></font></p>
+<p><font face="Arial, Helvetica, sans-serif"><b><font color="#336699"
+ size="5"><a name="Top"></a>Readme File - Importing Responses to RFQs</font>
+</b></font></p>
+<p>&nbsp;</p>
+<hr>
+<div align="left">
+<h2><font face="Arial, Helvetica, sans-serif"><a name="HowUse"></a>How
+To Use This File</font></h2>
+</div>
+</center>
+<p><font face="Arial, Helvetica, sans-serif">Once you have downloaded
+the spreadsheet, you can open it in Microsoft Excel (version 2003 or
+later). Excel automatically formats the display based on the style
+format that you selected. The spreadsheet will consist of multiple
+worksheets. The sections below describe the information contained in
+each worksheet, and the tables in the sections describe each
+spreadsheet field for that worksheet. As you use the spreadsheets, note
+the following: </font></p>
+<ul>
+  <li><font face="Arial, Helvetica, sans-serif">Entries to yellow
+fields are required. </font></li>
+  <li><font face="Arial, Helvetica, sans-serif">Entries&nbsp;to green
+fields are optional. </font></li>
+  <li><font face="Arial, Helvetica, sans-serif">Numeric, date, and URL
+fields for Requirements and attributes in the spreadsheet are indicated
+by a help note to the right of the field. </font></li>
+</ul>
+<p><font face="Arial, Helvetica, sans-serif">Excel will also
+automatically format date fields according to your user preferences
+into the spreadsheet. </font></p>
+<p><font face="Arial, Helvetica, sans-serif">Your spreadsheet can have
+multiple worksheets, depending on how the negotiation was defined (for
+example, if no attributes were defined, the Attributes Scoring
+Worksheet does not appear). Use the instructions in the table below to
+complete the spreadsheet. Once you have completed the spreadsheet, <a
+ href="#" target="upload">upload it back to the system</a>. </font></p>
+<table border="1" width="895">
+  <tbody>
+    <tr>
+      <td width="235"><font face="Arial, Helvetica, sans-serif"><a
+ href="#" target="CommonSection">Co</a><a href="#CommonSection"
+ target="CommonSection">mmon Section </a></font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">View
+this section to see overview information about the negotiation. You do
+not enter any information into this section. </font></td>
+    </tr>
+    <tr>
+      <td><font face="Arial, Helvetica, sans-serif"><a href="#HeaderTab"
+ target="HeaderTab">Header Worksheet </a></font></td>
+      <td><font face="Arial, Helvetica, sans-serif">Use this worksheet
+to enter your responses to buyer Requirements and any other information
+such as a note to the buyer. </font></td>
+    </tr>
+    <tr>
+      <td><font face="Arial, Helvetica, sans-serif"><a href="#LinesTab"
+ target="LinesTab">Lines Worksheet </a></font></td>
+      <td><font face="Arial, Helvetica, sans-serif">Use this section to
+enter your quote information as required by the buyer. </font></td>
+    </tr>
+    <tr>
+      <td><font face="Arial, Helvetica, sans-serif"><a
+ href="#RequirementsScoringTab" target="RequirementsScoringTab">Requirements
+Scoring Worksheet </a></font></td>
+      <td><font face="Arial, Helvetica, sans-serif">Use this section to
+view any Requirements scoring information and/or guidelines defined by
+the buyer. </font></td>
+    </tr>
+    <tr>
+      <td><font face="Arial, Helvetica, sans-serif"><a
+ href="#AttributesScoringTab" target="AttributesScoringTab">Attributes
+Scoring Worksheet </a></font></td>
+      <td><font face="Arial, Helvetica, sans-serif">Use this section to
+view any line attribute scoring information and/or guidelines defined
+by the buyer. </font></td>
+    </tr>
+  </tbody>
+</table>
+<h2><font face="Arial, Helvetica, sans-serif"><a name="Overview"></a>Overview</font></h2>
+<p><font face="Arial, Helvetica, sans-serif">This file contains the
+instructions for creating and importing quotes in RFQs using
+an&nbsp;XML spreadsheet. Spreadsheets allow suppliers to easily respond
+to negotiations. Spreadsheet import is very useful when dealing with
+large negotiations ( for example, many requirements or many lines) or
+complex lines (many attributes) and effectively speeds up the response
+process by allowing you to enter data into your spreadsheet offline and
+upload the entire spreadsheet in a single operation. </font>
+</p>
+<h2><font face="Arial, Helvetica, sans-serif"><b><a name="CommonSection"></a>Common
+Section</b></font></h2>
+<p><font face="Arial, Helvetica, sans-serif">The common information
+section appears at the top of each worksheet and contains overview
+information about the negotiation.</font></p>
+<table border="1" width="894">
+  <tbody>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif"><b>Field
+Title</b></font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif"><b>Meaning</b></font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Negotiation
+Title</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">Title
+of the negotiation as defined by the Buyer</font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Document
+Type and Document Number</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">Type of
+negotiation (Auction, RFQ, RFI) and the number assigned by the system</font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Close
+Date</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">Date
+and time when the negotiation&nbsp;closes and quotes are no longer
+accepted. Note that the buyer may optionally choose to close the
+negotiation early.</font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">RFQ
+Currency</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">Currency
+defined for the negotiation by the Buyer</font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Quote
+Currency</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">In a
+multi-currency negotiation, the currency you chose when you initiated
+your quote. </font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Price
+Precision </font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">Price
+precision to be applied to the quote currency</font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Exchange
+Rate</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">In a
+multi-currency negotiation, the exchange rate between the negotiation
+currency and the quote currency, as defined by the Buyer.</font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Company</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">Name of
+the buying company</font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Name</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">Name of
+the buyer who created the negotiation</font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Phone</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">Phone
+number of the Buyer</font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Email</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">Email
+address of the Buyer</font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Supplier</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">Your
+company name, as registered with the system.</font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Supplier
+Site</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">Your
+company site</font></td>
+    </tr>
+  </tbody>
+</table>
+<p><font face="Arial, Helvetica, sans-serif">At the bottom of
+each&nbsp;worksheet, the spreadsheet download time appears. </font></p>
+<h2><font face="Arial, Helvetica, sans-serif"><b><a name="HeaderTab"></a>Header
+Worksheet </b></font></h2>
+<p><font face="Arial, Helvetica, sans-serif">The Header Worksheet
+displays information about your quote. It also contains any notes from
+the Buyer and displays the Requirements the Buyer defined for the
+negotiation. </font></p>
+<table border="1" width="895">
+  <tbody>
+    <tr>
+      <td width="235"><font face="Arial, Helvetica, sans-serif"><b>Field
+Title</b></font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif"><b>Meaning</b></font></td>
+    </tr>
+    <tr>
+      <td width="235"><font face="Arial, Helvetica, sans-serif">Quote
+Received Time</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">Enter
+the time the quote is received if you are submitting a surrogate quote.
+      </font></td>
+    </tr>
+    <tr>
+      <td width="235"><font face="Arial, Helvetica, sans-serif">Quote
+Valid Until</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">Enter a
+date after which your quote should no longer be considered active.</font></td>
+    </tr>
+    <tr>
+      <td width="235"><font face="Arial, Helvetica, sans-serif">Reference
+Number</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">Enter a
+number or ID by which you wish to track this quote internally within
+your own system.</font></td>
+    </tr>
+    <tr>
+      <td width="235"><font face="Arial, Helvetica, sans-serif">Note to
+Suppliers</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">A note
+defined by the Buyer for your information.</font></td>
+    </tr>
+    <tr>
+      <td width="235"><font face="Arial, Helvetica, sans-serif">Note to
+Buyer</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">Field
+in which you can enter a response to the Buyer's note or enter a note
+of your own.</font></td>
+    </tr>
+  </tbody>
+</table>
+<p><font face="Arial, Helvetica, sans-serif"><b>Requirements
+Information </b></font></p>
+<p><font face="Arial, Helvetica, sans-serif">The Requirements
+information section contains questions the Buyer wishes you to answer.
+Your responses will be used by the Buyer when evaluating your quote.
+You&nbsp;can&nbsp;click&nbsp;the&nbsp;View&nbsp;Scoring&nbsp;Criteria&nbsp;link&nbsp;to
+view the acceptable values (if any) the Buyer has defined for a
+particular Requirement along with any scoring and weighting
+information. </font></p>
+<table border="1" width="895">
+  <tbody>
+    <tr>
+      <td width="235"><font face="Arial, Helvetica, sans-serif"><b>Field
+Title</b></font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif"><b>Meaning</b></font></td>
+    </tr>
+    <tr>
+      <td><font face="Arial, Helvetica, sans-serif">View Scoring
+Criteria </font></td>
+      <td><font face="Arial, Helvetica, sans-serif">Link to the
+Requirement Scoring Worksheet. This link only appears if the buyer
+defined scoring information for at least one Requirement and made the
+information viewable to suppliers. </font></td>
+    </tr>
+    <tr>
+      <td width="235"><font face="Arial, Helvetica, sans-serif">Title</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">The
+gray row displays the name of the Requirement section or the text of
+the Requirement itself.</font></td>
+    </tr>
+    <tr>
+      <td width="235"><font face="Arial, Helvetica, sans-serif">Quote
+Value</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">Your
+response to the Requirement. If the Buyer defined a target value and
+chose to display it, a pop-up box appears when you click in this field.
+If the Buyer has defined acceptable values for this field, you can
+display them by clicking in the field and then clicking the down arrow.</font></td>
+    </tr>
+  </tbody>
+</table>
+<h2><font face="Arial, Helvetica, sans-serif"><b><a name="LinesTab"></a>Lines
+Worksheet </b></font></h2>
+<p><font face="Arial, Helvetica, sans-serif">The Lines Worksheet
+displays the line information defined for this negotiation. Note that
+some fields appear depending on whether the negotiation outcome is
+standard purchase order&nbsp;(SPO), or blanket or contract purchase
+agreement (BPA/CPA). The table below contains descriptions of all
+possible columns regardless of negotiation outcome. &nbsp;</font></p>
+<p><font face="Arial, Helvetica, sans-serif">If your negotiation
+contains many lines, you can control the display by clicking the down
+arrow at the top left of the lines table. You have several options
+including sorting the lines by line number or using the Custom option
+to display specific lines.</font> </p>
+<p><font face="Arial, Helvetica, sans-serif"><b>Lines Information</b></font></p>
+<table border="1">
+  <tbody>
+    <tr>
+      <td width="111"><font face="Arial, Helvetica, sans-serif"><b>Field
+Name</b></font></td>
+      <td width="767"><b><font face="Arial, Helvetica, sans-serif">Meaning
+      </font></b></td>
+    </tr>
+    <tr>
+      <td width="111"><font face="Arial, Helvetica, sans-serif">Quote
+Total</font></td>
+      <td><font face="Arial, Helvetica, sans-serif">This value is
+calculated by the system as you enter&nbsp;your responses into the
+spreadsheet. </font></td>
+    </tr>
+    <tr>
+      <td width="111"><font face="Arial, Helvetica, sans-serif">Line</font></td>
+      <td><font face="Arial, Helvetica, sans-serif">Line number and
+description as entered by the Buyer</font></td>
+    </tr>
+    <tr>
+      <td width="111"><font face="Arial, Helvetica, sans-serif">Item,
+Rev/Job</font></td>
+      <td><font face="Arial, Helvetica, sans-serif">The Item Number and
+Item revision of the item that the Buyer wants to purchase, or the job
+name. </font></td>
+    </tr>
+    <tr>
+      <td width="111"><font face="Arial, Helvetica, sans-serif">Rank</font></td>
+      <td><font face="Arial, Helvetica, sans-serif">This quote's rank,
+as calculated by the system if the buyer chose to display the rank.</font></td>
+    </tr>
+    <tr>
+      <td width="111"><font face="Arial, Helvetica, sans-serif">Start
+Price</font></td>
+      <td><font face="Arial, Helvetica, sans-serif">The starting quote
+price for one unit of the item or service being negotiated. Your quote
+price cannot be higher than the quote start price.</font></td>
+    </tr>
+    <tr>
+      <td width="111"><font face="Arial, Helvetica, sans-serif">Unit</font></td>
+      <td><font face="Arial, Helvetica, sans-serif">The unit of measure
+in which the Buyer plans to buy the desired item.</font></td>
+    </tr>
+    <tr>
+      <td width="111"><font face="Arial, Helvetica, sans-serif">Quantity</font></td>
+      <td><font face="Arial, Helvetica, sans-serif">The number of units
+the Buyer wishes to buy </font></td>
+    </tr>
+    <tr>
+      <td width="111"><font face="Arial, Helvetica, sans-serif">Estimated
+Quantity</font></td>
+      <td><font face="Arial, Helvetica, sans-serif">The number of units
+the Buyer wishes to buy </font></td>
+    </tr>
+    <tr>
+      <td width="111"><font face="Arial, Helvetica, sans-serif">Estimated
+Total Amount</font></td>
+      <td><font face="Arial, Helvetica, sans-serif">Estimated amount of
+business you expect to pay for this line over the life of this
+agreement.</font></td>
+    </tr>
+    <tr>
+      <td width="111"><font face="Arial, Helvetica, sans-serif">Target
+Minimum Release</font></td>
+      <td>
+      <p><font face="Arial, Helvetica, sans-serif">The minimum amount
+the Buyer wishes to release against this blanket agreement line. </font></p>
+      </td>
+    </tr>
+    <tr>
+      <td width="111"><font face="Arial, Helvetica, sans-serif">Quote
+Price</font></td>
+      <td>
+      <p><font face="Arial, Helvetica, sans-serif">The price for one
+unit of the item or services to be negotiated in your chosen currency
+for this RFQ. Use numeric numbers, e.g., "5.75" Omit currency signs.</font></p>
+      <p><font face="Arial, Helvetica, sans-serif"><br>
+This is a required field for any lines on which you wish to quote. For
+lines that you do not want to quote on, you can leave all the
+quote-related columns blank. This only applies to RFQs that do not
+require you to quote on all lines. </font></p>
+      <p><font face="Arial, Helvetica, sans-serif"><br>
+If this&nbsp;line has cost factors, you do not need to enter a value
+for this field. Instead enter the line price in the Cost Factors table
+(see below). The system will calculate the Quote Price based on your
+line price and your cost factor responses. </font></p>
+      </td>
+    </tr>
+    <tr>
+      <td width="111"><font face="Arial, Helvetica, sans-serif">Quote
+Quantity</font></td>
+      <td>
+      <p><font face="Arial, Helvetica, sans-serif">The number of units
+of the item that you will buy. </font></p>
+      <p><font face="Arial, Helvetica, sans-serif"><br>
+This is a required field for all lines on which you wish to quote. If
+this RFQ does not accept partial quantities, this field displays the
+Quantity value and is protected against update. </font></p>
+      <p><font face="Arial, Helvetica, sans-serif">For lines that you
+do not want to quote on, you can leave all the quote-related columns
+blank. This applies only to RFQs that do not require you to quote on
+all lines. </font></p>
+      </td>
+    </tr>
+    <tr>
+      <td width="111"><font face="Arial, Helvetica, sans-serif">Promised
+Date</font></td>
+      <td><font face="Arial, Helvetica, sans-serif">The date by which
+you can promise to deliver the item or service to the buyer's Ship-To
+address. </font></td>
+    </tr>
+    <tr>
+      <td width="111"><font face="Arial, Helvetica, sans-serif">Quote
+Minimum Release Amount</font></td>
+      <td><font face="Arial, Helvetica, sans-serif">Enter the minimum
+release amount you offer for this agreement line.</font></td>
+    </tr>
+    <tr>
+      <td width="111"><font face="Arial, Helvetica, sans-serif">Note to
+Buyer</font></td>
+      <td><font face="Arial, Helvetica, sans-serif">Enter any text note
+to the Buyer on additional information for this negotiation line.</font></td>
+    </tr>
+    <tr>
+      <td width="111"><font face="Arial, Helvetica, sans-serif">Progress
+Payment Rate (%)</font></td>
+      <td><font face="Arial, Helvetica, sans-serif">Percentage&nbsp;of&nbsp;completion&nbsp;at&nbsp;which&nbsp;this&nbsp;item<br>
+is&nbsp;paid (for complex work negotiations only). This field is
+required </font></td>
+    </tr>
+    <tr>
+      <td width="111"><font face="Arial, Helvetica, sans-serif">Advance
+Amount</font></td>
+      <td>
+      <p><font face="Arial, Helvetica, sans-serif">Amount&nbsp;to&nbsp;be&nbsp;paid&nbsp;to&nbsp;the&nbsp;supplier&nbsp;before</font><font
+ color="red" face="Arial, Helvetica, sans-serif"><br>
+      </font><font face="Arial, Helvetica, sans-serif">completion of
+the contract (complex work negotiations only). This field is required. </font></p>
+      </td>
+    </tr>
+    <tr>
+      <td width="111"><font face="Arial, Helvetica, sans-serif">Recoupment
+Rate (%)</font></td>
+      <td><font face="Arial, Helvetica, sans-serif">The&nbsp;percentage&nbsp;of&nbsp;the&nbsp;invoice&nbsp;amount&nbsp;which&nbsp;<br>
+can&nbsp;be&nbsp;used&nbsp;for&nbsp;recoupment&nbsp;of&nbsp;an&nbsp;advance<br>
+payment (complex work negotiations only). This field is required. </font></td>
+    </tr>
+    <tr>
+      <td width="111"><font face="Arial, Helvetica, sans-serif">Maximum
+Retainage Amount</font></td>
+      <td>
+      <p><font face="Arial, Helvetica, sans-serif">Maximum&nbsp;amount&nbsp;to&nbsp;be&nbsp;withheld&nbsp;as&nbsp;retainage
+(complex work negotiations only).This field is required. </font></p>
+      </td>
+    </tr>
+    <tr>
+      <td width="111"><font face="Arial, Helvetica, sans-serif">Retainage
+Rate (%)</font></td>
+      <td>
+      <p><font face="Arial, Helvetica, sans-serif">Percentage&nbsp;of&nbsp;payment&nbsp;to&nbsp;be&nbsp;withheld&nbsp;<br>
+until&nbsp;all&nbsp;work&nbsp;is&nbsp;complete&nbsp;and&nbsp;accepted
+(complex work negotiations only). This field is required. </font></p>
+      </td>
+    </tr>
+    <tr>
+      <td><font face="Arial, Helvetica, sans-serif">Need-By Date</font></td>
+      <td>
+      <p><font face="Arial, Helvetica, sans-serif">The date by which
+the item or service the Buyer wants to purchase will be needed at his
+Ship-To address. This field is required. </font></p>
+      </td>
+    </tr>
+    <tr>
+      <td width="111"><font face="Arial, Helvetica, sans-serif">Target
+Price</font></td>
+      <td><font face="Arial, Helvetica, sans-serif">The target quote
+price for one unit of the item or service to be purchased.</font></td>
+    </tr>
+    <tr>
+      <td width="111"><font face="Arial, Helvetica, sans-serif">Category</font></td>
+      <td><font face="Arial, Helvetica, sans-serif">The category name
+describing the broad family or category to which this line belongs.</font></td>
+    </tr>
+    <tr>
+      <td width="111"><font face="Arial, Helvetica, sans-serif">Ship-To
+Address</font></td>
+      <td><font face="Arial, Helvetica, sans-serif">The address where
+the item or service should be delivered.</font></td>
+    </tr>
+    <tr>
+      <td width="111"><font face="Arial, Helvetica, sans-serif">Job
+Details</font></td>
+      <td><font face="Arial, Helvetica, sans-serif">For
+services-related line types, a description of the associated job.</font></td>
+    </tr>
+    <tr>
+      <td width="111"><font face="Arial, Helvetica, sans-serif">Note to
+Suppliers</font></td>
+      <td><font face="Arial, Helvetica, sans-serif">A text message
+added by the buyer.</font></td>
+    </tr>
+  </tbody>
+</table>
+<p><font face="Arial, Helvetica, sans-serif"><b>Cost Factor Information</b></font></p>
+<p><font face="Arial, Helvetica, sans-serif">The Cost Factor section
+displays cost factor information defined by the Buyer for this line.
+The first row of this table will be named Line Price. This is where you
+should enter your&nbsp;per-unit price (instead of Quote Price above).
+&nbsp;</font></p>
+<table border="1" width="894">
+  <tbody>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif"><b>Field
+Name</b></font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif"><b>Meaning</b></font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Name</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">Name of
+the cost factor defined by the Buyer</font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Type</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">Whether
+this is a supplier cost factor or buyer cost factor</font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Pricing
+Basis</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">How
+this particular cost factor will be calculated. It can be a fixed
+amount, a per-unit amount, or a % of line price amount.</font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Target
+Value</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">The
+amount the Buyer expects for this cost factor. </font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Quote
+Value</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">For a
+supplier cost factor, enter your response. For a buyer cost factor,
+this field displays the value defined by the buyer and is
+for&nbsp;your&nbsp;information&nbsp;only. Buyer defined cost factors
+are shown if they are defined as displayable to suppliers. </font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Quote
+Price</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">The
+quote value converted to a per-unit price.</font></td>
+    </tr>
+  </tbody>
+</table>
+<p><font face="Arial, Helvetica, sans-serif"><b>Price Differential
+Information</b></font></p>
+<p><font face="Arial, Helvetica, sans-serif">Price differentials are
+available for rate-based temp labor lines. Price differentials are used
+for adjusting pay rates. Note that there may be price differentials
+within price breaks. </font></p>
+<table border="1" width="895">
+  <tbody>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif"><b>Field
+Name</b></font></td>
+      <td width="645"><font face="Arial, Helvetica, sans-serif"><b>Meaning</b></font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Price
+Type</font></td>
+      <td width="645"><font face="Arial, Helvetica, sans-serif">The
+type of differential. This is the reason for adjusting the pay rate
+(for example, weekend or holiday)</font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Target
+Multiplier</font></td>
+      <td width="645"><font face="Arial, Helvetica, sans-serif">The
+value by which the normal rate is adjusted. This is the adjustment
+expected by the buyer. </font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Quote
+Multiplier</font></td>
+      <td width="645"><font face="Arial, Helvetica, sans-serif">Your
+response to the target multiplier. </font></td>
+    </tr>
+  </tbody>
+</table>
+<p><font face="Arial, Helvetica, sans-serif"><b>Price Break Information</b></font></p>
+<p><font face="Arial, Helvetica, sans-serif">Price Breaks are only
+available for BPA and CPA outcome negotiations. If there are empty rows
+in the table, the Buyer has defined the price breaks as optional. In
+this case, you can enter your own price breaks in the empty rows and/or
+modify the Buyer defined ones. </font></p>
+<table border="1" width="894">
+  <tbody>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif"><strong>Field
+Name</strong></font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif"><strong>Meaning</strong></font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Agreement
+Release Quantity</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">How the
+applicable break for a quantity is determined. Non-cumulative quantity
+applies only to a single release. Cumulative quantity is incremented
+over the life of the agreement.</font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Ship-To</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">The
+buyer's ship-to address for which this break applies</font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Quantity</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">The
+quantity bought </font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Effective-From</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">The
+date this break begins</font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Effective-To</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">The
+date this break ends</font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Target
+Price</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">The
+price the buyer is expecting. This is shown only if the price break
+optional. </font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Price
+or Discount %</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">Whether
+the Price value you enter is an actual price or discount percentage of
+the line price. </font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Price</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">The
+price offered or the discount percentage of the line price. </font></td>
+    </tr>
+  </tbody>
+</table>
+<p><font face="Arial, Helvetica, sans-serif"><b>Quantity-Based&nbsp;Price&nbsp;Tier&nbsp;Information
+</b></font></p>
+<p><font face="Arial, Helvetica, sans-serif">Quantity-based price tiers
+can be used in negotiations with any outcome. They function similarly
+to price breaks in BPA and CPA outcome negotiations. However,
+quantity-based&nbsp;price&nbsp;tiers&nbsp;are based solely on quantity.
+Quantity-based price tiers are always optional, so you can enter your
+own price tiers in the empty rows and/or modify the Buyer-defined price
+tiers. </font></p>
+<table border="1" width="894">
+  <tbody>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif"><b>Field
+Name</b></font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif"><b>Meaning</b></font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Minimum
+Quantity</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">The
+minimum number of units available for this price&nbsp;</font> </td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Maximum
+Quantity</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">The
+maximum number of units available for&nbsp;this price</font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Price</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">The
+price per unit offered for this quantity range</font> </td>
+    </tr>
+  </tbody>
+</table>
+<p><font face="Arial, Helvetica, sans-serif"><b>Pay Item Information</b></font></p>
+<p><font face="Arial, Helvetica, sans-serif">Pay items are used with
+complex work negotiations to identify progress payments that must be
+made over the course of a complex work project. If the negotiation was
+defined such that you can modify pay items, there will be empty rows
+and you can enter your own pay items or modify the Buyer-defined ones. </font></p>
+<table border="1" width="894">
+  <tbody>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif"><b>Field
+Name</b></font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif"><b>Meaning</b></font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Pay Item</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">The
+number for this pay item</font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Type</font></td>
+      <td width="644">
+      <p><font face="Arial, Helvetica, sans-serif">The point
+in&nbsp;time&nbsp;when&nbsp;this item is paid. Values are Lump Sum,
+Milestone, and Rate</font></p>
+      </td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Description</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">Description
+of the pay item</font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Unit</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">For a
+rate type pay item, the unit of measure, for example, hour</font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Quote
+Quantity</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">Number
+of units for this pay item. This is also shown if this is a rate-type
+pay item. </font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Quote
+Price</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">Enter
+the price you are offering for this pay item</font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Promised
+Date</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">The
+date by which you commit to delivering the item or service</font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Need-By
+Date</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">The
+date by which the buyer needs the item or service. This is only shown
+if you cannot modify the pay item. </font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Target
+Price</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">The
+price the buyer is expecting to receive. This is only shown if you
+cannot modify the pay item. </font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Note to
+Suppliers</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">An
+informational text note from the buyer. This is only shown if you
+cannot modify the pay item. </font></td>
+    </tr>
+  </tbody>
+</table>
+<p><font face="Arial, Helvetica, sans-serif"><b>Attribute Information</b></font></p>
+<p><font face="Arial, Helvetica, sans-serif">Information on the line's
+attributes is displayed in the Attributes table. You enter your
+response in the quote value field. If this field is yellow, a response
+is required, and you must enter one. If this field is green, a response
+is optional.</font></p>
+<p><font face="Arial, Helvetica, sans-serif">If the Buyer defined
+weights and scores for this attribute, the View Scoring Criteria link
+and the Weighted Score columns appear. </font></p>
+<table border="1" width="895">
+  <tbody>
+    <tr>
+      <td width="233"><font face="Arial, Helvetica, sans-serif"><b>Field
+Name</b></font></td>
+      <td width="646"><font face="Arial, Helvetica, sans-serif"><b>Meaning</b></font></td>
+    </tr>
+    <tr>
+      <td width="233"><font face="Arial, Helvetica, sans-serif">View
+Scoring Criteria</font></td>
+      <td width="646">
+      <p><font face="Arial, Helvetica, sans-serif">Link that takes you
+to the Attribute Scoring worksheet. For Multi-Attribute Weighted
+Scoring RFQs, you should consult the scoring information the Buyer has
+defined. This link only appears if the Buyer defined scoring
+information for&nbsp;at least one attribute and made the information
+viewable to&nbsp;suppliers.</font></p>
+      </td>
+    </tr>
+    <tr>
+      <td><font face="Arial, Helvetica, sans-serif">Title</font></td>
+      <td><font face="Arial, Helvetica, sans-serif">Gray rows display
+the name of the attribute group. White lines display the name of the
+attribute.</font></td>
+    </tr>
+    <tr>
+      <td width="233"><font face="Arial, Helvetica, sans-serif">Target
+Value</font></td>
+      <td width="646"><font face="Arial, Helvetica, sans-serif">The
+target value entered by the Buyer for the attribute </font></td>
+    </tr>
+    <tr>
+      <td width="233"><font face="Arial, Helvetica, sans-serif">Quote
+Value</font></td>
+      <td width="646"><font face="Arial, Helvetica, sans-serif">Your
+response to the attribute. If the Buyer has defined acceptable values
+for this field, you can display them by clicking in the field and then
+clicking the down arrow. </font></td>
+    </tr>
+    <tr>
+      <td width="233"><font face="Arial, Helvetica, sans-serif">Weighted
+Score</font></td>
+      <td width="646"><font face="Arial, Helvetica, sans-serif">This
+field is calculated by the system when you enter a value in the Quote
+Value field. This field only appears if the Buyer defined scoring
+criteria and made the information viewable to suppliers.</font> </td>
+    </tr>
+    <tr>
+      <td><font face="Arial, Helvetica, sans-serif">Total Weighted
+Score </font></td>
+      <td><font face="Arial, Helvetica, sans-serif">This field is
+calculated by the system as you enter values in the Quote Value fields.
+It is the sum of all the Weighted Score fields. It only appears if the
+Buyer defined scoring criteria and made the information viewable to
+suppliers. </font></td>
+    </tr>
+  </tbody>
+</table>
+<h2><font face="Arial, Helvetica, sans-serif"><b><a
+ name="RequirementsScoringTab"></a>Requirements Scoring Worksheet </b></font></h2>
+<p><font face="Arial, Helvetica, sans-serif">The Requirements Scoring
+Worksheet only appears if scoring criteria was defined by the Buyer and
+is viewable by the supplier. All Requirements will be displayed,
+including ones that do not have scoring criteria. View the Requirements
+Scoring Worksheet to determine how the Buyer will evaluate your
+responses to the negotiation's Requirements. </font></p>
+<table border="1" width="895">
+  <tbody>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif"><b>Field
+Name</b></font></td>
+      <td width="645"><font face="Arial, Helvetica, sans-serif"><b>Meaning</b></font></td>
+    </tr>
+    <tr>
+      <td><font face="Arial, Helvetica, sans-serif">Title</font></td>
+      <td><font face="Arial, Helvetica, sans-serif">The name of the
+Requirement.</font></td>
+    </tr>
+    <tr>
+      <td valign="top"><font face="Arial, Helvetica, sans-serif">Acceptable
+Quote Values</font></td>
+      <td><font face="Arial, Helvetica, sans-serif">The acceptable
+quote values for the attribute as defined by the Buyer. For a text
+attribute, this will be a list of values. For numeric and date type
+attributes, it can be a set of numbers or one or more ranges of
+numbers&nbsp;(ranges cannot overlap).</font></td>
+    </tr>
+    <tr>
+      <td><font face="Arial, Helvetica, sans-serif">Score</font></td>
+      <td><font face="Arial, Helvetica, sans-serif">For each acceptable
+quote value, the numeric score assigned to that&nbsp;value&nbsp;by the
+Buyer.</font></td>
+    </tr>
+    <tr>
+      <td><font face="Arial, Helvetica, sans-serif">Weight or Maximum
+Score </font></td>
+      <td><font face="Arial, Helvetica, sans-serif">If weights are
+enabled, for each Requirement, the numeric value assigned to it by the
+Buyer to reflect that Requirement's importance, relative to any other
+Requirements; otherwise, the Maximum Score for the Requirements is
+displayed as defined by the Buyer.</font></td>
+    </tr>
+  </tbody>
+</table>
+<h2><font face="Arial, Helvetica, sans-serif"><b><a
+ name="AttributesScoringTab"></a>Attributes Scoring Worksheet </b></font></h2>
+<p><font face="Arial, Helvetica, sans-serif">The Attribute Scoring
+Worksheet only appears if at least one line attribute has scoring
+information defined and the Buyer has chosen to display scoring
+information to the supplier. There will be a table for each line that
+has an attribute for which the Buyer has entered score information.
+Additionally, if there is a table for a line, entries for all
+attributes for that line will appear, even if no scoring information
+was defined for a particular attribute. You can view the Attribute
+Scoring Worksheet to determine how the Buyer will evaluate your
+responses to line attributes. </font></p>
+<table border="1" width="894">
+  <tbody>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif"><b>Field
+Name</b></font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif"><b>Meaning</b></font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Title</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">The
+name of the attribute.</font></td>
+    </tr>
+    <tr>
+      <td valign="top" width="234"><font
+ face="Arial, Helvetica, sans-serif">Acceptable Quote Values</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">The
+acceptable quote values for the attribute as defined by the Buyer. For
+a text attribute, this will be a list of values. For numeric and date
+type attributes, it can be a set of numbers or one or more ranges of
+numbers&nbsp;(ranges cannot overlap).</font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Score</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">For
+each acceptable quote value, the numeric score assigned to
+that&nbsp;value&nbsp;by the Buyer.</font></td>
+    </tr>
+    <tr>
+      <td width="234"><font face="Arial, Helvetica, sans-serif">Weight</font></td>
+      <td width="644"><font face="Arial, Helvetica, sans-serif">For
+each attribute of the line, the numeric value assigned to it by the
+Buyer to reflect that attribute's importance, relative to any other
+attributes for the line.</font></td>
+    </tr>
+  </tbody>
+</table>
+<h2><font face="Arial, Helvetica, sans-serif"><a name="upload"></a>Uploading
+Your Spreadsheet </font></h2>
+<ol>
+  <li><font face="Arial, Helvetica, sans-serif">Once you have completed
+your spreadsheet, save it to the drive/location of your choice. <br>
+    <br>
+    </font></li>
+  <li><font face="Arial, Helvetica, sans-serif">Return to the system.
+From the <b>Create Quote: Quote by Spreadsheet</b> page. Select
+XML&nbsp;Spreadsheet as the format of spreadsheet to be imported and
+use the Browse button to locate your completed spreadsheet file. Once
+you have located your spreadsheet file, click Import.<br>
+    <br>
+    </font></li>
+  <li><font face="Arial, Helvetica, sans-serif">The system will import
+your spreadsheet information and the validation process will occur. If
+the system detects no error on your spreadsheet, all of your quote
+values will be imported successfully. You can then modify any of your
+quote information online. <br>
+    <br>
+    </font></li>
+  <li><font face="Arial, Helvetica, sans-serif">If the system discovers
+errors with your spreadsheet, the spreadsheet rows on which those
+errors occurred will be identified, and the system will note the
+specific error that occurred. All rows with errors will be listed in a
+table, which will identify the worksheet name, spreadsheet row number,
+table, column title, error value and error that occurred. Common errors
+include: <br>
+    <br>
+    </font></li>
+  <ul>
+    <ul>
+      <li><font face="Arial, Helvetica, sans-serif">File errors<br>
+File errors occur when your spreadsheet format does not match the
+import format supported by the system. For example, if you import a
+word processing file which the system does not recognize, a file error
+will occur. Or if you try to import the .zip file instead of the .XML
+file, a file error will occur. <br>
+        <br>
+        </font></li>
+      <li><font face="Arial, Helvetica, sans-serif">Format errors<br>
+Format errors occur when information that you entered in your
+spreadsheet cannot be understood by the system. For example, if you
+enter alphabetic characters into fields where only numeric characters
+are expected, a format error will appear. <br>
+        </font><font face="Arial, Helvetica, sans-serif"><br>
+        </font></li>
+    </ul>
+  </ul>
+  <li><font face="Arial, Helvetica, sans-serif">If any of your
+spreadsheet rows contained errors, the system will ask you to make the
+necessary correction in your spreadsheet and try importing again. <strong>Note:
+    </strong>If your negotiation is a large negotiation, the system
+uses a concurrent process to upload lines by batches. If the upload
+process completes unsuccessfully, the upload page indicates the last
+line that was successfully processed. <br>
+    <br>
+    </font></li>
+  <li><font face="Arial, Helvetica, sans-serif">Open your completed
+spreadsheet file, make changes where necessary, save the file
+correctly, browse to the location of the updated file, and run the
+import process again.</font></li>
+</ol>
+<h2><font face="Arial, Helvetica, sans-serif">Creating Two-Stage
+Surrogate Quotes
+- for Buyers<br>
+</font></h2>
+<ol>
+  <li><font face="Arial, Helvetica, sans-serif">To create the surrogate
+quote process of Two-Stage RFQ, you need to submit technical
+information and commercial information separately in a technical round
+and a commercial round.&nbsp;<br>
+    <br>
+    </font></li>
+  <li><font face="Arial, Helvetica, sans-serif">If you use the Quote by
+Spreadsheet feature when you create the surrogate quote for Two-Stage
+RFQ, the technical information and commercial information should be
+downloaded and uploaded by spreadsheet separately in the technical
+round and the commercial round.<br>
+    <br>
+    </font></li>
+  <li><font face="Arial, Helvetica, sans-serif">In the technical round,
+when you download the spreadsheet, the following fields and sections
+should be exclusive in this round:</font></li>
+</ol>
+<ul>
+  <li><font face="Arial, Helvetica, sans-serif">In
+the Header Worksheet, the requirements that belong to the commercial
+stage should be exclusive.</font></li>
+  <li><font face="Arial, Helvetica, sans-serif">&nbsp;In the
+Lines
+worksheet, the following fields should be exclusive:&nbsp; <br>
+    </font></li>
+  <ul>
+    <li><font face="Arial, Helvetica, sans-serif">Quote Total</font></li>
+    <li><font face="Arial, Helvetica, sans-serif">Estimated
+Total
+Amount</font></li>
+    <li><font face="Arial, Helvetica, sans-serif">Quote
+Price</font></li>
+    <li><font face="Arial, Helvetica, sans-serif">Quote Minimum
+Release Amount</font></li>
+    <li><font face="Arial, Helvetica, sans-serif">Progress
+Payment
+Rate (%)</font></li>
+    <li><font face="Arial, Helvetica, sans-serif">Advance
+Amount <br>
+      </font></li>
+    <li><font face="Arial, Helvetica, sans-serif">Recoupment
+Rate (%)</font></li>
+    <li><font face="Arial, Helvetica, sans-serif">Maximum
+Retainage
+Amount</font></li>
+    <li><font face="Arial, Helvetica, sans-serif">Retainage
+Rate
+(%)&nbsp;</font></li>
+  </ul>
+  <ul>
+    <li><font face="Arial, Helvetica, sans-serif">Cost Factor
+Information,
+Price Differential information, Price Break, Quantity-Based Price Tier
+and Pay Item <br>
+      </font></li>
+  </ul>
+  <li><font face="Arial, Helvetica, sans-serif">In the Requirement
+Scoring Worksheet the scoring criteria of
+requirement that belong to the commercial stage should be exclusive in
+this round</font></li>
+</ul>
+<font face="Arial, Helvetica, sans-serif">In the
+commercial
+round, when you download the spreadsheet, the fields and sections that
+have been
+excluded in the technical round should be included in this spreadsheet;
+you can enter and upload commercial information in this round.<br>
+</font><br>
+<br>
+<b>Copyright &copy; 2007 Oracle Corporation. All rights reserved. </b>
+<p><font face="Arial, Helvetica, sans-serif"> </font> </p>
+<p><font face="Arial, Helvetica, sans-serif">The Programs (which
+include both the software and documentation) contain proprietary
+information of Oracle Corporation; they are provided under a license
+agreement containing restrictions on use and disclosure and are also
+protected by copyright, patent, and other intellectual and industrial
+property laws. Reverse engineering, disassembly, or decompilation of
+the Programs except to the extent required to obtain interoperability
+with other independently created software or as specified by law, is
+prohibited. </font></p>
+<p><font face="Arial, Helvetica, sans-serif">Program Documentation is
+licensed for use solely to support the deployment of the Programs and
+not for any other purpose.</font> </p>
+<p><font face="Arial, Helvetica, sans-serif">The information contained
+in this document is subject to change without notice. If you find any
+problems in the documentation, please report them to us in writing.
+Oracle Corporation does not warrant that this document is error free.
+Except as may be expressly permitted in your license agreement for
+these Programs, no part of these Programs may be reproduced or
+transmitted in any form or by any means, electronic or mechanical, for
+any purpose, without the express written permission of Oracle
+Corporation.</font> </p>
+<p><font face="Arial, Helvetica, sans-serif">If the Programs are
+delivered to the U.S. Government or anyone licensing or using the
+programs on behalf of the US Government, the following notice is
+applicable:</font> </p>
+<p><font face="Arial, Helvetica, sans-serif"><b>Restricted Rights Notice</b>
+Programs delivered subject to the DOD FAR Supplement are "commercial
+computer software" and use, duplication, and disclosure of the
+Programs, including documentation, shall be subject to the licensing
+restrictions set forth in the applicable Oracle license agreement.
+Otherwise, Programs delivered subject to the Federal Acquisition
+Regulations are "restricted computer software" and use, duplication,
+and disclosure of the Programs shall be subject to the restrictions in
+FAR 52.227-19, Commercial Computer Software - Restricted Rights (June,
+1987). Oracle Corporation, 500 Oracle Parkway, Redwood City, CA 94065.</font>
+</p>
+<p><font face="Arial, Helvetica, sans-serif">The Programs are not
+intended for use in any nuclear, aviation, mass transit, medical, or
+other inherently dangerous applications. It shall be the licensee's
+responsibility to take all appropriate fail-safe, backup, redundancy,
+and other measures to ensure the safe use of such applications if the
+Programs are used for such purposes, and Oracle Corporation disclaims
+liability for any damages caused by such use of the Programs.</font> </p>
+<p><font face="Arial, Helvetica, sans-serif">Oracle is a registered
+trademark of Oracle Corporation. Other names may be trademarks of their
+respective owners.</font> </p>
+</body>
+</html>

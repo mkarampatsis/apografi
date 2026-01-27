@@ -10,7 +10,7 @@ from datetime import timedelta
 import argparse
 
 from models.Organizations import Organizations
-from models.Logs import Logs
+from models.synclog import Logs
 
 dbname = get_database()
 # api-endpoints

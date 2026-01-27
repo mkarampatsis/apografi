@@ -11,7 +11,7 @@ import argparse
 
 from models.Organizations import Organizations
 from models.Organization_Units import Organization_Units
-from models.Logs import Logs
+from models.synclog import Logs
 
 dbname = get_database()
 # api-endpoints

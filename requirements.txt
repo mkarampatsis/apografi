@@ -1,7 +1,10 @@
+about-time==4.2.1
+alive-progress==3.3.0
 certifi==2022.9.24
 charset-normalizer==2.1.1
 deepdiff==6.2.1
 dnspython==2.2.1
+graphemeu==0.7.2
 idna==3.4
 mongoengine==0.24.2
 ordered-set==4.1.0

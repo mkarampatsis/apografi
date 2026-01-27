@@ -1,23 +1,19 @@
-from mongoengine import *
+from mongoengine import connect
 from dotenv import load_dotenv
 
 import os
 
 load_dotenv()
 
-ATLAS_USERNAME=os.getenv('ATLAS_USERNAME')
-ATLAS_PASSWORD=os.getenv('ATLAS_PASSWORD')
-ATLAS_HOST=os.getenv('ATLAS_HOST')
 ATLAS_DB=os.getenv('ATLAS_DB')
+MONGO_URI=os.getenv('MONGO_URI')
 
 def get_database():
  
   connect(
+    host=MONGO_URI,
     db=ATLAS_DB,
-    username=ATLAS_USERNAME,
-    password=ATLAS_PASSWORD,
-    host=ATLAS_HOST,
-    alias="ministryDB",
+    alias=ATLAS_DB,
   )
 
   return connect

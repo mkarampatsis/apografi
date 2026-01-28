@@ -2,6 +2,7 @@
 import requests
 import json
 from connection import get_database
+from utils import url_get, send_email
 from pprint import *
 from deepdiff import DeepDiff
 from datetime import datetime
@@ -10,12 +11,14 @@ import argparse
 from alive_progress import alive_bar
 
 from models.Organizations import Organizations
-from models.synclog import Logs
+from models.synclog import SyncLog
 
 dbname = get_database()
+
 # api-endpoints
 APOGRAFI = "https://hrms.gov.gr/api/public"
 APOGRAFI_DICTS = f"{APOGRAFI}/metadata/dictionary"
+APOGRAFI_ORGANIZATIONS = f"{APOGRAFI}/organizations/"
 
 URL_UNITTYPES = f"{APOGRAFI_DICTS}/UnitTypes"
 URL_SPECIALITES = f"{APOGRAFI_DICTS}/Specialities"
@@ -55,6 +58,9 @@ DICTIONARIES = {
 }
 
 def processOrganizations(code, organizationTypes, unitTypes, functionalAreas, functions, organizations, countries, cities):
+  
+  print(f"  - Συγχρονισμός οργανισμού: {code}...")
+  response = url_get(f"{APOGRAFI_ORGANIZATIONS}{code}")
   organization_details = requests.get(url=URL_DETAIL_ORGANIZATION %code).json()['data']
 
   # print ("1>>",organization_details)
@@ -203,6 +209,7 @@ def batch_run():
   Logs(data=log).save()
 
 def organization_run(code):
+  print("Συγχρονισμός οργανισμού από το ΣΔΑΔ...")
   organizationTypes = requests.get(url=URL_ORGANIZATIONTYPES).json()['data']
   unitTypes = requests.get(url=URL_UNITTYPES).json()['data']
   functionalAreas = requests.get(url=URL_FUNCTIONALAREAS).json()['data']
@@ -211,8 +218,11 @@ def organization_run(code):
   cities = requests.get(url=URL_CITIES).json()['data']
 
   organizations = requests.get(url = URL_ALL_ORGANIZATIONS).json()['data']
-  
+  start_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
   processOrganizations(code, organizationTypes, unitTypes, functionalAreas, functions, organizations, countries, cities)
+  end_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+  send_email("dictionaries", start_time, end_time)
+  print("Τέλος συγχρονισμού οργανισμού από το ΣΔΑΔ.")
     
 my_parser = argparse.ArgumentParser(
   prog="organizations.py",

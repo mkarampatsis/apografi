@@ -14,6 +14,7 @@ from models.dictionary import Dictionary
 from models.synclog import SyncLog
 
 dbname = get_database()
+
 # api-endpoints
 APOGRAFI = "https://hrms.gov.gr/api/public"
 APOGRAFI_DICTS = f"{APOGRAFI}/metadata/dictionary"
@@ -93,7 +94,7 @@ def processDictionaries(dictionary, bar=None):
           doc_id=doc_id,
           value=diff,
         ).save()
-  else:
+    else:
       Dictionary(**doc).save()
       SyncLog(
         entity="dictionary", action="insert", doc_id=doc_id, value=doc

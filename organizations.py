@@ -1,32 +1,58 @@
 #!/usr/bin/env python3
 import requests
 import json
-import sys
 from connection import get_database
 from pprint import *
 from deepdiff import DeepDiff
 from datetime import datetime
 from datetime import timedelta
 import argparse
+from alive_progress import alive_bar
 
 from models.Organizations import Organizations
 from models.synclog import Logs
 
 dbname = get_database()
 # api-endpoints
-APOGRAFI = "https://hr.apografi.gov.gr/api/public"
+APOGRAFI = "https://hrms.gov.gr/api/public"
 APOGRAFI_DICTS = f"{APOGRAFI}/metadata/dictionary"
 
-URL_ALL_ORGANIZATIONS = f"{APOGRAFI}/organizations"
-URL_ORGANIZATIONS_UNITS = f"{APOGRAFI}/organizational-units?organizationCode=%s"
-
-URL_ORGANIZATIONTYPES = f"{APOGRAFI_DICTS}/OrganizationTypes"
 URL_UNITTYPES = f"{APOGRAFI_DICTS}/UnitTypes"
-URL_FUNCTIONALAREAS = f"{APOGRAFI_DICTS}/FunctionalAreas"
+URL_SPECIALITES = f"{APOGRAFI_DICTS}/Specialities"
+URL_SPECIALPOSITIONS  = f"{APOGRAFI_DICTS}/SpecialPositions"
+URL_RANKS = f"{APOGRAFI_DICTS}/Ranks"
+URL_PROFESSIONCATEGORIES = f"{APOGRAFI_DICTS}/ProfessionCategories"
+URL_ORGANIZATIONTYPES = f"{APOGRAFI_DICTS}/OrganizationTypes"
+URL_ORGANIZATIONCATEGORIES = f"{APOGRAFI_DICTS}/OrganizationCategories"
 URL_FUNCTIONS = f"{APOGRAFI_DICTS}/Functions"
+URL_FUNCTIONALAREAS = f"{APOGRAFI_DICTS}/FunctionalAreas"
+URL_EMPLOYMENTTYPES  = f"{APOGRAFI_DICTS}/EmploymentTypes"
+URL_EMPLOYEECATEGORIES = f"{APOGRAFI_DICTS}/EmployeeCategories"
+URL_EDUCATIONTYPES = f"{APOGRAFI_DICTS}/EducationTypes"
+URL_DUTYTYPES = f"{APOGRAFI_DICTS}/DutyTypes"
 URL_COUNTRIES = f"{APOGRAFI_DICTS}/Countries"
 URL_CITIES = f"{APOGRAFI_DICTS}/Cities"
-URL_DETAIL_ORGANIZATION  = f"{APOGRAFI}/organizations/%s"
+
+API_URL = "https://hrms.gov.gr/api"
+DICTIONARIES_URL = f"{API_URL}/public/metadata/dictionary/"
+
+DICTIONARIES = {
+  "UnitTypes": "Επιστρέφει όλες τους τύπους μονάδων που περιέχονται στο αντίστοιχο λεξικό του ΣΔΑΔ",
+  "Specialities": "Επιστρέφει όλες τις ειδικότητες που περιέχονται στο αντίστοιχο λεξικό του ΣΔΑΔ",
+  "SpecialPositions":"Επιστρέφει όλες τις ειδικές θέσεις που περιέχονται στο αντίστοιχο λεξικό του ΣΔΑΔ",
+  "Ranks":"Επιστρέφει όλους τους βαθμούς που περιέχονται στο αντίστοιχο λεξικό του ΣΔΑΔ",
+  "ProfessionCategories": "Επιστρέφει όλους τους κλάδους που περιέχονται στο αντίστοιχο λεξικό του ΣΔΑΔ",
+  "OrganizationTypes": "Επιστρέφει όλες τους τύπους φορέων που περιέχονται στο αντίστοιχο λεξικό του ΣΔΑΔ",
+  "OrganizationCategories": "Επιστρέφει όλες τις κατηγορίες φορέων που περιέχονται στο αντίστοιχο λεξικό του ΣΔΑΔ",
+  "Functions": "Επιστρέφει όλες τις λειτουργίες που περιέχονται στο αντίστοιχο λεξικό του ΣΔΑΔ",
+  "FunctionalAreas": "Επιστρέφει όλους τους τομείς πολιτικής που περιέχονται στο αντίστοιχο λεξικό του ΣΔΑΔ",
+  "EmploymentTypes": "Επιστρέφει όλες τις εργασιακές σχέσεις που περιέχονται στο αντίστοιχο λεξικό του ΣΔΑΔ",
+  "EmployeeCategories": "Επιστρέφει όλες τις κατηγορίες προσωπικού που περιέχονται στο αντίστοιχο λεξικό του ΣΔΑΔ",
+  "EducationTypes": "Επιστρέφει όλες τις κατηγορίες εκπαίδευσης που περιέχονται στο αντίστοιχο λεξικό του ΣΔΑΔ",
+  "DutyTypes": "Επιστρέφει όλα τα καθήκοντα θέσης απασχόλησης που περιέχονται στο αντίστοιχο λεξικό του ΣΔΑΔ",
+  "Countries": "Επιστρέφει όλες τις χώρες που περιέχονται στο αντίστοιχο λεξικό του ΣΔΑΔ",
+  "Cities": "Επιστρέφει όλους τους δήμους που περιέχονται στο αντίστοιχο λεξικό του ΣΔΑΔ"
+}
 
 def processOrganizations(code, organizationTypes, unitTypes, functionalAreas, functions, organizations, countries, cities):
   organization_details = requests.get(url=URL_DETAIL_ORGANIZATION %code).json()['data']

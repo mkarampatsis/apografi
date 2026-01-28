@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
 import requests
 import json
-import sys
 from connection import get_database
 from utils import url_get, send_email
 from pprint import *
 from deepdiff import DeepDiff
 from datetime import datetime
-from datetime import timedelta
 import argparse
-from mongoengine.queryset.visitor import Q
+# from mongoengine.queryset.visitor import Q
 from alive_progress import alive_bar
 
 from models.dictionary import Dictionary

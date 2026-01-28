@@ -16,25 +16,6 @@ from models.synclog import SyncLog
 dbname = get_database()
 
 # api-endpoints
-APOGRAFI = "https://hrms.gov.gr/api/public"
-APOGRAFI_DICTS = f"{APOGRAFI}/metadata/dictionary"
-
-URL_UNITTYPES = f"{APOGRAFI_DICTS}/UnitTypes"
-URL_SPECIALITES = f"{APOGRAFI_DICTS}/Specialities"
-URL_SPECIALPOSITIONS  = f"{APOGRAFI_DICTS}/SpecialPositions"
-URL_RANKS = f"{APOGRAFI_DICTS}/Ranks"
-URL_PROFESSIONCATEGORIES = f"{APOGRAFI_DICTS}/ProfessionCategories"
-URL_ORGANIZATIONTYPES = f"{APOGRAFI_DICTS}/OrganizationTypes"
-URL_ORGANIZATIONCATEGORIES = f"{APOGRAFI_DICTS}/OrganizationCategories"
-URL_FUNCTIONS = f"{APOGRAFI_DICTS}/Functions"
-URL_FUNCTIONALAREAS = f"{APOGRAFI_DICTS}/FunctionalAreas"
-URL_EMPLOYMENTTYPES  = f"{APOGRAFI_DICTS}/EmploymentTypes"
-URL_EMPLOYEECATEGORIES = f"{APOGRAFI_DICTS}/EmployeeCategories"
-URL_EDUCATIONTYPES = f"{APOGRAFI_DICTS}/EducationTypes"
-URL_DUTYTYPES = f"{APOGRAFI_DICTS}/DutyTypes"
-URL_COUNTRIES = f"{APOGRAFI_DICTS}/Countries"
-URL_CITIES = f"{APOGRAFI_DICTS}/Cities"
-
 API_URL = "https://hrms.gov.gr/api"
 DICTIONARIES_URL = f"{API_URL}/public/metadata/dictionary/"
 

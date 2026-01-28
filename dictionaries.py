@@ -63,14 +63,14 @@ def processDictionaries(dictionary, bar=None):
   
   for item in response.json()["data"]:
     doc = {
-        "code": dictionary,
-        "code_el": DICTIONARIES[dictionary],
-        "sdad_id": item["id"],
-        "description": item["description"],
+      "code": dictionary,
+      "code_el": DICTIONARIES[dictionary],
+      "sdad_id": item["id"],
+      "description": item["description"],
     }
 
     if "parentId" in item:
-        doc["parentId"] = item["parentId"]
+      doc["parentId"] = item["parentId"]
     
     doc_id = f"{dictionary}:{item['id']}:{item['description']}"
 
@@ -81,25 +81,25 @@ def processDictionaries(dictionary, bar=None):
     ).first()
 
     if existing:
-        existing_dict = existing.to_mongo().to_dict()
-        existing_dict.pop("_id")
-        diff = DeepDiff(existing_dict, doc, view='tree').to_json() 
-        diff = json.loads(diff)
-        if diff:
-            for key, value in doc.items():
-                setattr(existing, key, value)
-            existing.save()
-            SyncLog(
-                entity="dictionary",
-                action="update",
-                doc_id=doc_id,
-                value=diff,
-            ).save()
-    else:
-        Dictionary(**doc).save()
+      existing_dict = existing.to_mongo().to_dict()
+      existing_dict.pop("_id")
+      diff = DeepDiff(existing_dict, doc, view='tree').to_json() 
+      diff = json.loads(diff)
+      if diff:
+        for key, value in doc.items():
+          setattr(existing, key, value)
+        existing.save()
         SyncLog(
-            entity="dictionary", action="insert", doc_id=doc_id, value=doc
+          entity="dictionary",
+          action="update",
+          doc_id=doc_id,
+          value=diff,
         ).save()
+  else:
+      Dictionary(**doc).save()
+      SyncLog(
+        entity="dictionary", action="insert", doc_id=doc_id, value=doc
+      ).save()
   if bar:
     bar()
 

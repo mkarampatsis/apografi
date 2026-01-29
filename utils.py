@@ -45,6 +45,7 @@ def url_get(URL):
 
 def send_email(typeOf, start_time, end_time):
   try:
+    print("Start sending email")
     text = messages[typeOf] % (start_time, end_time)
     subject = subjects[typeOf]
     

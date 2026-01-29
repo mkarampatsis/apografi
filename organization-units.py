@@ -1,42 +1,35 @@
 #!/usr/bin/env python3
-import requests
 import json
-import sys
 from connection import get_database
-from pprint import *
+from utils import url_get, send_email
 from deepdiff import DeepDiff
 from datetime import datetime
-from datetime import timedelta
 import argparse
+from alive_progress import alive_bar
 
 from models.Organizations import Organizations
-from models.Organization_Units import Organization_Units
+from models.response import response
 from models.synclog import Logs
 
 dbname = get_database()
 # api-endpoints
-APOGRAFI = "https://hr.apografi.gov.gr/api/public"
-APOGRAFI_DICTS = f"{APOGRAFI}/metadata/dictionary"
+# api-endpoints
+API_URL = "https://hrms.gov.gr/api"
+DICTIONARIES_URL = f"{API_URL}/public/metadata/dictionary/"
+ORGANIZATIONS_URL = f"{API_URL}/public/organizations"
+ORGANIZATION_UNITS_URL = f"{API_URL}/public/organizational-units?organizationCode=%s"
+ORGANIZATION_TREE_URL = f"{API_URL}/public/organization-tree?organizationCode=%s"
 
-URL_ORGANIZATION_UNITS = f"{APOGRAFI}/organizational-units?organizationCode=%s"
-URL_ORGANIZATION_TREE = f"{APOGRAFI}/organization-tree?organizationCode=%s"
 
-URL_UNITTYPES = f"{APOGRAFI_DICTS}/UnitTypes"
-URL_FUNCTIONS = f"{APOGRAFI_DICTS}/Functions"
-URL_COUNTRIES = f"{APOGRAFI_DICTS}/Countries"
-URL_CITIES = f"{APOGRAFI_DICTS}/Cities"
+def processOrganizationUnits(code, unitTypes, functions, countries, cities):
+  print(f"  - Συγχρονισμός μονάδων οργανισμού: {code}...")
+  # response = requests.get(url=URL_ORGANIZATION_UNITS %code).json()['data']
+  response = url_get(f"{ORGANIZATION_UNITS_URL %code}").json()['data']
 
-def processOrganizations(organization, unitTypes, functions, countries, cities):
-  code = organization['code']
-  organization_units = requests.get(url=URL_ORGANIZATION_UNITS %code).json()['data']
-
-  # print(">>>",organization)
-
-  for unit in organization_units:
-    # print(unit)
+  for unit in response:
+    
     unitType = [x for x in unitTypes if x['id'] == unit['unitType']]
-    # print (unitType)
-    unit['unitType']={'id': unitType[0]['id'], 'description': unitType[0]['description']}
+    unit['unitType'] = unitType[0]
 
     purposeArray = []
     if unit.get('purpose'):
@@ -50,7 +43,7 @@ def processOrganizations(organization, unitTypes, functions, countries, cities):
     unit['purpose']=purposeArray
 
     if unit.get('supervisorUnitCode'):
-      supervisorUnitCode = [x for x in organization_units if x['code'] in unit['supervisorUnitCode']]
+      supervisorUnitCode = [x for x in response if x['code'] in unit['supervisorUnitCode']]
       unit['supervisorUnitCode'] = {'code': supervisorUnitCode[0]['code'], 'preferredLabel': supervisorUnitCode[0]['preferredLabel']}
     
     unit['email'] = unit['email'] if unit.get('email') else None
@@ -117,12 +110,12 @@ def processOrganizations(organization, unitTypes, functions, countries, cities):
     "subOrganizationOf" : organization['subOrganizationOf'],
     "organizationType"  : organization['organizationType'],
     "description" : organization['description'],
-    "units":organization_units
+    "units":response
   }
   # print(item)
   # sys.exit()
   try:
-    organization = Organization_Units.objects.get(code=code)
+    organization = response.objects.get(code=code)
     print ("Organization %s exist" %code)
     
     organization = json.loads(organization.to_json())
@@ -135,52 +128,54 @@ def processOrganizations(organization, unitTypes, functions, countries, cities):
       Logs(data=diff).save()
       #print(diff)
       # sys.exit()
-      Organization_Units.objects(code=code).update_one(**item)
+      response.objects(code=code).update_one(**item)
       
-  except Organization_Units.DoesNotExist:
+  except response.DoesNotExist:
     print("Organization %s is new" %code)
-    Organization_Units(**item).save()
+    response(**item).save()
 
 def batch_iterator():
-  organizations = Organizations.objects(organization_units__gte=1)
-  for organization in organizations:
-    yield organization
+  organizations = url_get(f"{ORGANIZATIONS_URL}")
+  with alive_bar(len(organizations.json()["data"])) as bar:
+    for organization in organizations:
+      yield organization
+      bar()
 
 def batch_run():
-  unitTypes = requests.get(url=URL_UNITTYPES).json()['data']
-  functions = requests.get(url=URL_FUNCTIONS).json()['data']
-  countries = requests.get(url=URL_COUNTRIES).json()['data']
-  cities = requests.get(url=URL_CITIES).json()['data']
-  
-  log = {}
-  log['start'] = datetime.now()
-  log['application'] = "organizations"
+  print("Συγχρονισμός μονάδων οργανισμού από το ΣΔΑΔ...")
+  unitTypes = url_get(f"{DICTIONARIES_URL}UnitTypes").json()['data']
+  functions = url_get(f"{DICTIONARIES_URL}Functions").json()['data']
+  countries = url_get(f"{DICTIONARIES_URL}Countries").json()['data']
+  cities = url_get(f"{DICTIONARIES_URL}Cities").json()['data']
 
   for item in batch_iterator():
     organization = json.loads(item.to_json())
-    # print (item)
     code = organization['code']
-    print(code)
-    processOrganizations(organization, unitTypes, functions, countries, cities)
-  
-  log['end'] = datetime.now()
-  Logs(data=log).save()
 
-def organization_run(code):
-  item = Organizations.objects.get(code=code)
-  organization = json.loads(item.to_json())
+    start_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+    processOrganizationUnits(code, unitTypes, functions, countries, cities)
+    end_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+    send_email("organizational_units", start_time, end_time)
+    print("Τέλος συγχρονισμού μονάδων οργανισμού από το ΣΔΑΔ.")
+
+def organization_unit_run(code):
+  print("Συγχρονισμός μονάδων οργανισμού από το ΣΔΑΔ...")
+ 
+  unitTypes = url_get(f"{DICTIONARIES_URL}UnitTypes").json()['data']
+  functions = url_get(f"{DICTIONARIES_URL}Functions").json()['data']
+  countries = url_get(f"{DICTIONARIES_URL}Countries").json()['data']
+  cities = url_get(f"{DICTIONARIES_URL}Cities").json()['data']
   
-  unitTypes = requests.get(url=URL_UNITTYPES).json()['data']
-  functions = requests.get(url=URL_FUNCTIONS).json()['data']
-  countries = requests.get(url=URL_COUNTRIES).json()['data']
-  cities = requests.get(url=URL_CITIES).json()['data']
-  
-  processOrganizations(organization, unitTypes, functions, countries, cities)
+  start_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+  processOrganizationUnits(code, unitTypes, functions, countries, cities)
+  end_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+  send_email("organizational_units", start_time, end_time)
+  print("Τέλος συγχρονισμού μονάδων οργανισμού από το ΣΔΑΔ.")
     
 my_parser = argparse.ArgumentParser(
-  prog="organizations.py",
+  prog="organization-units.py",
   usage="%(prog)s [--all] | [--code] code",
-  description="Get all organization unit if run in batch else specific oranization unit")
+  description="Get all organization units if run in batch else specific oranization unit")
 
 my_parser.add_argument("--all", action="store_true")
 my_parser.add_argument("--code", type=str, help="give an organization unit code to process")
@@ -192,4 +187,4 @@ if args.all:
   batch_run()
 else:
   print("Process code: ", args.code)
-  organization_run(args.code)
+  organization_unit_run(args.code)

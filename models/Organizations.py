@@ -1,9 +1,5 @@
 from mongoengine import *
 
-class PurposeDoc(EmbeddedDocument):
-  id = IntField()
-  description = StringField()
-
 class CountryDoc(EmbeddedDocument):
   id = IntField()
   description = StringField()
@@ -11,11 +7,7 @@ class CountryDoc(EmbeddedDocument):
 class CityDoc(EmbeddedDocument):
   id = IntField()
   description = StringField()
-  parentId = IntField()
-
-class SpatialDoc(EmbeddedDocument):
-  country = EmbeddedDocumentField(CountryDoc, null=True)
-  city = EmbeddedDocumentField(CityDoc, null=True)
+  parentId = IntField(null=True)
 
 class OrganizationDoc(EmbeddedDocument):
   id = IntField()
@@ -26,51 +18,38 @@ class SubOrganizationDoc(EmbeddedDocument):
   preferredLabel = StringField()  
 
 class FekDoc(EmbeddedDocument):
-  year = IntField()
-  number = StringField()
-  issue = StringField()
-
-class FekDoc(EmbeddedDocument):
-  year = IntField()
-  number = StringField()
-  issue = StringField()
+  year = IntField(null=True)
+  number = StringField(null=True)
+  issue = StringField(null=True)
 
 class ContactDoc(EmbeddedDocument):
-  email = StringField()
-  telephone = StringField()
+  email = StringField(null=True)
+  telephone = StringField(null=True)
  
 class MainAddressDoc(EmbeddedDocument):
   fullAddress = StringField()
   postCode = StringField()
-  country = EmbeddedDocumentField(CountryDoc)  
-  city = EmbeddedDocumentField(CityDoc)
-
-class SecondaryAddressesDoc(EmbeddedDocument):
-  fullAddress = StringField()
-  postCode = StringField()
-  country = EmbeddedDocumentField(CountryDoc)  
-  city = EmbeddedDocumentField(CityDoc)  
+  country = EmbeddedDocumentField(CountryDoc, null=True)  
+  city = EmbeddedDocumentField(CityDoc, null=True)
 
 class Organizations(Document):
   code = StringField(required=True, unique=True)
   preferredLabel = StringField()
-  alternativeLabels = ListField(StringField(max_length=200))
-  purpose = EmbeddedDocumentListField(PurposeDoc)
-  spatial = EmbeddedDocumentListField(SpatialDoc)
-  identifier = StringField()
   subOrganizationOf = EmbeddedDocumentField(SubOrganizationDoc, null=True)
   organizationType  = EmbeddedDocumentField(OrganizationDoc)
   description = StringField()
+  url = StringField()
+  contactPoint = EmbeddedDocumentField(ContactDoc, null=True)
+  vatId = StringField()
   status = StringField()
   foundationDate = DateTimeField(null=True)
   terminationDate = DateTimeField(null=True)
-  foundationFek = EmbeddedDocumentField(FekDoc)
-  organization_units = IntField()
-  contactPoint = EmbeddedDocumentField(ContactDoc)
+  mainDataUpdateDate = DateTimeField(null=True)
+  organizationStructureUpdateDate = DateTimeField(null=True)
+  foundationFek = EmbeddedDocumentField(FekDoc, null=True)
   mainAddress = EmbeddedDocumentField(MainAddressDoc)
-  secondaryAddresses = EmbeddedDocumentListField(SecondaryAddressesDoc)
   
   meta = {
-    "collection": "organozations",
-    "db_alias": "ministryDB"
+    "collection": "organizations",
+    "db_alias": "sdad"
   }

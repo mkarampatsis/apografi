@@ -27,7 +27,7 @@ class CountryDoc(EmbeddedDocument):
 class CityDoc(EmbeddedDocument):
   id = IntField()
   description = StringField()
-  parentId = IntField()
+  parentId = IntField(null=True)
 
 class SpatialDoc(EmbeddedDocument):
   country = EmbeddedDocumentField(CountryDoc, null=True)
@@ -36,39 +36,30 @@ class SpatialDoc(EmbeddedDocument):
 class MainAddressDoc(EmbeddedDocument):
   fullAddress = StringField()
   postCode = StringField()
-  country = EmbeddedDocumentField(CountryDoc)  
-  city = EmbeddedDocumentField(CityDoc)
+  country = EmbeddedDocumentField(CountryDoc, null=True)  
+  city = EmbeddedDocumentField(CityDoc, null=True)
 
 class SecondaryAddressesDoc(EmbeddedDocument):
   fullAddress = StringField()
   postCode = StringField()
-  country = EmbeddedDocumentField(CountryDoc)  
-  city = EmbeddedDocumentField(CityDoc)
+  country = EmbeddedDocumentField(CountryDoc, null=True)  
+  city = EmbeddedDocumentField(CityDoc, null=True)
 
-class Units(EmbeddedDocument):
+class Organization_Units(Document):
   code = StringField()
   organizationCode = StringField()
+  supervisorUnitCode = EmbeddedDocumentField(supervisorUnitCodeDoc, null=True)
   preferredLabel = StringField()
   alternativeLabels = ListField(StringField(max_length=200))
   purpose = EmbeddedDocumentListField(PurposeDoc)
-  description = StringField()
-  unitType = EmbeddedDocumentField(UnitTypeDoc)
-  supervisorUnitCode = EmbeddedDocumentField(supervisorUnitCodeDoc, null=True)
   spatial = EmbeddedDocumentListField(SpatialDoc)
+  identifier = StringField(null=True)
+  unitType = EmbeddedDocumentField(UnitTypeDoc)
+  description = StringField()
   email = StringField()
   telephone = StringField()
   url = StringField()
   mainAddress = EmbeddedDocumentField(MainAddressDoc)
   secondaryAddresses = EmbeddedDocumentListField(SecondaryAddressesDoc)
  
-class Organization_Units(Document):
-  code = StringField(required=True, unique=True)
-  preferredLabel = StringField()
-  alternativeLabels = ListField(StringField(max_length=200))
-  purpose = EmbeddedDocumentListField(PurposeDoc)
-  subOrganizationOf = EmbeddedDocumentField(SubOrganizationDoc)
-  organizationType  = EmbeddedDocumentField(OrganizationDoc)
-  description = StringField()
-  units = EmbeddedDocumentListField(Units)
-
-  meta = {"db_alias": "ministryDB"}
+  meta = {"db_alias": "sdad"}

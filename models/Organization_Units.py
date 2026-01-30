@@ -62,4 +62,7 @@ class Organization_Units(Document):
   mainAddress = EmbeddedDocumentField(MainAddressDoc)
   secondaryAddresses = EmbeddedDocumentListField(SecondaryAddressesDoc)
  
-  meta = {"db_alias": "sdad"}
+  meta = {
+    "collection": "organizational-units",
+    "db_alias": "sdad"
+    }

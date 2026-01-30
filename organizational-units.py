@@ -168,9 +168,11 @@ def batch_run():
   cities = url_get(f"{DICTIONARIES_URL}Cities").json()['data']
 
   for item in batch_iterator():
-    organization = json.loads(item.to_json())
-    code = organization['code']
-
+    print(item)
+    # organization = json.loads(item)
+    print(item, item['code'])
+    # code = organization['code']
+    code = item['code']
     start_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
     processOrganizationUnits(code, unitTypes, functions, countries, cities)
     end_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")

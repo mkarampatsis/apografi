@@ -51,5 +51,6 @@ class Organizations(Document):
   
   meta = {
     "collection": "organizations",
-    "db_alias": "sdad"
+    "db_alias": "sdad",
+    "indexes": ["preferredLabel"],
   }

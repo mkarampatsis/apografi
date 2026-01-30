@@ -8,6 +8,7 @@ import argparse
 from alive_progress import alive_bar
 
 from models.Organizations import Organizations
+from models.Organizational_Units import Organizational_Units
 from models.synclog import SyncLog
 
 dbname = get_database()
@@ -34,12 +35,11 @@ def processOrganizationUnits(code, unitTypes, functions, countries, cities):
       purposeArray = []
       if unit.get('purpose'):
         for u in unit['purpose']:
-          purposeArray.append(u)
-          # purpose = [x for x in functions if x['id'] == u]
-          # if purpose:
-          #   purposeArray.append(purpose[0])
-          # else:
-          #   purposeArray.append({'id': u, 'description': 'NotExist'})
+          purpose = [x for x in functions if x['id'] == u]
+          if purpose:
+            purposeArray.append(purpose[0])
+          else:
+            purposeArray.append({'id': u, 'description': 'NotExist'})
                           
       unit['purpose']=purposeArray
 
@@ -124,8 +124,8 @@ def processOrganizationUnits(code, unitTypes, functions, countries, cities):
       # print(item)
       # sys.exit()
       try:
-        existing = response.objects.get(code=code)
-        print ("Organization unit %s exist" %code)
+        existing = Organizational_Units.objects.get(code=unit['code'])
+        print ("Organization unit %s exist" %unit['code'])
         
         if existing:
           existing_dict = existing.to_mongo().to_dict()
@@ -146,10 +146,11 @@ def processOrganizationUnits(code, unitTypes, functions, countries, cities):
                 doc_id=item["code"],
                 value=diff,
             ).save()
+            # Organization_Units.objects(code=code).update_one(**item)
           
-      except response.DoesNotExist:
-        print("Organization %s is new" %code)
-        response(**item).save()
+      except Organizational_Units.DoesNotExist:
+        print("Organizational Unit %s is new" %unit['code'])
+        Organizational_Units(**item).save()
     bar()
 
 def batch_iterator():

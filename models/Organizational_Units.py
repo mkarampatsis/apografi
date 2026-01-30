@@ -45,7 +45,7 @@ class SecondaryAddressesDoc(EmbeddedDocument):
   country = EmbeddedDocumentField(CountryDoc, null=True)  
   city = EmbeddedDocumentField(CityDoc, null=True)
 
-class Organization_Units(Document):
+class Organizational_Units(Document):
   code = StringField()
   organizationCode = StringField()
   supervisorUnitCode = EmbeddedDocumentField(supervisorUnitCodeDoc, null=True)
@@ -55,14 +55,15 @@ class Organization_Units(Document):
   spatial = EmbeddedDocumentListField(SpatialDoc)
   identifier = StringField(null=True)
   unitType = EmbeddedDocumentField(UnitTypeDoc)
-  description = StringField()
-  email = StringField()
-  telephone = StringField()
-  url = StringField()
+  description = StringField(null=True)
+  email = StringField(null=True)
+  telephone = StringField(null=True)
+  url = StringField(null=True)
   mainAddress = EmbeddedDocumentField(MainAddressDoc)
   secondaryAddresses = EmbeddedDocumentListField(SecondaryAddressesDoc)
  
   meta = {
     "collection": "organizational-units",
-    "db_alias": "sdad"
+    "db_alias": "sdad",
+    "indexes": ["organizationCode", "supervisorUnitCode", "preferredLabel"],
     }

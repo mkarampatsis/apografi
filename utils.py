@@ -8,7 +8,7 @@ from datetime import datetime
 
 SMTPSERVER = "smtp.ntua.gr"
 SENDER = 'no-reply@thryallis.ypes.gov.gr'
-DESTINATION = ['marka@mail.ntua.gr','marka@central.ntua.gr']
+DESTINATION = ['antpsarakis@gmail.com','marka@central.ntua.gr']
 
 USERNAME = "jraptaki"
 PASSWORD = "l1vadak1a"

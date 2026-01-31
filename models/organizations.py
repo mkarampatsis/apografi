@@ -19,7 +19,7 @@ class SubOrganizationDoc(EmbeddedDocument):
 
 class FekDoc(EmbeddedDocument):
   year = IntField(null=True)
-  number = StringField(null=True)
+  number = IntField(null=True)
   issue = StringField(null=True)
 
 class ContactDoc(EmbeddedDocument):

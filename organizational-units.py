@@ -25,141 +25,139 @@ def processOrganizationUnits(code, unitTypes, functions, countries, cities):
   print(f"  - Συγχρονισμός μονάδων οργανισμού: {code}...")
   # response = requests.get(url=URL_ORGANIZATION_UNITS %code).json()['data']
   response = url_get(f"{ORGANIZATION_UNITS_URL %code}").json()['data']
+  if response:
+    with alive_bar(len(response)) as bar:
+      for unit in response:
+        
+        unitType = [x for x in unitTypes if x['id'] == unit['unitType']]
+        unit['unitType'] = unitType[0]
 
-  with alive_bar(len(response)) as bar:
-    for unit in response:
-      
-      unitType = [x for x in unitTypes if x['id'] == unit['unitType']]
-      unit['unitType'] = unitType[0]
+        purposeArray = []
+        if unit.get('purpose'):
+          for u in unit['purpose']:
+            purpose = [x for x in functions if x['id'] == u]
+            if purpose:
+              purposeArray.append(purpose[0])
+            else:
+              purposeArray.append({'id': u, 'description': 'NotExist'})
+                            
+        unit['purpose']=purposeArray
 
-      purposeArray = []
-      if unit.get('purpose'):
-        for u in unit['purpose']:
-          purpose = [x for x in functions if x['id'] == u]
-          if purpose:
-            purposeArray.append(purpose[0])
-          else:
-            purposeArray.append({'id': u, 'description': 'NotExist'})
-                          
-      unit['purpose']=purposeArray
+        if unit.get('supervisorUnitCode'):
+          supervisorUnitCode = [x for x in response if x['code'] in unit['supervisorUnitCode']]
+          unit['supervisorUnitCode'] = {'code': supervisorUnitCode[0]['code'], 'preferredLabel': supervisorUnitCode[0]['preferredLabel']}
+        
+        unit['email'] = unit['email'] if unit.get('email') else None
+        unit['telephone'] = unit['telephone'] if unit.get('telephone') else None
+        unit['url'] = unit['url'] if unit.get('url') else None
+        unit['identifier'] = unit['identifier'] if unit.get('identifier') else None
 
-      if unit.get('supervisorUnitCode'):
-        supervisorUnitCode = [x for x in response if x['code'] in unit['supervisorUnitCode']]
-        unit['supervisorUnitCode'] = {'code': supervisorUnitCode[0]['code'], 'preferredLabel': supervisorUnitCode[0]['preferredLabel']}
-      
-      unit['email'] = unit['email'] if unit.get('email') else None
-      unit['telephone'] = unit['telephone'] if unit.get('telephone') else None
-      unit['url'] = unit['url'] if unit.get('url') else None
-      unit['identifier'] = unit['identifier'] if unit.get('identifier') else None
+        spatialArray = []
+        if unit.get('spatial'):
+          for s in unit.get('spatial'):
+            country = [x for x in countries if x['id'] == s['countryId']]
+            city = [x for x in cities if x['id'] == s['countryId']]
+            spatialArray.append({ 
+              'country': country[0] if country else None, 
+              'city': city[0] if city else None 
+            })
+        unit['spatial']=spatialArray
 
-      spatialArray = []
-      if unit.get('spatial'):
-        for s in unit.get('spatial'):
-          country = [x for x in countries if x['id'] == s['countryId']]
-          city = [x for x in cities if x['id'] == s['countryId']]
-          spatialArray.append({ 
-            'country': country[0] if country else None, 
-            'city': city[0] if city else None 
-          })
-      unit['spatial']=spatialArray
-
-      if unit.get('mainAddress'):
-        if unit['mainAddress'].get('adminUnitLevel1'):
-          country = [x for x in countries if x['id'] == unit['mainAddress']['adminUnitLevel1']]
-        else: 
-          country = None  
-        if unit['mainAddress'].get('adminUnitLevel2'):
-          city = [x for x in cities if x['id'] == unit['mainAddress']['adminUnitLevel2']]
-        else:
-          city = None
-        unit['mainAddress']={ 
-          'fullAddress':unit['mainAddress']['fullAddress'] if unit['mainAddress'].get('fullAddress') else None, 
-          'postCode':unit['mainAddress']['postCode'] if unit['mainAddress'].get('postCode') else None, 
-          'country': country[0] if country else None, 
-          'city': city[0] if city else None
-        }
-      else:
-        unit['mainAddress'] = None
-
-      secondaryAddressesArray = []    
-      if unit.get('secondaryAddresses'):
-        for s in unit.get('secondaryAddresses'):
-          if s.get('adminUnitLevel1'):
-            country = [x for x in countries if x['id'] == s['adminUnitLevel1']]
-          else:
-            country = None
-          if s.get('adminUnitLevel2'):
-            city = [x for x in cities if x['id'] == s['adminUnitLevel2']]
+        if unit.get('mainAddress'):
+          if unit['mainAddress'].get('adminUnitLevel1'):
+            country = [x for x in countries if x['id'] == unit['mainAddress']['adminUnitLevel1']]
+          else: 
+            country = None  
+          if unit['mainAddress'].get('adminUnitLevel2'):
+            city = [x for x in cities if x['id'] == unit['mainAddress']['adminUnitLevel2']]
           else:
             city = None
-          secondaryAddressesArray.append({ 
-            'fullAddress':s['fullAddress'] if s.get('fullAddress') else None, 
-            'postCode':s['postCode'] if s.get('postCode') else None, 
+          unit['mainAddress']={ 
+            'fullAddress':unit['mainAddress']['fullAddress'] if unit['mainAddress'].get('fullAddress') else None, 
+            'postCode':unit['mainAddress']['postCode'] if unit['mainAddress'].get('postCode') else None, 
             'country': country[0] if country else None, 
             'city': city[0] if city else None
-          })
-      unit['secondaryAddresses']=secondaryAddressesArray
+          }
+        else:
+          unit['mainAddress'] = None
 
-      # unit.pop('identifier', None)
-      
-      # print(unit)   
-    
-      item = {
-        "code": unit["code"],
-        "organizationCode": unit["organizationCode"],
-        "supervisorUnitCode": unit["supervisorUnitCode"],
-        "preferredLabel": unit["preferredLabel"],
-        "alternativeLabels": unit["alternativeLabels"],
-        "purpose": unit["purpose"],
-        "spatial": unit["spatial"],
-        "identifier": unit["identifier"],
-        "unitType": unit["unitType"],
-        "description": unit["description"],
-        "email": unit["email"],
-        "telephone": unit["telephone"],
-        "url": unit["url"],
-        "mainAddress": unit["mainAddress"],
-        "secondaryAddresses": unit["secondaryAddresses"],
-      }
-      # print(item)
-      # sys.exit()
-      try:
-        existing = Organizational_Units.objects.get(code=unit['code'])
-        print ("Organization unit %s exist" %unit['code'])
+        secondaryAddressesArray = []    
+        if unit.get('secondaryAddresses'):
+          for s in unit.get('secondaryAddresses'):
+            if s.get('adminUnitLevel1'):
+              country = [x for x in countries if x['id'] == s['adminUnitLevel1']]
+            else:
+              country = None
+            if s.get('adminUnitLevel2'):
+              city = [x for x in cities if x['id'] == s['adminUnitLevel2']]
+            else:
+              city = None
+            secondaryAddressesArray.append({ 
+              'fullAddress':s['fullAddress'] if s.get('fullAddress') else None, 
+              'postCode':s['postCode'] if s.get('postCode') else None, 
+              'country': country[0] if country else None, 
+              'city': city[0] if city else None
+            })
+        unit['secondaryAddresses']=secondaryAddressesArray
+
+        # unit.pop('identifier', None)
         
-        if existing:
-          existing_dict = existing.to_mongo().to_dict()
-          existing_dict.pop("_id")
+        # print(unit)   
+      
+        item = {
+          "code": unit["code"],
+          "organizationCode": unit["organizationCode"],
+          "supervisorUnitCode": unit["supervisorUnitCode"],
+          "preferredLabel": unit["preferredLabel"],
+          "alternativeLabels": unit["alternativeLabels"],
+          "purpose": unit["purpose"],
+          "spatial": unit["spatial"],
+          "identifier": unit["identifier"],
+          "unitType": unit["unitType"],
+          "description": unit["description"],
+          "email": unit["email"],
+          "telephone": unit["telephone"],
+          "url": unit["url"],
+          "mainAddress": unit["mainAddress"],
+          "secondaryAddresses": unit["secondaryAddresses"],
+        }
+        # print(item)
+        # sys.exit()
+        try:
+          existing = Organizational_Units.objects.get(code=unit['code'])
+          print ("Organization unit %s exist" %unit['code'])
           
-          diff = DeepDiff(existing_dict, item, view='tree').to_json() 
-          diff = json.loads(diff)
-          # print (diff)
-          if diff:
-            print("DIFF TRUE", diff)
-            for key, value in item.items():
-              setattr(existing, key, value)
-            # print("Existing>>",existing.to_json())
-            existing.save()
-            SyncLog(
-                entity="organization",
-                action="update",
-                doc_id=item["code"],
-                value=diff,
-            ).save()
-            # Organization_Units.objects(code=code).update_one(**item)
-          
-      except Organizational_Units.DoesNotExist:
-        print("Organizational Unit %s is new" %unit['code'])
-        Organizational_Units(**item).save()
-    bar()
-
-def batch_iterator():
-  organizations = url_get(f"{ORGANIZATIONS_URL}")
-  with alive_bar(len(organizations.json()["data"])) as bar:
-    for organization in organizations:
-      yield organization
+          if existing:
+            existing_dict = existing.to_mongo().to_dict()
+            existing_dict.pop("_id")
+            
+            diff = DeepDiff(existing_dict, item, view='tree').to_json() 
+            diff = json.loads(diff)
+            # print (diff)
+            if diff:
+              print("DIFF TRUE", diff)
+              for key, value in item.items():
+                setattr(existing, key, value)
+              # print("Existing>>",existing.to_json())
+              existing.save()
+              SyncLog(
+                  entity="organization",
+                  action="update",
+                  doc_id=item["code"],
+                  value=diff,
+              ).save()
+              # Organization_Units.objects(code=code).update_one(**item)
+            
+        except Organizational_Units.DoesNotExist:
+          print("Organizational Unit %s is new" %unit['code'])
+          Organizational_Units(**item).save()
       bar()
 
+def batch_iterator():
+  organizations = url_get(f"{ORGANIZATIONS_URL}").json()["data"]
+  for organization in organizations:
+    yield organization
+  
 def batch_run():
   print("Συγχρονισμός μονάδων οργανισμού από το ΣΔΑΔ...")
   unitTypes = url_get(f"{DICTIONARIES_URL}UnitTypes").json()['data']
@@ -167,17 +165,15 @@ def batch_run():
   countries = url_get(f"{DICTIONARIES_URL}Countries").json()['data']
   cities = url_get(f"{DICTIONARIES_URL}Cities").json()['data']
 
+  start_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+    
   for item in batch_iterator():
-    print(item)
-    # organization = json.loads(item)
-    print(item, item['code'])
-    # code = organization['code']
     code = item['code']
-    start_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
     processOrganizationUnits(code, unitTypes, functions, countries, cities)
-    end_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
-    send_email("organizational_units", start_time, end_time)
-    print("Τέλος συγχρονισμού μονάδων οργανισμού από το ΣΔΑΔ.")
+  
+  end_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+  send_email("organizational_units", start_time, end_time)
+  print("Τέλος συγχρονισμού μονάδων οργανισμού από το ΣΔΑΔ.")
 
 def organization_unit_run(code):
   print("Συγχρονισμός μονάδων οργανισμού από το ΣΔΑΔ...")

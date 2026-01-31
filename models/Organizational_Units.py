@@ -59,8 +59,8 @@ class Organizational_Units(Document):
   email = StringField(null=True)
   telephone = StringField(null=True)
   url = StringField(null=True)
-  mainAddress = EmbeddedDocumentField(MainAddressDoc)
-  secondaryAddresses = EmbeddedDocumentListField(SecondaryAddressesDoc)
+  mainAddress = EmbeddedDocumentField(MainAddressDoc,null=True)
+  secondaryAddresses = EmbeddedDocumentListField(SecondaryAddressesDoc, null=True)
  
   meta = {
     "collection": "organizational-units",

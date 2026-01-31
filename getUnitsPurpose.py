@@ -6,7 +6,7 @@ from pprint import *
 
 import argparse
 
-from models.Organizational_Units import Organization_Units
+from models.organizational_units import Organization_Units
 
 dbname = get_database()
 
@@ -43,7 +43,7 @@ def batch_iterator():
         yield organization
 
 def batch_run():
-    f = open("purposes.txt", "w")
+    f = open("purposes.txt", "w",encoding='utf-8')
     
     for item in batch_iterator():
         organization = json.loads(item.to_json())

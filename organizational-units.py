@@ -7,8 +7,7 @@ from datetime import datetime
 import argparse
 from alive_progress import alive_bar
 
-from models.Organizations import Organizations
-from models.Organizational_Units import Organizational_Units
+from models.organizational_units import Organizational_Units
 from models.synclog import SyncLog
 
 dbname = get_database()

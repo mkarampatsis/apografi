@@ -130,14 +130,14 @@ def processOrganizationUnits(code, unitTypes, functions, countries, cities):
             existing_dict = existing.to_mongo().to_dict()
             existing_dict.pop("_id")
             
-            diff = DeepDiff(existing_dict, item, view='tree').to_json() 
+            diff = DeepDiff(existing_dict, item, ignore_order=True, view='tree').to_json() 
             diff = json.loads(diff)
             # print (diff)
             if diff:
               print("DIFF TRUE", diff)
               for key, value in item.items():
                 setattr(existing, key, value)
-              # print("Existing>>",existing.to_json())
+              print("Existing>>",existing.to_json())
               existing.save()
               SyncLog(
                   entity="organization",

@@ -8,7 +8,6 @@ import argparse
 from alive_progress import alive_bar
 
 from models.organizations import Organizations
-from models.organizations import SubOrganizationDoc, OrganizationDoc, ContactDoc, FekDoc, MainAddressDoc, CountryDoc, CityDoc
 from models.synclog import SyncLog
 import redis
 
@@ -46,9 +45,9 @@ def processOrganizations(code):
     else: 
       mainCountry = None  
     if response['mainAddress'].get('adminUnitLevel2'):
-      # mainCity = [x for x in cities if x['id'] == response['mainAddress']['adminUnitLevel2']]
+      # mainCity = [x for x in cities if xCities['id'] == response['mainAddress']['adminUnitLevel2']]
       city  = dict_cache.get(f"Cities:{response['mainAddress']['adminUnitLevel2']}").decode("utf-8")
-      mainCity = {'id': response['mainAddress']['adminUnitLevel2'], "description": city }
+      mainCity = {'id': response['mainAddress']['adminUnitLevel2'], "description": city, 'parentId':None }
     else:
       mainCity = None
     response['mainAddress']={ 
@@ -106,7 +105,7 @@ def processOrganizations(code):
         print("DIFF TRUE", diff)
         item = normalize_embedded(item)
         for key, value in item.items():
-            setattr(existing, key, value)
+          setattr(existing, key, value)
         # print("Existing>>",existing.to_json())
         existing.save()
         SyncLog(

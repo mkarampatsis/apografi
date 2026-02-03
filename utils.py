@@ -110,9 +110,6 @@ def normalize_embedded(item):
       city=CityDoc(**addr["city"]) if addr.get("city") else None,
     )  
   
-  if item.get("supervisorUnitCode"):
-    item["supervisorUnitCode"] = SubOrganizationDoc(**item["subOrganizationOf"])
-
   if item.get("spatial"):
     item["spatial"] = SpatialDoc(**item["spatial"])  
   

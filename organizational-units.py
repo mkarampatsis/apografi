@@ -64,7 +64,7 @@ def processOrganizationUnits(code):
             # country = [x for x in countries if x['id'] == s['countryId']]
             country = {'id': s['countryId'], "description": dict_cache.get(f"Countries:{s['countryId']}").decode("utf-8") } 
             # city = [x for x in cities if x['id'] == s['countryId']]
-            city = {'id': s['dimosId'], "description": dict_cache.get(f"Cities:{s['dimosId']}").decode("utf-8") } 
+            city = {'id': s['dimosId'], "description": dict_cache.get(f"Cities:{s['dimosId']}").decode("utf-8") , "parentId":None} 
             spatialArray.append({ 
               # 'country': country[0] if country else None, 
               # 'city': city[0] if city else None 
@@ -83,7 +83,7 @@ def processOrganizationUnits(code):
           if unit['mainAddress'].get('adminUnitLevel2'):
             # city = [x for x in cities if x['id'] == unit['mainAddress']['adminUnitLevel2']]
             name  = dict_cache.get(f"Cities:{unit['mainAddress']['adminUnitLevel2']}").decode("utf-8")
-            city = {'id': unit['mainAddress']['adminUnitLevel2'], "description": name }
+            city = {'id': unit['mainAddress']['adminUnitLevel2'], "description": name, 'parentId':None }
           else:
             city = None
           unit['mainAddress']={ 
@@ -109,7 +109,7 @@ def processOrganizationUnits(code):
             if s.get('adminUnitLevel2'):
               # city = [x for x in cities if x['id'] == s['adminUnitLevel2']]
               name  = dict_cache.get(f"Cities:{response['mainAddress']['adminUnitLevel2']}").decode("utf-8")
-              city = {'id': s['adminUnitLevel2'], "description": name }
+              city = {'id': s['adminUnitLevel2'], "description": name, 'parentId':None }
             else:
               city = None
             secondaryAddressesArray.append({ 
@@ -158,6 +158,7 @@ def processOrganizationUnits(code):
             # print (diff)
             if diff:
               print("DIFF TRUE", diff)
+              item = normalize_embedded(item)
               for key, value in item.items():
                 setattr(existing, key, value)
               # print("Existing>>",existing.to_json())

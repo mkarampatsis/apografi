@@ -1,36 +1,9 @@
 from mongoengine import *
 
-class CountryDoc(EmbeddedDocument):
-  id = IntField()
-  description = StringField()
-  
-class CityDoc(EmbeddedDocument):
-  id = IntField()
-  description = StringField()
-  parentId = IntField(null=True)
-
-class OrganizationDoc(EmbeddedDocument):
-  id = IntField()
-  description = StringField()
-
-class SubOrganizationDoc(EmbeddedDocument):
-  code = StringField()
-  preferredLabel = StringField()  
-
-class FekDoc(EmbeddedDocument):
-  year = IntField(null=True)
-  number = IntField(null=True)
-  issue = StringField(null=True)
-
-class ContactDoc(EmbeddedDocument):
-  email = StringField(null=True)
-  telephone = StringField(null=True)
- 
-class MainAddressDoc(EmbeddedDocument):
-  fullAddress = StringField()
-  postCode = StringField()
-  country = EmbeddedDocumentField(CountryDoc, null=True)  
-  city = EmbeddedDocumentField(CityDoc, null=True)
+from models.embedded import (
+  SubOrganizationDoc, OrganizationDoc, ContactDoc,
+  FekDoc, MainAddressDoc
+)
 
 class Organizations(Document):
   code = StringField(required=True, unique=True)
@@ -47,7 +20,7 @@ class Organizations(Document):
   mainDataUpdateDate = DateTimeField(null=True)
   organizationStructureUpdateDate = DateTimeField(null=True)
   foundationFek = EmbeddedDocumentField(FekDoc, null=True)
-  mainAddress = EmbeddedDocumentField(MainAddressDoc)
+  mainAddress = EmbeddedDocumentField(MainAddressDoc, null=True)
   
   meta = {
     "collection": "organizations",

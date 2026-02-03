@@ -7,11 +7,12 @@ from pprint import *
 from deepdiff import DeepDiff
 from datetime import datetime
 import argparse
-# from mongoengine.queryset.visitor import Q
 from alive_progress import alive_bar
 
 from models.dictionary import Dictionary
 from models.synclog import SyncLog
+
+import redis
 
 dbname = get_database()
 
@@ -57,7 +58,7 @@ def processDictionaries(dictionary, bar=None):
     existing = Dictionary.objects(
       code=dictionary,
       sdad_id=item["id"],
-      description=item["description"],
+      # description=item["description"],
     ).first()
 
     if existing:
@@ -66,6 +67,7 @@ def processDictionaries(dictionary, bar=None):
       diff = DeepDiff(existing_dict, doc, view='tree').to_json() 
       diff = json.loads(diff)
       if diff:
+        print("DIFF TRUE", diff)
         for key, value in doc.items():
           setattr(existing, key, value)
         existing.save()
@@ -92,6 +94,7 @@ def batch_run():
     end_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
     send_email("dictionaries", start_time, end_time)
   print("Τέλος συγχρονισμού λεξικών από το ΣΔΑΔ.")
+  cache_dictionaries()
 
 def dictionary_run(dictionary):
   print("Συγχρονισμός λεξικού από το ΣΔΑΔ...")
@@ -102,20 +105,53 @@ def dictionary_run(dictionary):
       end_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
       send_email("dictionaries", start_time, end_time)
   print("Τέλος συγχρονισμού λεξικού από το ΣΔΑΔ.")
-    
+  cache_dictionaries()
+
+
+def cache_dictionaries():
+  r = redis.Redis(db=0)
+  r.flushdb()
+  print("Καταχώρηση συνόλων στην cache...")
+  for dictionary in DICTIONARIES.keys():
+    # r.delete(dictionary)
+    docs = Dictionary.objects(code=dictionary)
+    ids = set([doc["sdad_id"] for doc in docs])
+    r.sadd(dictionary, *ids)
+  print("Τέλος καταχώρησης συνόλων στην cache.")
+
+  r = redis.Redis(db=1)
+  r.flushdb()
+  print("Καταχώρηση λεξικών στην cache...")
+  for entry in Dictionary.objects():
+    if entry["code"] in [
+      "Functions",
+      "Cities",
+      "Countries",
+      "OrganizationTypes",
+      "UnitTypes",
+    ]:
+      r.set(f"{entry['code']}:{entry['sdad_id']}", entry["description"])
+  print("Τέλος καταχώρησης λεξικών στην cache.")
+
 my_parser = argparse.ArgumentParser(
   prog="dictionaries.py",
-  usage="%(prog)s [--all] | [--dictionary] dictionary",
+  usage="%(prog)s [--all] | [--dictionary] dictionary | [--redis]",
   description="Get all dictionaries if run in batch else specific dictionaries")
 
 my_parser.add_argument("--all", action="store_true")
 my_parser.add_argument("--dictionary", type=str, help="give a dictionary to process")
+my_parser.add_argument("--redis", action="store_true")
 my_parser.add_argument("--version", action='version', version='%(prog)s 1.0')
 args = my_parser.parse_args()
 
 if args.all:
   print ("Process all")
   batch_run()
+elif args.redis:
+  print("Refresh redis DB")
+  cache_dictionaries()
 else:
   print("Process dictionary: ", args.dictionary)
   dictionary_run(args.dictionary)
+
+

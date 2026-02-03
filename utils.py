@@ -4,7 +4,11 @@ import sys
 from smtplib import SMTP as SMTP # this invokes the secure SMTP protocol (port 465, uses SSL)
 from email.mime.text import MIMEText
 
-from datetime import datetime
+from models.embedded import (
+  SubOrganizationDoc, OrganizationDoc, ContactDoc, CountryDoc, CityDoc,
+  FekDoc, MainAddressDoc, supervisorUnitCodeDoc, PurposeDoc, 
+  UnitTypeDoc, SecondaryAddressesDoc, SpatialDoc
+)
 
 SMTPSERVER = "smtp.ntua.gr"
 SENDER = 'no-reply@thryallis.ypes.gov.gr'
@@ -71,3 +75,55 @@ def send_email(typeOf, start_time, end_time):
 
   except Exception as e:
     sys.exit("Μail failed; %s" % str(e))  # give an error message
+
+
+
+def normalize_embedded(item):
+   
+  if item.get("subOrganizationOf"):
+    item["subOrganizationOf"] = SubOrganizationDoc(**item["subOrganizationOf"])
+
+  if item.get("organizationType"):
+    item["organizationType"] = OrganizationDoc(**item["organizationType"])
+
+  if item.get("contactPoint"):
+    item["contactPoint"] = ContactDoc(**item["contactPoint"])
+
+  if item.get("foundationFek"):
+    item["foundationFek"] = FekDoc(**item["foundationFek"])
+
+  if item.get("mainAddress"):
+    addr = item["mainAddress"]
+    item["mainAddress"] = MainAddressDoc(
+      fullAddress=addr.get("fullAddress"),
+      postCode=addr.get("postCode"),
+      country=CountryDoc(**addr["country"]) if addr.get("country") else None,
+      city=CityDoc(**addr["city"]) if addr.get("city") else None,
+    )
+
+  if item.get("secondaryAddresses"):
+    addr = item["secondaryAddresses"]
+    item["secondaryAddresses"] = SecondaryAddressesDoc(
+      fullAddress=addr.get("fullAddress"),
+      postCode=addr.get("postCode"),
+      country=CountryDoc(**addr["country"]) if addr.get("country") else None,
+      city=CityDoc(**addr["city"]) if addr.get("city") else None,
+    )  
+  
+  if item.get("supervisorUnitCode"):
+    item["supervisorUnitCode"] = SubOrganizationDoc(**item["subOrganizationOf"])
+
+  if item.get("spatial"):
+    item["spatial"] = SpatialDoc(**item["spatial"])  
+  
+  if item.get("supervisorUnitCode"):
+    item["supervisorUnitCode"] = supervisorUnitCodeDoc(**item["supervisorUnitCode"]) 
+
+  if item.get("purpose"):
+    item["purpose"] = PurposeDoc(**item["purpose"]) 
+
+  if item.get("unitType"):
+    item["unitType"] = UnitTypeDoc(**item["unitType"]) 
+
+  return item
+

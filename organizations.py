@@ -1,30 +1,36 @@
 #!/usr/bin/env python3
 import json
 from connection import get_database
-from utils import url_get, send_email
+from utils import url_get, send_email, normalize_embedded
 from deepdiff import DeepDiff
 from datetime import datetime
 import argparse
 from alive_progress import alive_bar
 
 from models.organizations import Organizations
+from models.organizations import SubOrganizationDoc, OrganizationDoc, ContactDoc, FekDoc, MainAddressDoc, CountryDoc, CityDoc
 from models.synclog import SyncLog
+import redis
 
 dbname = get_database()
+dict_cache = redis.Redis(db=1)
 
 # api-endpoints
 API_URL = "https://hrms.gov.gr/api"
-DICTIONARIES_URL = f"{API_URL}/public/metadata/dictionary/"
+# DICTIONARIES_URL = f"{API_URL}/public/metadata/dictionary/"
 ORGANIZATIONS_URL = f"{API_URL}/public/organizations"
 ORGANIZATION_URL = f"{API_URL}/public/organizations/"
 
-def processOrganizations(code, organizationTypes, countries, cities):
+# def processOrganizations(code, organizationTypes, countries, cities):
+def processOrganizations(code):  
   
   print(f"  - Συγχρονισμός οργανισμού: {code}...")
   response = url_get(f"{ORGANIZATION_URL}{code}").json()['data']
   
-  organizationType = [x for x in organizationTypes if x['id'] == response['organizationType']]
-  response['organizationType'] = organizationType[0]
+  # organizationType = [x for x in organizationTypes if x['id'] == response['organizationType']]
+  organizationType = dict_cache.get(f"OrganizationTypes:{response['organizationType']}").decode("utf-8")
+  # response['organizationType'] = organizationType[0]
+  response['organizationType'] = { 'id': response['organizationType'], 'description': organizationType }
 
   if response.get('subOrganizationOf'):
     subOrganizationOf = url_get(f"{ORGANIZATION_URL}{response['subOrganizationOf']}").json()['data']
@@ -34,18 +40,24 @@ def processOrganizations(code, organizationTypes, countries, cities):
       
   if response.get('mainAddress'):
     if response['mainAddress'].get('adminUnitLevel1'):
-      mainCountry = [x for x in countries if x['id'] == response['mainAddress']['adminUnitLevel1']]
+      # mainCountry = [x for x in countries if x['id'] == response['mainAddress']['adminUnitLevel1']]
+      country = dict_cache.get(f"Countries:{response['mainAddress']['adminUnitLevel1']}").decode("utf-8")
+      mainCountry = {'id': response['mainAddress']['adminUnitLevel1'], "description": country }
     else: 
       mainCountry = None  
     if response['mainAddress'].get('adminUnitLevel2'):
-      mainCity = [x for x in cities if x['id'] == response['mainAddress']['adminUnitLevel2']]
+      # mainCity = [x for x in cities if x['id'] == response['mainAddress']['adminUnitLevel2']]
+      city  = dict_cache.get(f"Cities:{response['mainAddress']['adminUnitLevel2']}").decode("utf-8")
+      mainCity = {'id': response['mainAddress']['adminUnitLevel2'], "description": city }
     else:
       mainCity = None
     response['mainAddress']={ 
       'fullAddress':response['mainAddress']['fullAddress'] if response['mainAddress'].get('fullAddress') else None, 
       'postCode':response['mainAddress']['postCode'] if response['mainAddress'].get('postCode') else None, 
-      'country': mainCountry[0] if mainCountry else None, 
-      'city': mainCity[0] if mainCity else None
+      # 'country': mainCountry[0] if mainCountry else None,
+      'country': mainCountry if mainCountry else None, 
+      # 'city': mainCity[0] if mainCity else None
+      'city': mainCity if mainCity else None
     }
 
   item = {
@@ -61,7 +73,7 @@ def processOrganizations(code, organizationTypes, countries, cities):
     "foundationDate" : response['foundationDate'] if response.get('foundationDate') else None,
     "terminationDate" : response['terminationDate'] if response.get('terminationDate') else None,
     "mainDataUpdateDate" : response['mainDataUpdateDate'] if response.get('mainDataUpdateDate') else None,
-    "organizationStructureUpdateDate" : response['organizationStructureUpdateDate'] if response.get('mainDaorganizationStructureUpdateDatetaUpdateDate') else None,
+    "organizationStructureUpdateDate" : response['organizationStructureUpdateDate'] if response.get('organizationStructureUpdateDate') else None,
     "foundationFek" : response['foundationFek'] if response.get('foundationFek') else None,
   }
 
@@ -92,6 +104,7 @@ def processOrganizations(code, organizationTypes, countries, cities):
 
       if diff:
         print("DIFF TRUE", diff)
+        item = normalize_embedded(item)
         for key, value in item.items():
             setattr(existing, key, value)
         # print("Existing>>",existing.to_json())
@@ -121,16 +134,17 @@ def processOrganizations(code, organizationTypes, countries, cities):
     
 def batch_run():
   print("Συγχρονισμός οργανισμού από το ΣΔΑΔ...")
-  organizationTypes = url_get(f"{DICTIONARIES_URL}OrganizationTypes").json()['data']
-  countries = url_get(f"{DICTIONARIES_URL}Countries").json()['data']
-  cities = url_get(f"{DICTIONARIES_URL}Cities").json()['data']
+  # organizationTypes = url_get(f"{DICTIONARIES_URL}OrganizationTypes").json()['data']
+  # countries = url_get(f"{DICTIONARIES_URL}Countries").json()['data']
+  # cities = url_get(f"{DICTIONARIES_URL}Cities").json()['data']
 
   organizations = url_get(f"{ORGANIZATIONS_URL}")
   with alive_bar(len(organizations.json()["data"])) as bar:
     for organization in organizations.json()["data"]:
       code = organization['code']
       start_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
-      processOrganizations(code, organizationTypes, countries, cities)
+      # processOrganizations(code, organizationTypes, countries, cities)
+      processOrganizations(code)
       bar()
   end_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
   send_email("(organizations", start_time, end_time)
@@ -139,12 +153,14 @@ def batch_run():
 def organization_run(code):
   print("Συγχρονισμός οργανισμού από το ΣΔΑΔ...")
   
-  organizationTypes = url_get(f"{DICTIONARIES_URL}OrganizationTypes").json()['data']
-  countries = url_get(f"{DICTIONARIES_URL}Countries").json()['data']
-  cities = url_get(f"{DICTIONARIES_URL}Cities").json()['data']
+  # organizationTypes = url_get(f"{DICTIONARIES_URL}OrganizationTypes").json()['data']
+  # countries = url_get(f"{DICTIONARIES_URL}Countries").json()['data']
+  # cities = url_get(f"{DICTIONARIES_URL}Cities").json()['data']
 
   start_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
-  processOrganizations(code, organizationTypes, countries, cities)
+  # processOrganizations(code, organizationTypes, countries, cities)
+  processOrganizations(code)
+
   end_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
   send_email("organizations", start_time, end_time)
   print("Τέλος συγχρονισμού οργανισμού από το ΣΔΑΔ.")

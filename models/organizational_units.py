@@ -1,49 +1,8 @@
 from mongoengine import *
-
-class PurposeDoc(EmbeddedDocument):
-  id = IntField()
-  description = StringField()
-
-class OrganizationDoc(EmbeddedDocument):
-  id = IntField()
-  description = StringField()
-
-class SubOrganizationDoc(EmbeddedDocument):
-  code = StringField()
-  preferredLabel = StringField() 
-
-class UnitTypeDoc(EmbeddedDocument):
-  id = IntField()
-  description = StringField()
-
-class supervisorUnitCodeDoc(EmbeddedDocument):
-  code = StringField()
-  preferredLabel = StringField()
-
-class CountryDoc(EmbeddedDocument):
-  id = IntField()
-  description = StringField()
-  
-class CityDoc(EmbeddedDocument):
-  id = IntField()
-  description = StringField()
-  parentId = IntField(null=True)
-
-class SpatialDoc(EmbeddedDocument):
-  country = EmbeddedDocumentField(CountryDoc, null=True)
-  city = EmbeddedDocumentField(CityDoc, null=True)
-
-class MainAddressDoc(EmbeddedDocument):
-  fullAddress = StringField()
-  postCode = StringField()
-  country = EmbeddedDocumentField(CountryDoc, null=True)  
-  city = EmbeddedDocumentField(CityDoc, null=True)
-
-class SecondaryAddressesDoc(EmbeddedDocument):
-  fullAddress = StringField()
-  postCode = StringField()
-  country = EmbeddedDocumentField(CountryDoc, null=True)  
-  city = EmbeddedDocumentField(CityDoc, null=True)
+from models.embedded import (
+  supervisorUnitCodeDoc, PurposeDoc, SpatialDoc,
+  UnitTypeDoc, MainAddressDoc, SecondaryAddressesDoc
+)
 
 class Organizational_Units(Document):
   code = StringField()

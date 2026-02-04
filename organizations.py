@@ -146,7 +146,7 @@ def batch_run():
       processOrganizations(code)
       bar()
   end_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
-  send_email("(organizations", start_time, end_time)
+  send_email("organizations", start_time, end_time)
   print("Τέλος συγχρονισμού οργανισμού από το ΣΔΑΔ.")
   
 def organization_run(code):

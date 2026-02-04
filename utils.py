@@ -111,7 +111,10 @@ def normalize_embedded(item):
     )  
   
   if item.get("spatial"):
-    item["spatial"] = SpatialDoc(**item["spatial"])  
+    print("1>>>",item['spatial'])
+    # item["spatial"] = [SpatialDoc(**item) for item in value] 
+    print("2>>>",item["spatial"]);
+    SpatialDoc(**item["spatial"])  
   
   if item.get("supervisorUnitCode"):
     item["supervisorUnitCode"] = supervisorUnitCodeDoc(**item["supervisorUnitCode"]) 

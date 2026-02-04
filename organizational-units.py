@@ -102,13 +102,13 @@ def processOrganizationUnits(code):
           for s in unit.get('secondaryAddresses'):
             if s.get('adminUnitLevel1'):
               # country = [x for x in countries if x['id'] == s['adminUnitLevel1']]
-              name = dict_cache.get(f"Countries:{unit['mainAddress']['adminUnitLevel1']}").decode("utf-8")
+              name = dict_cache.get(f"Countries:{s['adminUnitLevel1']}").decode("utf-8")
               country = {'id': s['adminUnitLevel1'], "description": name }
             else:
               country = None
             if s.get('adminUnitLevel2'):
               # city = [x for x in cities if x['id'] == s['adminUnitLevel2']]
-              name  = dict_cache.get(f"Cities:{response['mainAddress']['adminUnitLevel2']}").decode("utf-8")
+              name  = dict_cache.get(f"Cities:{s['adminUnitLevel2']}").decode("utf-8")
               city = {'id': s['adminUnitLevel2'], "description": name, 'parentId':None }
             else:
               city = None

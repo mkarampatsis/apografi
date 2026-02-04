@@ -118,7 +118,8 @@ def normalize_embedded(item):
     item["supervisorUnitCode"] = supervisorUnitCodeDoc(**item["supervisorUnitCode"]) 
 
   if item.get("purpose"):
-    item["purpose"] = PurposeDoc(**item["purpose"]) 
+    value = item['purpose']
+    item["purpose"] = [PurposeDoc(**item) for item in value]
 
   if item.get("unitType"):
     item["unitType"] = UnitTypeDoc(**item["unitType"]) 

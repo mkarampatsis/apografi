@@ -102,13 +102,15 @@ def normalize_embedded(item):
     )
 
   if item.get("secondaryAddresses"):
-    addr = item["secondaryAddresses"]
-    item["secondaryAddresses"] = SecondaryAddressesDoc(
-      fullAddress=addr.get("fullAddress"),
-      postCode=addr.get("postCode"),
-      country=CountryDoc(**addr["country"]) if addr.get("country") else None,
-      city=CityDoc(**addr["city"]) if addr.get("city") else None,
-    )  
+    value = item['secondaryAddresses']
+    item["secondaryAddresses"] = [
+      SecondaryAddressesDoc(
+        fullAddress=addr["fullAddress"],
+        postCode=addr["postCode"],
+        country=CountryDoc(**addr["country"]) if addr.get("country") else None,
+        city=CityDoc(**addr["city"]) if addr.get("city") else None,
+      ) for addr in value
+    ]
   
   if item.get("spatial"):
     value = item['spatial']

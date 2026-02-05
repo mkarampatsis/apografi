@@ -16,19 +16,15 @@ dict_cache = redis.Redis(db=1)
 
 # api-endpoints
 API_URL = "https://hrms.gov.gr/api"
-# DICTIONARIES_URL = f"{API_URL}/public/metadata/dictionary/"
 ORGANIZATIONS_URL = f"{API_URL}/public/organizations"
 ORGANIZATION_URL = f"{API_URL}/public/organizations/"
 
-# def processOrganizations(code, organizationTypes, countries, cities):
 def processOrganizations(code):  
   
   print(f"  - Συγχρονισμός οργανισμού: {code}...")
   response = url_get(f"{ORGANIZATION_URL}{code}").json()['data']
   
-  # organizationType = [x for x in organizationTypes if x['id'] == response['organizationType']]
   organizationType = dict_cache.get(f"OrganizationTypes:{response['organizationType']}").decode("utf-8")
-  # response['organizationType'] = organizationType[0]
   response['organizationType'] = { 'id': response['organizationType'], 'description': organizationType }
 
   if response.get('subOrganizationOf'):
@@ -39,13 +35,11 @@ def processOrganizations(code):
       
   if response.get('mainAddress'):
     if response['mainAddress'].get('adminUnitLevel1'):
-      # mainCountry = [x for x in countries if x['id'] == response['mainAddress']['adminUnitLevel1']]
       country = dict_cache.get(f"Countries:{response['mainAddress']['adminUnitLevel1']}").decode("utf-8")
       mainCountry = {'id': response['mainAddress']['adminUnitLevel1'], "description": country }
     else: 
       mainCountry = None  
     if response['mainAddress'].get('adminUnitLevel2'):
-      # mainCity = [x for x in cities if xCities['id'] == response['mainAddress']['adminUnitLevel2']]
       city  = dict_cache.get(f"Cities:{response['mainAddress']['adminUnitLevel2']}").decode("utf-8")
       mainCity = {'id': response['mainAddress']['adminUnitLevel2'], "description": city, 'parentId':None }
     else:
@@ -53,9 +47,7 @@ def processOrganizations(code):
     response['mainAddress']={ 
       'fullAddress':response['mainAddress']['fullAddress'] if response['mainAddress'].get('fullAddress') else None, 
       'postCode':response['mainAddress']['postCode'] if response['mainAddress'].get('postCode') else None, 
-      # 'country': mainCountry[0] if mainCountry else None,
       'country': mainCountry if mainCountry else None, 
-      # 'city': mainCity[0] if mainCity else None
       'city': mainCity if mainCity else None
     }
 
@@ -98,8 +90,6 @@ def processOrganizations(code):
       
       diff = DeepDiff(existing_dict, item, view='tree').to_json() 
       diff = json.loads(diff)
-      # print("existing_dict", existing_dict)
-      # print("item", item)
 
       if diff:
         print("DIFF TRUE", diff)
@@ -133,18 +123,16 @@ def processOrganizations(code):
     
 def batch_run():
   print("Συγχρονισμός οργανισμού από το ΣΔΑΔ...")
-  # organizationTypes = url_get(f"{DICTIONARIES_URL}OrganizationTypes").json()['data']
-  # countries = url_get(f"{DICTIONARIES_URL}Countries").json()['data']
-  # cities = url_get(f"{DICTIONARIES_URL}Cities").json()['data']
 
   organizations = url_get(f"{ORGANIZATIONS_URL}")
+  start_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+
   with alive_bar(len(organizations.json()["data"])) as bar:
     for organization in organizations.json()["data"]:
       code = organization['code']
-      start_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
-      # processOrganizations(code, organizationTypes, countries, cities)
       processOrganizations(code)
       bar()
+  
   end_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
   send_email("organizations", start_time, end_time)
   print("Τέλος συγχρονισμού οργανισμού από το ΣΔΑΔ.")
@@ -152,12 +140,8 @@ def batch_run():
 def organization_run(code):
   print("Συγχρονισμός οργανισμού από το ΣΔΑΔ...")
   
-  # organizationTypes = url_get(f"{DICTIONARIES_URL}OrganizationTypes").json()['data']
-  # countries = url_get(f"{DICTIONARIES_URL}Countries").json()['data']
-  # cities = url_get(f"{DICTIONARIES_URL}Cities").json()['data']
-
   start_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
-  # processOrganizations(code, organizationTypes, countries, cities)
+
   processOrganizations(code)
 
   end_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import requests
 import json
 from connection import get_database
 from utils import url_get, send_email
@@ -58,7 +57,6 @@ def processDictionaries(dictionary, bar=None):
     existing = Dictionary.objects(
       code=dictionary,
       sdad_id=item["id"],
-      # description=item["description"],
     ).first()
 
     if existing:
@@ -153,5 +151,3 @@ elif args.redis:
 else:
   print("Process dictionary: ", args.dictionary)
   dictionary_run(args.dictionary)
-
-

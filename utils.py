@@ -12,7 +12,7 @@ from models.embedded import (
 
 SMTPSERVER = "smtp.ntua.gr"
 SENDER = 'no-reply@thryallis.ypes.gov.gr'
-DESTINATION = ['antpsarakis@gmail.com','marka@central.ntua.gr']
+DESTINATION = ['a.psarakis@ypes.gov.gr','marka@central.ntua.gr']
 
 USERNAME = "jraptaki"
 PASSWORD = "l1vadak1a"

@@ -4,8 +4,9 @@ from models.embedded import (
   SubOrganizationDoc, OrganizationDoc, ContactDoc,
   FekDoc, MainAddressDoc
 )
+from models.timestamp import TimeStampedModel
 
-class Organizations(Document):
+class Organizations(TimeStampedModel):
   code = StringField(required=True, unique=True)
   preferredLabel = StringField()
   subOrganizationOf = EmbeddedDocumentField(SubOrganizationDoc, null=True)

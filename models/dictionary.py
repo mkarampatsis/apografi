@@ -1,6 +1,7 @@
 import mongoengine as me
+from models.timestamp import TimeStampedModel
 
-class Dictionary(me.Document):
+class Dictionary(TimeStampedModel):
   meta = {
     "collection": "dictionaries",
     "db_alias": "sdad",

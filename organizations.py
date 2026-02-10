@@ -78,6 +78,8 @@ def processOrganizations(code):
     if existing:
       existing_dict = existing.to_mongo().to_dict()
       existing_dict.pop("_id")
+      existing_dict.pop("createdAt")
+      existing_dict.pop("updatedAt")
       
       if existing_dict.get("foundationDate") and isinstance(existing_dict.get("foundationDate"), datetime):
         existing_dict["foundationDate"] = existing_dict["foundationDate"].strftime("%Y-%m-%d")

@@ -62,6 +62,9 @@ def processDictionaries(dictionary, bar=None):
     if existing:
       existing_dict = existing.to_mongo().to_dict()
       existing_dict.pop("_id")
+      existing_dict.pop("createdAt")
+      existing_dict.pop("updatedAt")
+      
       diff = DeepDiff(existing_dict, doc, view='tree').to_json() 
       diff = json.loads(diff)
       if diff:

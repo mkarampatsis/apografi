@@ -131,6 +131,8 @@ def processOrganizationUnits(code):
           if existing:
             existing_dict = existing.to_mongo().to_dict()
             existing_dict.pop("_id")
+            existing_dict.pop("createdAt")
+            existing_dict.pop("updatedAt")
             
             diff = DeepDiff(existing_dict, item, ignore_order=True, view='tree').to_json() 
             diff = json.loads(diff)

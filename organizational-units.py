@@ -17,6 +17,7 @@ dict_cache = redis.Redis(db=1)
 # api-endpoints
 API_URL = "https://hrms.gov.gr/api"
 ORGANIZATIONS_URL = f"{API_URL}/public/organizations"
+ORGANIZATION_URL = f"{API_URL}/public/organizations/"
 ORGANIZATION_UNITS_URL = f"{API_URL}/public/organizational-units?organizationCode=%s"
 ORGANIZATION_TREE_URL = f"{API_URL}/public/organization-tree?organizationCode=%s"
 
@@ -31,6 +32,13 @@ def processOrganizationUnits(code):
     with alive_bar(len(response)) as bar:
       for unit in response:
         print(unit["code"])
+
+        if response.get('organizationCode'):
+          organizationOf = url_get(f"{ORGANIZATION_URL}{unit['organizationCode']}").json()['data']
+          unit['organizationCode']={'code': organizationOf['code'], 'preferredLabel': organizationOf['preferredLabel']}
+        else:
+          unit['organizationCode']=None
+        
         unitType = dict_cache.get(f"UnitTypes:{unit['unitType']}").decode("utf-8")
         unit['unitType'] = { 'id': unit['unitType'], 'description': unitType } 
 

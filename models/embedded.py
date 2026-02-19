@@ -49,6 +49,10 @@ class UnitTypeDoc(EmbeddedDocument):
 class supervisorUnitCodeDoc(EmbeddedDocument):
   code = StringField()
   preferredLabel = StringField()
+
+class organizationCode(EmbeddedDocument):
+  code = StringField()
+  preferredLabel = StringField()
   
 class SpatialDoc(EmbeddedDocument):
   country = EmbeddedDocumentField(CountryDoc, null=True)

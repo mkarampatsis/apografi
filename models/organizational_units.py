@@ -1,13 +1,13 @@
 from mongoengine import *
 from models.embedded import (
-  supervisorUnitCodeDoc, PurposeDoc, SpatialDoc,
+  organizationCode, supervisorUnitCodeDoc, PurposeDoc, SpatialDoc,
   UnitTypeDoc, MainAddressDoc, SecondaryAddressesDoc
 )
 from models.timestamp import TimeStampedModel
 
 class Organizational_Units(TimeStampedModel):
   code = StringField()
-  organizationCode = StringField()
+  organizationCode = EmbeddedDocumentField(organizationCode, null=True)
   supervisorUnitCode = EmbeddedDocumentField(supervisorUnitCodeDoc, null=True)
   preferredLabel = StringField()
   alternativeLabels = ListField(StringField(max_length=200))

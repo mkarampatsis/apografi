@@ -144,7 +144,7 @@ def processOrganizationUnits(code):
             
             diff = DeepDiff(existing_dict, item, ignore_order=True, view='tree').to_json() 
             diff = json.loads(diff)
-            print (diff)
+            # print (diff)
             if diff:
               print("DIFF TRUE", diff)
               item = normalize_embedded(item)

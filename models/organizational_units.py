@@ -21,9 +21,10 @@ class Organizational_Units(TimeStampedModel):
   url = StringField(null=True)
   mainAddress = EmbeddedDocumentField(MainAddressDoc,null=True)
   secondaryAddresses = EmbeddedDocumentListField(SecondaryAddressesDoc, null=True)
+  remitsFinalized = BooleanField(default=False)
  
   meta = {
     "collection": "organizational-units",
     "db_alias": "sdad",
     "indexes": ["organizationCode", "supervisorUnitCode", "preferredLabel"],
-    }
+  }

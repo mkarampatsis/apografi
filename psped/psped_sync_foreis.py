@@ -1,11 +1,12 @@
 #!venv/bin/python
-from src.models.apografi.organization import Organization
-from src.models.apografi.organizational_unit import OrganizationalUnit
-from src.models.psped import Apografi, Foreas
+from models.sdad.organizations import Organizations
+from models.sdad.organizational_units import Organizational_Units
+from models.psped.monada import Sdad
+from models.psped.foreas import Foreas
 
-for organization in Organization.objects():
-    code = organization.code
-    monades = OrganizationalUnit.objects(organizationCode=organization.code)
-    apografi = Apografi(foreas=organization, monades=monades)
-    foreas = Foreas(code=code, apografi=apografi)
-    Foreas.objects(code=organization.code).update_one(**foreas.to_mongo(), upsert=True)
+for organization in Organizations.objects():
+  code = organization.code
+  monades = Organizational_Units.objects(organizationCode=organization.code)
+  sdad = Sdad(foreas=organization, monades=monades)
+  foreas = Foreas(code=code, sdad=sdad)
+  Foreas.objects(code=organization.code).update_one(**foreas.to_mongo(), upsert=True)

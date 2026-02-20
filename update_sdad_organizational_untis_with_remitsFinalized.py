@@ -1,5 +1,5 @@
-from models.organizational_units import Organizational_Units
-from models.monada import Monada
+from models.sdad.organizational_units import Organizational_Units
+from models.psped.monada import Monada
 from connection import get_database
 
 dbname = get_database()

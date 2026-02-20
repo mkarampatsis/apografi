@@ -7,8 +7,8 @@ from datetime import datetime
 import argparse
 from alive_progress import alive_bar
 
-from models.organizational_units import Organizational_Units
-from models.synclog import SyncLog
+from models.sdad.organizational_units import Organizational_Units
+from models.sdad.synclog import SyncLog
 import redis
 
 dbname = get_database()

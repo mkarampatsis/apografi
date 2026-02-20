@@ -6,7 +6,7 @@ from pprint import *
 
 import argparse
 
-from models.organizational_units import Organization_Units
+from models.sdad.organizational_units import Organization_Units
 
 dbname = get_database()
 

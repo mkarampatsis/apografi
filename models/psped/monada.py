@@ -11,6 +11,10 @@ class Apografi(me.EmbeddedDocument):
   proistamenh_monada = me.ReferenceField(OrganizationalUnit)
   proistamenh_monada_preferredLabel = me.StringField()
 
+class Sdad(me.Document):
+  foreasSDAD = me.EmbeddedDocumentField(Organization)
+  organizationalUnitSDAD = me.EmbeddedDocumentField(OrganizationalUnit)
+  proistamenh_monadaSDAD = me.EmbeddedDocumentField(OrganizationalUnit)
 
 class Monada(me.Document):
   meta = {"collection": "monades", "db_alias": "psped"}

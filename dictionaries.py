@@ -8,8 +8,8 @@ from datetime import datetime
 import argparse
 from alive_progress import alive_bar
 
-from models.dictionary import Dictionary
-from models.synclog import SyncLog
+from models.sdad.dictionary import Dictionary
+from models.sdad.synclog import SyncLog
 
 import redis
 

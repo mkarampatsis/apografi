@@ -94,7 +94,7 @@ def processOrganizations(code):
       diff = json.loads(diff)
 
       if diff:
-        print("DIFF TRUE", diff)
+        # print("DIFF TRUE", diff)
         item = normalize_embedded(item)
         for key, value in item.items():
           setattr(existing, key, value)

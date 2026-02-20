@@ -3,7 +3,6 @@ from models.sdad.organizations import Organizations
 from models.sdad.organizational_units import Organizational_Units
 from models.psped.monada import Monada
 
-
 class TreeNode(me.EmbeddedDocument):
   expandable = me.BooleanField()
   monada = me.ReferenceField(Organizational_Units)

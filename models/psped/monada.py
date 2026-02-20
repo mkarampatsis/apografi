@@ -1,26 +1,31 @@
 import mongoengine as me
-from models.organizations import Organizations as Organization
-from models.organizational_units import Organizational_Units as OrganizationalUnit
+from models.sdad.organizations import Organizations
+from models.sdad.organizational_units import Organizational_Units
 
 
 class Apografi(me.EmbeddedDocument):
-  foreas = me.ReferenceField(Organization)
+  foreas = me.ReferenceField(Organizations)
   foreas_preferredLabel = me.StringField()
-  monada = me.ReferenceField(OrganizationalUnit)
+  monada = me.ReferenceField(Organizational_Units)
   monada_preferredLabel = me.StringField()
-  proistamenh_monada = me.ReferenceField(OrganizationalUnit)
+  proistamenh_monada = me.ReferenceField(Organizational_Units)
   proistamenh_monada_preferredLabel = me.StringField()
 
-class Sdad(me.Document):
-  foreasSDAD = me.EmbeddedDocumentField(Organization)
-  organizationalUnitSDAD = me.EmbeddedDocumentField(OrganizationalUnit)
-  proistamenh_monadaSDAD = me.EmbeddedDocumentField(OrganizationalUnit)
+class Sdad(me.EmbeddedDocument):
+  organization = me.ReferenceField(Organizations)
+  organization_preferredLabel = me.StringField()
+  organizational_unit = me.ReferenceField(Organizational_Units)
+  organizational_unit_preferredLabel = me.StringField()
+  supervisor_unit = me.ReferenceField(Organizational_Units)
+  supervisor_unit_preferredLabel = me.StringField()
+
 
 class Monada(me.Document):
   meta = {"collection": "monades", "db_alias": "psped"}
 
   code = me.StringField(required=True, unique=True)
   apografi = me.EmbeddedDocumentField(Apografi)
+  sdad = me.EmbeddedDocumentField(Sdad)
   remitsFinalized = me.BooleanField()
   provisionText = me.StringField()
 
@@ -31,13 +36,14 @@ class Monada(me.Document):
       "provisionText": self.provisionText,
     }
 
-    if self.apografi:
-      data["apografi"] = {
-        "foreas": self.apografi.foreas.to_mongo() if self.apografi.foreas else None,
-        "monada": self.apografi.monada.to_mongo() if self.apografi.monada else None,
-        "proistamenh_monada": self.apografi.proistamenh_monada.to_mongo()
-        if self.apografi.proistamenh_monada
-        else None,
+    if self.sdad:
+      data["sdad"] = {
+        "organization": self.sdad.organization.to_mongo() if self.sdad.organization else None,
+        "organization_preferredLabel": self.sdad.organization_preferredLabel if self.sdad.organization_preferredLabel else None,
+        "organizational_unit": self.sdad.organizational_unit.to_mongo() if self.sdad.organizational_unit else None,
+        "organizational_unit_preferredLabel": self.sdad.organizational_unit_preferredLabel if self.sdad.organizational_unit_preferredLabel else None,
+        "supervisor_unit": self.sdad.supervisor_unit.to_mongo() if self.sdad.supervisor_unit else None,
+        "supervisor_unit_preferredLabel": self.sdad.supervisor_unit_preferredLabel if self.sdad.supervisor_unit_preferredLabel else None,
       }
 
     return data

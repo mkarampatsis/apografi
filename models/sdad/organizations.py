@@ -1,10 +1,10 @@
 from mongoengine import *
 
-from models.embedded import (
-  SubOrganizationDoc, OrganizationDoc, ContactDoc,
-  FekDoc, MainAddressDoc
+from models.sdad.embedded import (
+  SubOrganizationDoc, OrganizationDoc, 
+  ContactDoc, FekDoc, MainAddressDoc
 )
-from models.timestamp import TimeStampedModel
+from models.sdad.timestamp import TimeStampedModel
 
 class Organizations(TimeStampedModel):
   code = StringField(required=True, unique=True)

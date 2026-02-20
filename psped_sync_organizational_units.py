@@ -23,11 +23,11 @@ for organization_unit in Organizational_Units.objects():
   supervisor_unit = Organizational_Units.objects(code=supervisor_unit_code).first()
 
   sdad = Sdad(
-    foreasSDAD=organization,
-    organizationalUnitSDAD=organizational_unit,
-    proistamenh_monadaSDAD=supervisor_unit
+    organization=organization,
+    organizational_unit=[organizational_unit],
+    supervisor_unit=supervisor_unit
   )
-
+  
   # apografi = Apografi(
   #   foreas=organization,
   #   foreas_preferredLabel=organization.preferredLabel, 

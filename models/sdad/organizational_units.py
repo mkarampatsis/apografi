@@ -1,9 +1,9 @@
 from mongoengine import *
-from models.embedded import (
+from models.sdad.embedded import (
   organizationCode, supervisorUnitCodeDoc, PurposeDoc, SpatialDoc,
   UnitTypeDoc, MainAddressDoc, SecondaryAddressesDoc
 )
-from models.timestamp import TimeStampedModel
+from models.sdad.timestamp import TimeStampedModel
 
 class Organizational_Units(TimeStampedModel):
   code = StringField()

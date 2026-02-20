@@ -4,7 +4,7 @@ import sys
 from smtplib import SMTP as SMTP # this invokes the secure SMTP protocol (port 465, uses SSL)
 from email.mime.text import MIMEText
 
-from models.embedded import (
+from models.sdad.embedded import (
   SubOrganizationDoc, OrganizationDoc, ContactDoc, CountryDoc, CityDoc,
   FekDoc, MainAddressDoc, supervisorUnitCodeDoc, PurposeDoc, 
   UnitTypeDoc, SecondaryAddressesDoc, SpatialDoc

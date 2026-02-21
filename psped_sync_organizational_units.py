@@ -1,59 +1,97 @@
 #!venv/vin/python
+import argparse
+from alive_progress import alive_bar
+from utils import send_email
+from datetime import datetime
+
 from models.sdad.organizations import Organizations
 from models.sdad.organizational_units import Organizational_Units
 from models.sdad.dictionary import Dictionary
-from models.psped.monada import Monada, Apografi, Sdad
+from models.psped.monada import Monada, Sdad
 
-from pprint import pprint
+from connection import get_database
+dbname = get_database()
 
-i=0
-unitTypes = Dictionary.objects(code="UnitTypes")
-pursposes = Dictionary.objects(code="Functions")
-
-for organization_unit in Organizational_Units.objects():
-  i+=1
-  print(i)
-  organizational_unit_code = organization_unit.code
-  # print(organizational_unit_code)
-  supervisor_unit_code = organization_unit.supervisorUnitCode
-  organization_code = organization_unit.organizationCode
-
-  organization = Organizations.objects(code=organization_code).first()
-  organizational_unit = Organizational_Units.objects(code=organizational_unit_code).first()
-  supervisor_unit = Organizational_Units.objects(code=supervisor_unit_code).first()
-
-  sdad = Sdad(
-    organization=organization,
-    organizational_unit=[organizational_unit],
-    supervisor_unit=supervisor_unit
-  )
+def processOrganizationalUnit(organizationCode):
+   
+  organization = Organizations.objects(code=organizationCode).first()
+  organizationalUnits = Organizational_Units.objects(organizationCode__code=organizationCode)
   
-  # apografi = Apografi(
-  #   foreas=organization,
-  #   foreas_preferredLabel=organization.preferredLabel, 
-  #   foreas_purpose=pursposes.filter(apografi_id=organization.purposeCode).first() if organization.purposeCode else None,
-  #   monada=organizational_unit, 
-  #   monada_preferredLabel=organizational_unit.preferredLabel,
-  #   monada_unitType=unitTypes.filter(apografi_id=organizational_unit.unitTypeCode).first() if organizational_unit.unitTypeCode else None,
-  #   monada_purpose=pursposes.filter(apografi_id=organizational_unit.purposeCode).first() if organizational_unit.purposeCode else None,
-  #   proistamenh_monada=supervisor_unit,
-  #   proistamenh_monada_preferredLabel=supervisor_unit.preferredLabel if supervisor_unit else None,
-  #   proistamenh_monada_unitType=unitTypes.filter(apografi_id=supervisor_unit.unitTypeCode).first() if supervisor_unit.unitTypeCode else None,
-  #   proistamenh_monada_purpose=pursposes.filter(apografi_id=supervisor_unit.purposeCode).first() if supervisor_unit and supervisor_unit.purposeCode else None,
-  # )
+  with alive_bar(len(organizationalUnits)) as bar:
+    for ou in organizationalUnits:
+      print(f"Processing organizational unit with code: {ou.code}")
+      organizational_unit_code = ou.code
+      supervisor_unit_code = ou.supervisorUnitCode.code if ou.supervisorUnitCode else None
 
-  monada = Monada.objects(code=organizational_unit_code).first()
-  if monada:
-      # monada.apografi = apografi
-      monada.sdad = sdad
-      monada.save(upsert=True)
-      #print(monada.to_mongo().to_dict())
-  else:
-      monada = Monada(code=organizational_unit_code, sdad=sdad, remitsFinalized=False, provisionText=None)
-      monada.save()
+      if supervisor_unit_code:
+        supervisor_unit = Organizational_Units.objects(code=supervisor_unit_code).first()
+      
+      sdad = Sdad(
+        organization=organization,
+        organization_preferredLabel=organization.preferredLabel, 
+        organizational_unit=ou,
+        organizational_unit_preferredLabel=ou.preferredLabel ,
+        supervisor_unit=supervisor_unit if supervisor_unit_code else None,
+        supervisor_unit_preferredLabel=supervisor_unit.preferredLabel if supervisor_unit_code else None       
+      )
 
-  # if organizational_unit_code == "800399":
-  #     pprint(organization_unit.to_mongo().to_dict())
-  # organization = Organization.objects(code=organization_unit.organizationCode).first()
-  # monada = Monada(foreas=organization, monada=organization_unit)
-  # Monada.objects(code=code).update_one(**monada.to_mongo(), upsert=True)
+      monada = Monada.objects(code=organizational_unit_code).first()
+      if monada:
+          monada.sdad = sdad
+          monada.save(upsert=True)
+      else:
+          monada = Monada(code=organizational_unit_code, sdad=sdad, remitsFinalized=False, provisionText=None)
+          monada.save()
+      
+      bar()
+      
+    # if organizational_unit_code == "800399":
+    #     pprint(organization_unit.to_mongo().to_dict())
+    # organization = Organization.objects(code=organization_unit.organizationCode).first()
+    # monada = Monada(foreas=organization, monada=organization_unit)
+    # Monada.objects(code=code).update_one(**monada.to_mongo(), upsert=True)
+
+def batch_iterator():
+  organizations = Organizations.objects()
+  for organization in organizations:
+    yield organization
+  
+def batch_run():
+  print("Ενημέρωση μονάδων psped από το sdad")
+
+  start_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+    
+  for item in batch_iterator():
+    processOrganizationalUnit(item)
+  
+  end_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+  send_email("sync_organizations_sdad_with_psped", start_time, end_time)
+  print("Τέλος ενημέρωσης μονάδων psped από το sdad")
+
+def organization_run(organizationCode):
+  print("Ενημέρωση μονάδων psped από το sdad")
+
+  start_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+  
+  processOrganizationalUnit(organizationCode)
+  
+  end_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+  send_email("sync_organizations_sdad_with_psped", start_time, end_time)
+  print("Τέλος ενημέρωσης μονάδων psped από το sdad")
+    
+my_parser = argparse.ArgumentParser(
+  prog="psped_sync_organizational_units.py",
+  usage="%(prog)s [--all] | [--code] code",
+  description="Get all organizational units if run in batch else specific organizational units")
+
+my_parser.add_argument("--all", action="store_true")
+my_parser.add_argument("--code", type=str, help="give an organization code to process")
+my_parser.add_argument("--version", action='version', version='%(prog)s 1.0')
+args = my_parser.parse_args()
+
+if args.all:
+  print ("Process all")
+  batch_run()
+else:
+  print("Process code: ", args.code)
+  organization_run(args.code)

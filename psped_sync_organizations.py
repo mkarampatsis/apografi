@@ -6,8 +6,7 @@ from datetime import datetime
 
 from models.sdad.organizations import Organizations
 from models.sdad.organizational_units import Organizational_Units
-from models.psped.monada import Sdad
-from models.psped.foreas import Foreas
+from models.psped.foreas import Foreas,Sdad
 
 from connection import get_database
 dbname = get_database()
@@ -15,23 +14,31 @@ dbname = get_database()
 def processOrganization(organization):
   code = organization.code
   print(f"Processing organization with code: {organization.code}")
+  
   organizationalUnits = list( Organizational_Units.objects(organizationCode__code=organization.code))
   organizationalUnits_preferredLabel = [u.preferredLabel for u in organizationalUnits]
+  
+  if organization.subOrganizationOf:
+    subOrganizationOf = Organizations.objects(code=organization.subOrganizationOf.code).first()
+
   sdad = Sdad(
-    organization=organization,
-    organization_preferredLabel=organization.preferredLabel, 
-    organizational_unit=organizationalUnits if organizationalUnits else None,
-    organizational_unit_preferredLabel=organizationalUnits_preferredLabel if organizationalUnits else None,
-    supervisor_unit=organization.subOrganizationOf.code if organization.subOrganizationOf else None,
-    supervisor_unit_preferredLabel=organization.subOrganizationOf.preferredLabel if organization.subOrganizationOf else None
+    organization = organization,
+    organization_preferredLabel = organization.preferredLabel, 
+    organizational_unit = organizationalUnits if organizationalUnits else None,
+    organizational_unit_preferredLabel = organizationalUnits_preferredLabel if organizationalUnits else None,
+    subOrganizationOf = subOrganizationOf if subOrganizationOf else None,
+    subOrganizationOf_preferredLabel = subOrganizationOf.preferredLabel if subOrganizationOf else None
   )
+
   foreas = Foreas(code=code, sdad=sdad)
   Foreas.objects(code=organization.code).update_one(**foreas.to_mongo(), upsert=True)
 
 def batch_iterator():
   organizations = Organizations.objects()
-  for organization in organizations:
-    yield organization
+  with alive_bar(len(organizations)) as bar:
+    for organization in organizations:
+      yield organization
+      bar()
   
 def batch_run():
   print("Ενημέρωση οργανισμών psped από το sdad")

@@ -122,18 +122,22 @@ def processOrganizations(code):
   except Exception as e: 
     print("UNEXPECTED ERROR in saving organization:", e) 
     raise
-    
+
+def batch_iterator():
+  organizations = url_get(f"{ORGANIZATIONS_URL}").json()["data"]
+  with alive_bar(len(organizations)) as bar:
+    for organization in organizations:
+      yield organization
+      bar() 
+
 def batch_run():
   print("Συγχρονισμός οργανισμού από το ΣΔΑΔ...")
 
-  organizations = url_get(f"{ORGANIZATIONS_URL}")
   start_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
-
-  with alive_bar(len(organizations.json()["data"])) as bar:
-    for organization in organizations.json()["data"]:
-      code = organization['code']
-      processOrganizations(code)
-      bar()
+  
+  for item in batch_iterator():
+    code = item['code']
+    processOrganizations(code)
   
   end_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
   send_email("organizations", start_time, end_time)

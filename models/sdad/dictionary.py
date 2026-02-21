@@ -1,5 +1,5 @@
 import mongoengine as me
-from models.timestamp import TimeStampedModel
+from models.sdad.timestamp import TimeStampedModel
 
 class Dictionary(TimeStampedModel):
   meta = {

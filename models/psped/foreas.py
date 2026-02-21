@@ -49,6 +49,14 @@ class Apografi(me.EmbeddedDocument):
   foreas = me.ReferenceField(Organizations)
   monades = me.ListField(me.ReferenceField(Organizational_Units))
 
+class Sdad(me.EmbeddedDocument):
+  organization = me.ReferenceField(Organizations)
+  organization_preferredLabel = me.StringField()
+  organizational_unit = me.ListField(me.ReferenceField(Organizational_Units))
+  organizational_unit_preferredLabel = me.ListField(me.StringField())
+  subOrganizationOf = me.ReferenceField(Organizations)
+  subOrganizationOf_preferredLabel = me.StringField()
+
 
 class Foreas(me.Document):
   meta = {"collection": "foreis", "db_alias": "psped"}

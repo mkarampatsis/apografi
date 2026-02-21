@@ -50,7 +50,7 @@ class supervisorUnitCodeDoc(EmbeddedDocument):
   code = StringField()
   preferredLabel = StringField()
 
-class organizationCode(EmbeddedDocument):
+class organizationCodeDoc(EmbeddedDocument):
   code = StringField()
   preferredLabel = StringField()
   

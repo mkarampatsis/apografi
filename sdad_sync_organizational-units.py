@@ -31,13 +31,12 @@ def processOrganizationUnits(code):
   if response:
     with alive_bar(len(response)) as bar:
       for unit in response:
-        print(unit["code"])
+        print ("Processing organization unit %s" %unit['code'])
+        
 
         if unit.get('organizationCode'):
           organizationOf = url_get(f"{ORGANIZATION_URL}{unit['organizationCode']}").json()['data']
           unit['organizationCode']={'code': organizationOf['code'], 'preferredLabel': organizationOf['preferredLabel']}
-        else:
-          unit['organizationCode']=None
         
         unitType = dict_cache.get(f"UnitTypes:{unit['unitType']}").decode("utf-8")
         unit['unitType'] = { 'id': unit['unitType'], 'description': unitType } 
@@ -61,6 +60,7 @@ def processOrganizationUnits(code):
         unit['telephone'] = unit['telephone'] if unit.get('telephone') else None
         unit['url'] = unit['url'] if unit.get('url') else None
         unit['identifier'] = unit['identifier'] if unit.get('identifier') else None
+        unit["remitsFinalized"] = unit["remitsFinalized"] if unit.get("remitsFinalized") else False
 
         spatialArray = []
         if unit.get('spatial'):
@@ -130,11 +130,12 @@ def processOrganizationUnits(code):
           "url": unit["url"],
           "mainAddress": unit["mainAddress"],
           "secondaryAddresses": unit["secondaryAddresses"],
+          "remitsFinalized": unit["remitsFinalized"]
         }
 
         try:
           existing = Organizational_Units.objects.get(code=unit['code'])
-          print ("Organization unit %s exist" %unit['code'])
+          # print ("Organization unit %s exist" %unit['code'])
           
           if existing:
             existing_dict = existing.to_mongo().to_dict()
@@ -146,17 +147,17 @@ def processOrganizationUnits(code):
             diff = json.loads(diff)
             # print (diff)
             if diff:
-              print("DIFF TRUE", diff)
+              # print("DIFF TRUE", diff)
               item = normalize_embedded(item)
               for key, value in item.items():
                 setattr(existing, key, value)
               # print("Existing>>",existing.to_json())
               existing.save()
               SyncLog(
-                  entity="organization",
-                  action="update",
-                  doc_id=item["code"],
-                  value=diff,
+                entity="organization",
+                action="update",
+                doc_id=item["code"],
+                value=diff,
               ).save()
             
         except Organizational_Units.DoesNotExist:
@@ -192,12 +193,12 @@ def organization_unit_run(code):
   print("Τέλος συγχρονισμού μονάδων οργανισμού από το ΣΔΑΔ.")
     
 my_parser = argparse.ArgumentParser(
-  prog="organization-units.py",
+  prog="sdad_sync_organizational-units.py",
   usage="%(prog)s [--all] | [--code] code",
   description="Get all organization units if run in batch else specific oranization unit")
 
 my_parser.add_argument("--all", action="store_true")
-my_parser.add_argument("--code", type=str, help="give an organization unit code to process")
+my_parser.add_argument("--code", type=str, help="give an organization code to process")
 my_parser.add_argument("--version", action='version', version='%(prog)s 1.0')
 args = my_parser.parse_args()
 

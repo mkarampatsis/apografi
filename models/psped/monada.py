@@ -14,8 +14,8 @@ class Apografi(me.EmbeddedDocument):
 class Sdad(me.EmbeddedDocument):
   organization = me.ReferenceField(Organizations)
   organization_preferredLabel = me.StringField()
-  organizational_unit = me.ReferenceField(Organizational_Units)
-  organizational_unit_preferredLabel = me.StringField()
+  organizational_unit = me.ListField(me.ReferenceField(Organizational_Units))
+  organizational_unit_preferredLabel = me.ListField(me.StringField())
   supervisor_unit = me.ReferenceField(Organizational_Units)
   supervisor_unit_preferredLabel = me.StringField()
 
@@ -24,7 +24,7 @@ class Monada(me.Document):
   meta = {"collection": "monades", "db_alias": "psped"}
 
   code = me.StringField(required=True, unique=True)
-  apografi = me.EmbeddedDocumentField(Apografi)
+  # apografi = me.EmbeddedDocumentField(Apografi)
   sdad = me.EmbeddedDocumentField(Sdad)
   remitsFinalized = me.BooleanField()
   provisionText = me.StringField()

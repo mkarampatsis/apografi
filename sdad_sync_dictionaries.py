@@ -135,7 +135,7 @@ def cache_dictionaries():
   print("Τέλος καταχώρησης λεξικών στην cache.")
 
 my_parser = argparse.ArgumentParser(
-  prog="dictionaries.py",
+  prog="sdad_sync_dictionaries.py",
   usage="%(prog)s [--all] | [--dictionary] dictionary | [--redis]",
   description="Get all dictionaries if run in batch else specific dictionaries")
 

@@ -151,7 +151,7 @@ def organization_run(code):
   print("Τέλος συγχρονισμού οργανισμού από το ΣΔΑΔ.")
     
 my_parser = argparse.ArgumentParser(
-  prog="organizations.py",
+  prog="sdad_sync_organizations.py",
   usage="%(prog)s [--all] | [--code] code",
   description="Get all organization unit if run in batch else specific oranization unit")
 

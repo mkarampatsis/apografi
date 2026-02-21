@@ -1,7 +1,7 @@
 import mongoengine as me
 from models.sdad.organizations import Organizations
 from models.sdad.organizational_units import Organizational_Units
-from models.psped.monada import Monada
+from models.psped.monada import Monada, Sdad
 
 class TreeNode(me.EmbeddedDocument):
   expandable = me.BooleanField()
@@ -59,7 +59,8 @@ class Foreas(me.Document):
     default="ΜΗ ΟΡΙΣΜΕΝΟ",
   )
   provisionText = me.StringField()
-  apografi = me.EmbeddedDocumentField(Apografi, required=True)
+  # apografi = me.EmbeddedDocumentField(Apografi, required=True)
+  sdad = me.EmbeddedDocumentField(Sdad)
   tree = me.EmbeddedDocumentListField(TreeNode)
 
   def to_dict(self):

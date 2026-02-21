@@ -1,6 +1,7 @@
 import requests
 from requests.adapters import HTTPAdapter, Retry
 import sys, os
+from dotenv import load_dotenv
 from smtplib import SMTP as SMTP # this invokes the secure SMTP protocol (port 465, uses SSL)
 from email.mime.text import MIMEText
 
@@ -10,17 +11,20 @@ from models.sdad.embedded import (
   UnitTypeDoc, SecondaryAddressesDoc, SpatialDoc
 )
 
-SMTPSERVER = os.getenv('EMAIL_SMTPSERVER')
-SENDER = 'no-reply@thryallis.ypes.gov.gr'
-DESTINATION = ['a.psarakis@ypes.gov.gr','marka@central.ntua.gr']
+load_dotenv()
 
+SMTPSERVER = os.getenv('EMAIL_SMTPSERVER')
 USERNAME = os.getenv('EMAIL_USERNAME')
 PASSWORD = os.getenv('EMAIL_PASSWORD')
+SENDER = os.getenv('EMAIL_SENDER')
+DESTINATION = os.getenv('EMAIL_DESTINATION').split(",")
 
 subjects = {
   "dictionaries":"Thryallis - Συγχρονισμός Λεξικών ΣΔΑΔ",
   "organizations":"Thryallis - Συγχρονισμός Φορέων ΣΔΑΔ",
   "organizational_units":"Thryallis - Συγχρονισμός Μονάδων ΣΔΑΔ",
+  "sync_organizations_sdad_with_psped":"Thryallis - Συγχρονισμός Φορέων ΣΔΑΔ με ΠΣΠΕΔ",
+  "sync_organizational_units_sdad_with_psped":"Thryallis - Συγχρονισμός Μονάδων ΣΔΑΔ με ΠΣΠΕΔ"
 }
 
 messages = {
@@ -62,22 +66,22 @@ def send_email(typeOf, start_time, end_time):
   try:
     print("Start sending email")
     text = messages[typeOf] % (start_time, end_time)
-    print(f"Email content: {text}")
     subject = subjects[typeOf]
-    
     msg = MIMEText(text, 'html', 'utf-8')
+
     msg['Subject'] = subject
     msg['From'] = SENDER
     msg['To'] = ", ".join(DESTINATION)
 
-    conn = SMTP(SMTPSERVER, port=587)
-    conn.set_debuglevel(False)
-    conn.ehlo()
-    conn.starttls()  # enable TLS
-    conn.ehlo()
-    # If authentication is required, uncomment and set USERNAME and PASSWORD
-    conn.login(USERNAME, PASSWORD)
+    conn = SMTP("mailgate.cosmotemail.gr", 587)
+    conn.set_debuglevel(False)  # enable debug to see server responses
 
+    conn.ehlo()
+    conn.starttls()
+    conn.ehlo()  # required after STARTTLS
+
+    conn.login(USERNAME, PASSWORD)
+    
     try:
       conn.sendmail(SENDER, DESTINATION, msg.as_string())
       print("Message sent")

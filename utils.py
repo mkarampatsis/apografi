@@ -24,7 +24,8 @@ subjects = {
   "organizations":"Thryallis - Συγχρονισμός Φορέων ΣΔΑΔ",
   "organizational_units":"Thryallis - Συγχρονισμός Μονάδων ΣΔΑΔ",
   "sync_organizations_sdad_with_psped":"Thryallis - Συγχρονισμός Φορέων ΣΔΑΔ με ΠΣΠΕΔ",
-  "sync_organizational_units_sdad_with_psped":"Thryallis - Συγχρονισμός Μονάδων ΣΔΑΔ με ΠΣΠΕΔ"
+  "sync_organizational_units_sdad_with_psped":"Thryallis - Συγχρονισμός Μονάδων ΣΔΑΔ με ΠΣΠΕΔ",
+  "build_tree":"Thryallis - Ενημέρωση δέντρου οργανισμών ΠΣΠΕΔ"
 }
 
 messages = {
@@ -47,10 +48,14 @@ messages = {
       <p>Ο συγχρονισμός των φορεών από ΣΔΑΔ σε ΠΣΠΕΔ ολοκληρώθηκε</p>
       <p>Ώρα που ξεκίνησε: %s</p>
       <p>Ώρα που τελείωσε: %s</p>
-  '''
-  ,
+  ''',
   "sync_organizational_units_sdad_with_psped":'''
       <p>Ο συγχρονισμός των μονάδων από ΣΔΑΔ σε ΠΣΠΕΔ ολοκληρώθηκε</p>
+      <p>Ώρα που ξεκίνησε: %s</p>
+      <p>Ώρα που τελείωσε: %s</p>
+  ''',
+  "build_tree":'''
+      <p>Η ενημέρωση του δέντρου των οργανισμών στο ΠΣΠΕΔ ολοκληρώθηκε</p>
       <p>Ώρα που ξεκίνησε: %s</p>
       <p>Ώρα που τελείωσε: %s</p>
   '''

@@ -19,7 +19,6 @@ API_URL = "https://hrms.gov.gr/api"
 ORGANIZATIONS_URL = f"{API_URL}/public/organizations"
 ORGANIZATION_URL = f"{API_URL}/public/organizations/"
 ORGANIZATION_UNITS_URL = f"{API_URL}/public/organizational-units?organizationCode=%s"
-ORGANIZATION_TREE_URL = f"{API_URL}/public/organization-tree?organizationCode=%s"
 
 units_with_problems = [
   { "code":"763976", "field":"email", 'problem':'email is tm.sint.td.akiklades@efka.gov.gr  / tm.par.td.akiklades@efka.gov.gr' }

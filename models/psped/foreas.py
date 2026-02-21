@@ -44,7 +44,6 @@ def convert_tree_to_flat_nodes(node, level=0):
       flat_nodes.extend(convert_tree_to_flat_nodes(subordinate, level + 1))
   return flat_nodes
 
-
 class Apografi(me.EmbeddedDocument):
   foreas = me.ReferenceField(Organizations)
   monades = me.ListField(me.ReferenceField(Organizational_Units))
@@ -68,14 +67,17 @@ class Foreas(me.Document):
   )
   provisionText = me.StringField()
   # apografi = me.EmbeddedDocumentField(Apografi, required=True)
+  apografi = me.EmbeddedDocumentField(Apografi)
   sdad = me.EmbeddedDocumentField(Sdad)
   tree = me.EmbeddedDocumentListField(TreeNode)
+  treeSdad = me.DictField()
 
   def to_dict(self):
     return self.to_mongo().to_dict()
 
   def build_tree(self):
-    monades = self.apografi.monades
+    # monades = self.apografi.monades
+    monades = self.sdad.organizational_unit
     tree = build_tree(monades)
 
     flat_nodes = []

@@ -1,15 +1,31 @@
 import argparse
 from alive_progress import alive_bar
-from utils import send_email
+from utils import send_email, url_get
 from datetime import datetime
 
 from connection import get_database
 from models.psped.foreas import Foreas
 
+# api-endpoints
+API_URL = "https://hrms.gov.gr/api"
+ORGANIZATION_TREE_URL = f"{API_URL}/public/organization-tree?organizationCode=%s"
+
 dbname = get_database()
 
 def build_tree(foreas):
-  foreas.build_tree()
+  # Save to tree key
+  tree = foreas.tree_to_json()
+  
+  # Save to treeSdad key
+  code = foreas.code
+  print(f"  - Δημίουργια δέντρου για οργανισμό: {code}...")
+  response = url_get(f"{ORGANIZATION_TREE_URL %code}").json()['data']
+  
+  if response:
+    foreas.treeSdad = response
+    foreas.save(upsert=True)
+
+  
 
 def batch_iterator():
   foreis = Foreas.objects()
@@ -36,7 +52,7 @@ def organization_run(code):
   start_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
   build_tree(foreas)
   end_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
-  send_email("build_tree", start_time, end_time)
+  # send_email("build_tree", start_time, end_time)
   print("Τέλος ενημέρωσης δεντρου psped")
     
 my_parser = argparse.ArgumentParser(

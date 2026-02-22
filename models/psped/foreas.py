@@ -17,7 +17,8 @@ def print_tree(node, indent=0):
 
 
 def build_subtree(super_monada, monades):
-  subordinates = [u for u in monades if u.supervisorUnitCode == super_monada.code]
+  # subordinates = [u for u in monades if u.supervisorUnitCode == super_monada.code]
+  subordinates = [u for u in monades if u.supervisorUnitCode and u.supervisorUnitCode.code == super_monada.code]
 
   for sub in subordinates:
       sub.subordinates = build_subtree(sub, monades)
@@ -27,7 +28,6 @@ def build_subtree(super_monada, monades):
 
 def build_tree(monades):
   roots = [u for u in monades if not u.supervisorUnitCode]
-
   for root in roots:
       root.subordinates = build_subtree(root, monades)
       # print_tree(root)
@@ -77,7 +77,10 @@ class Foreas(me.Document):
 
   def build_tree(self):
     # monades = self.apografi.monades
-    monades = self.sdad.organizational_unit
+    # monades = self.sdad.organizational_unit
+    monade_ids = [m.id for m in self.sdad.organizational_unit] 
+    # print("Monade",monade_ids)
+    monades = list(Organizational_Units.objects(id__in=monade_ids)) # CORRECT
     tree = build_tree(monades)
 
     flat_nodes = []

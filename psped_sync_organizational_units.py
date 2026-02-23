@@ -13,7 +13,8 @@ from connection import get_database
 dbname = get_database()
 
 def processOrganizationalUnit(organizationCode):
-   
+  print(f"Processing organization with code: {organizationCode}") 
+  
   organization = Organizations.objects(code=organizationCode).first()
   organizationalUnits = Organizational_Units.objects(organizationCode__code=organizationCode)
   
@@ -61,8 +62,8 @@ def batch_run():
 
   start_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
     
-  for item in batch_iterator():
-    processOrganizationalUnit(item)
+  for organization in batch_iterator():
+    processOrganizationalUnit(organization.code)
   
   end_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
   send_email("sync_organizations_sdad_with_psped", start_time, end_time)

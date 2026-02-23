@@ -14,12 +14,15 @@ dbname = get_database()
 def processOrganization(organization):
   code = organization.code
   print(f"Processing organization with code: {organization.code}")
+  # print(organization.to_json())
   
   organizationalUnits = list( Organizational_Units.objects(organizationCode__code=organization.code))
   organizationalUnits_preferredLabel = [u.preferredLabel for u in organizationalUnits]
   
   if organization.subOrganizationOf:
     subOrganizationOf = Organizations.objects(code=organization.subOrganizationOf.code).first()
+  else:
+    subOrganizationOf = None
 
   sdad = Sdad(
     organization = organization,

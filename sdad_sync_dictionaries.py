@@ -81,7 +81,10 @@ def processDictionaries(dictionary, bar=None):
     else:
       Dictionary(**doc).save()
       SyncLog(
-        entity="dictionary", action="insert", doc_id=doc_id, value=doc
+        entity="dictionary", 
+        action="insert", 
+        doc_id=doc_id, 
+        value=doc
       ).save()
   if bar:
     bar()

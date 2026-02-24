@@ -129,7 +129,8 @@ def processOrganizationUnits(code):
           "url": unit["url"],
           "mainAddress": unit["mainAddress"],
           "secondaryAddresses": unit["secondaryAddresses"],
-          "remitsFinalized": unit["remitsFinalized"]
+          "remitsFinalized": unit["remitsFinalized"],
+          "elasticSync": unit["elasticSync"] if unit.get("elasticSync") else False
         }
 
         try:
@@ -153,7 +154,7 @@ def processOrganizationUnits(code):
               print("Existing>>",existing.to_json())
               existing.save()
               SyncLog(
-                entity="organization",
+                entity="organizational_unit",
                 action="update",
                 doc_id=item["code"],
                 value=diff,
@@ -162,6 +163,12 @@ def processOrganizationUnits(code):
         except Organizational_Units.DoesNotExist:
           print("Organizational Unit %s is new" %unit['code'])
           Organizational_Units(**item).save()
+          SyncLog( 
+            entity="organizational_unit", 
+            action="insert", 
+            doc_id=item["code"], 
+            value=item 
+          ).save() 
       bar()
 
 def batch_iterator():

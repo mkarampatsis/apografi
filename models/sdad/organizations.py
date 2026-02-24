@@ -22,9 +22,13 @@ class Organizations(TimeStampedModel):
   organizationStructureUpdateDate = DateTimeField(null=True)
   foundationFek = EmbeddedDocumentField(FekDoc, null=True)
   mainAddress = EmbeddedDocumentField(MainAddressDoc, null=True)
+  elasticSync = BooleanField(default=False)
   
   meta = {
     "collection": "organizations",
     "db_alias": "sdad",
-    "indexes": ["preferredLabel"],
+    "indexes": [
+      "preferredLabel",
+      {"fields": ["code"], "unique": True}
+    ],
   }

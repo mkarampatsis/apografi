@@ -80,6 +80,7 @@ def processOrganizations(code):
       existing_dict.pop("_id")
       existing_dict.pop("createdAt")
       existing_dict.pop("updatedAt")
+      existing_dict.pop("elasticSync")
       
       if existing_dict.get("foundationDate") and isinstance(existing_dict.get("foundationDate"), datetime):
         existing_dict["foundationDate"] = existing_dict["foundationDate"].strftime("%Y-%m-%d")
@@ -90,25 +91,30 @@ def processOrganizations(code):
       if existing_dict.get("mainDataUpdateDate") and isinstance(existing_dict.get("mainDataUpdateDate"), datetime):
         existing_dict["mainDataUpdateDate"] = existing_dict["mainDataUpdateDate"].strftime("%Y-%m-%d")
       
+      if existing_dict.get("organizationStructureUpdateDate") and isinstance(existing_dict.get("organizationStructureUpdateDate"), datetime):
+        existing_dict["organizationStructureUpdateDate"] = existing_dict["organizationStructureUpdateDate"].strftime("%Y-%m-%d")
+
       diff = DeepDiff(existing_dict, item, view='tree').to_json() 
       diff = json.loads(diff)
 
+      
       if diff:
         # print("DIFF TRUE", diff)
         item = normalize_embedded(item)
         for key, value in item.items():
           setattr(existing, key, value)
-        # print("Existing>>",existing.to_json())
+        existing['elasticSync'] = False
         existing.save()
         SyncLog(
-            entity="organization",
-            action="update",
-            doc_id=item["code"],
-            value=diff,
+          entity="organization",
+          action="update",
+          doc_id=item["code"],
+          value=diff,
         ).save()
       
   except Organizations.DoesNotExist:
     try: 
+      print("Organization %s is new" %item['code'])
       Organizations(**item).save() 
       SyncLog( 
         entity="organization", 
@@ -151,7 +157,7 @@ def organization_run(code):
   processOrganizations(code)
 
   end_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
-  send_email("organizations", start_time, end_time)
+  # send_email("organizations", start_time, end_time)
   print("Τέλος συγχρονισμού οργανισμού από το ΣΔΑΔ.")
     
 my_parser = argparse.ArgumentParser(

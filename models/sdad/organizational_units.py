@@ -22,9 +22,13 @@ class Organizational_Units(TimeStampedModel):
   mainAddress = EmbeddedDocumentField(MainAddressDoc,null=True)
   secondaryAddresses = EmbeddedDocumentListField(SecondaryAddressesDoc, null=True)
   remitsFinalized = BooleanField(default=False)
+  elasticSync = BooleanField(default=False)
  
   meta = {
     "collection": "organizational-units",
     "db_alias": "sdad",
-    "indexes": ["organizationCode.code", "supervisorUnitCode.code", "preferredLabel"],
+    "indexes": [
+      "organizationCode.code", "supervisorUnitCode.code", "preferredLabel",
+      {"fields": ["code"], "unique": True}
+    ],
   }

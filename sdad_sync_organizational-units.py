@@ -141,16 +141,16 @@ def processOrganizationUnits(code):
             existing_dict.pop("_id")
             existing_dict.pop("createdAt")
             existing_dict.pop("updatedAt")
-            
+                        
             diff = DeepDiff(existing_dict, item, ignore_order=True, view='tree').to_json() 
             diff = json.loads(diff)
             # print (diff)
             if diff:
-              # print("DIFF TRUE", diff)
+              print("DIFF TRUE", diff)
               item = normalize_embedded(item)
               for key, value in item.items():
                 setattr(existing, key, value)
-              # print("Existing>>",existing.to_json())
+              print("Existing>>",existing.to_json())
               existing.save()
               SyncLog(
                 entity="organization",

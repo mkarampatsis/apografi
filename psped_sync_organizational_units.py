@@ -45,18 +45,19 @@ def processOrganizationalUnit(organizationCode):
           monada.save()
       
       bar()
-      
-    # if organizational_unit_code == "800399":
-    #     pprint(organization_unit.to_mongo().to_dict())
-    # organization = Organization.objects(code=organization_unit.organizationCode).first()
-    # monada = Monada(foreas=organization, monada=organization_unit)
-    # Monada.objects(code=code).update_one(**monada.to_mongo(), upsert=True)
 
-def batch_iterator():
-  organizations = Organizations.objects()
-  for organization in organizations:
-    yield organization
-  
+def batch_iterator(batch_size=200):
+  skip = 0
+  while True:
+    organizations = list(Organizations.objects.skip(skip).limit(batch_size))
+    if not organizations:
+      break
+    try: 
+      for organization in organizations: 
+        yield organization
+    finally: organizations.close()
+    skip += batch_size
+
 def batch_run():
   print("Ενημέρωση μονάδων psped από το sdad")
 

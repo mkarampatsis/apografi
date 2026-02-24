@@ -5,8 +5,8 @@ class CountryDoc(EmbeddedDocument):
   description = StringField()
 
 class CityDoc(EmbeddedDocument):
-  id = IntField()
-  description = StringField()
+  id = IntField(null=True)
+  description = StringField(null=True)
   parentId = IntField(null=True)
 
 class OrganizationDoc(EmbeddedDocument):

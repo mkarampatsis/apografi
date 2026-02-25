@@ -10,10 +10,14 @@ from models.psped.foreas import Foreas
 API_URL = "https://hrms.gov.gr/api"
 ORGANIZATION_TREE_URL = f"{API_URL}/public/organization-tree?organizationCode=%s"
 
+no_exist_foreis = ["05767"]
+
 dbname = get_database()
 
 def build_tree(foreas):
   # Save to tree key
+  print(f"  - Δημίουργια δέντρου για οργανισμό: {foreas.code}...")
+  
   tree = foreas.tree_to_json()
   
   # Save to treeSdad key
@@ -24,8 +28,6 @@ def build_tree(foreas):
   if response:
     foreas.treeSdad = response
     foreas.save(upsert=True)
-
-  
 
 def batch_iterator():
   foreis = Foreas.objects()
@@ -40,6 +42,7 @@ def batch_run():
   start_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
     
   for item in batch_iterator():
+    print(f"Processing {item.code} - {item.name}")
     build_tree(item)
   
   end_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")

@@ -52,10 +52,10 @@ def batch_iterator(batch_size=200):
     organizations = list(Organizations.objects.skip(skip).limit(batch_size))
     if not organizations:
       break
-    try: 
-      for organization in organizations: 
-        yield organization
-    finally: organizations.close()
+    # try: 
+    for organization in organizations: 
+      yield organization
+    # finally: organizations.close()
     skip += batch_size
 
 def batch_run():

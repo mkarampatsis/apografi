@@ -130,7 +130,6 @@ def processOrganizationUnits(code):
           "mainAddress": unit["mainAddress"],
           "secondaryAddresses": unit["secondaryAddresses"],
           "remitsFinalized": unit["remitsFinalized"],
-          "elasticSync": unit["elasticSync"] if unit.get("elasticSync") else False
         }
 
         try:
@@ -142,6 +141,7 @@ def processOrganizationUnits(code):
             existing_dict.pop("_id")
             existing_dict.pop("createdAt")
             existing_dict.pop("updatedAt")
+            existing_dict.pop("elasticSync")
                         
             diff = DeepDiff(existing_dict, item, ignore_order=True, view='tree').to_json() 
             diff = json.loads(diff)
@@ -151,7 +151,7 @@ def processOrganizationUnits(code):
               item = normalize_embedded(item)
               for key, value in item.items():
                 setattr(existing, key, value)
-              print("Existing>>",existing.to_json())
+              # print("Existing>>",existing.to_json())
               existing.save()
               SyncLog(
                 entity="organizational_unit",

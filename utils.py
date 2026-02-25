@@ -5,11 +5,7 @@ from dotenv import load_dotenv
 from smtplib import SMTP as SMTP # this invokes the secure SMTP protocol (port 465, uses SSL)
 from email.mime.text import MIMEText
 
-from models.sdad.embedded import (
-  SubOrganizationDoc, OrganizationDoc, ContactDoc, CountryDoc, CityDoc,
-  FekDoc, MainAddressDoc, supervisorUnitCodeDoc, PurposeDoc, 
-  UnitTypeDoc, SecondaryAddressesDoc, SpatialDoc
-)
+from models.sdad.embedded import *
 
 load_dotenv()
 
@@ -150,3 +146,54 @@ def normalize_embedded(item):
 
   return item
 
+def normalize_embedded_ou(item):
+
+  # organizationCode
+  if isinstance(item.get("organizationCode"), dict):
+    item["organizationCode"] = organizationCodeDoc(**item["organizationCode"])
+
+  # supervisorUnitCode
+  if isinstance(item.get("supervisorUnitCode"), dict):
+    item["supervisorUnitCode"] = supervisorUnitCodeDoc(**item["supervisorUnitCode"])
+
+  # unitType
+  if isinstance(item.get("unitType"), dict):
+    item["unitType"] = UnitTypeDoc(**item["unitType"])
+
+  # purpose
+  if isinstance(item.get("purpose"), list):
+    item["purpose"] = [
+      PurposeDoc(**p) if isinstance(p, dict) else p
+      for p in item["purpose"]
+    ]
+
+  # spatial
+  if isinstance(item.get("spatial"), list):
+    item["spatial"] = [
+      SpatialDoc(**s) if isinstance(s, dict) else s
+      for s in item["spatial"]
+    ]
+
+  # mainAddress
+  if isinstance(item.get("mainAddress"), dict):
+    addr = item["mainAddress"]
+    item["mainAddress"] = MainAddressDoc(
+      fullAddress=addr.get("fullAddress"),
+      postCode=addr.get("postCode"),
+      country=CountryDoc(**addr["country"]) if addr.get("country") else None,
+      city=CityDoc(**addr["city"]) if addr.get("city") else None,
+    )
+
+  # secondaryAddresses
+  if isinstance(item.get("secondaryAddresses"), list):
+    item["secondaryAddresses"] = [
+      SecondaryAddressesDoc(
+        fullAddress=addr.get("fullAddress"),
+        postCode=addr.get("postCode"),
+        country=CountryDoc(**addr["country"]) if addr.get("country") else None,
+        city=CityDoc(**addr["city"]) if addr.get("city") else None,
+      )
+      for addr in item["secondaryAddresses"]
+    ]
+
+  return item

@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 import json
 from connection import get_database
-from utils import url_get, send_email, normalize_embedded
+from utils import url_get, send_email, normalize_embedded_ou
+
 from deepdiff import DeepDiff
 from datetime import datetime
 import argparse
@@ -148,10 +149,10 @@ def processOrganizationUnits(code):
             # print (diff)
             if diff:
               print("DIFF TRUE", diff)
-              item = normalize_embedded(item)
+              item = normalize_embedded_ou(item)
               for key, value in item.items():
                 setattr(existing, key, value)
-              # print("Existing>>",existing.to_json())
+              print("Existing>>",existing.to_json())
               existing.save()
               SyncLog(
                 entity="organizational_unit",

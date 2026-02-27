@@ -15,14 +15,13 @@ no_exist_foreis = ["05767"]
 dbname = get_database()
 
 def build_tree(foreas):
-  # Save to tree key
-  print(f"  - Δημίουργια δέντρου για οργανισμό: {foreas.code}...")
-  
+  # Save to tree to key
+  print(f"  - Δημίουργια Tree δέντρου για οργανισμό: {foreas.code}...")  
   tree = foreas.tree_to_json()
   
   # Save to treeSdad key
   code = foreas.code
-  print(f"  - Δημίουργια δέντρου για οργανισμό: {code}...")
+  print(f"  - Δημίουργια Tree Sdad δέντρου για οργανισμό: {code}...")
   response = url_get(f"{ORGANIZATION_TREE_URL %code}").json()['data']
   
   if response:
@@ -42,8 +41,9 @@ def batch_run():
   start_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
     
   for item in batch_iterator():
-    print(f"Processing {item.code} - {item.name}")
-    build_tree(item)
+    if item.sdad and item.sdad.organizational_unit:
+      print(f"Processing {item.code}...")
+      build_tree(item)
   
   end_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
   send_email("build_tree", start_time, end_time)

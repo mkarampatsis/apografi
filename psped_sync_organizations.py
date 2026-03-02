@@ -36,19 +36,30 @@ def processOrganization(organization):
   foreas = Foreas(code=code, sdad=sdad)
   Foreas.objects(code=organization.code).update_one(**foreas.to_mongo(), upsert=True)
 
-def batch_iterator():
-  organizations = Organizations.objects()
+def batch_iterator(changed=False):
+  if changed:
+    organizations = Organizations.objects(pspedSync=False)
+  else:  
+    organizations = Organizations.objects()
+  
+  if not organizations:
+    return
+  
   with alive_bar(len(organizations)) as bar:
     for organization in organizations:
       yield organization
       bar()
   
-def batch_run():
+def batch_run(changed=False):
   print("Ενημέρωση οργανισμών psped από το sdad")
 
   start_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
     
-  for item in batch_iterator():
+  if changed:
+    print("Processing only changed organizations")
+  else:
+    print("Processing all organizations")  
+  for item in batch_iterator(changed):
     processOrganization(item)
   
   end_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
@@ -66,17 +77,21 @@ def organization_run(code):
     
 my_parser = argparse.ArgumentParser(
   prog="psped_sync_organizations.py",
-  usage="%(prog)s [--all] | [--code] code",
+  usage="%(prog)s [--all] | [--changed] | [--code] code",
   description="Get all organizations if run in batch else specific oranizations")
 
 my_parser.add_argument("--all", action="store_true")
 my_parser.add_argument("--code", type=str, help="give an organization code to process")
+my_parser.add_argument("--changed", action="store_true", help="process only changed organizations")
 my_parser.add_argument("--version", action='version', version='%(prog)s 1.0')
 args = my_parser.parse_args()
 
 if args.all:
   print ("Process all")
   batch_run()
+elif args.changed:
+  print("Process changed")
+  batch_run(changed=True)
 else:
   print("Process code: ", args.code)
   organization_run(args.code)

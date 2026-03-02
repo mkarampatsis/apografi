@@ -143,6 +143,7 @@ def processOrganizationUnits(code):
             existing_dict.pop("createdAt")
             existing_dict.pop("updatedAt")
             existing_dict.pop("elasticSync")
+            existing_dict.pop("pspedSync")
                         
             diff = DeepDiff(existing_dict, item, ignore_order=True, view='tree').to_json() 
             diff = json.loads(diff)
@@ -152,7 +153,9 @@ def processOrganizationUnits(code):
               item = normalize_embedded_ou(item)
               for key, value in item.items():
                 setattr(existing, key, value)
-              print("Existing>>",existing.to_json())
+              # print("Existing>>",existing.to_json())
+              existing['elasticSync'] = False
+              existing['pspedSync'] = False
               existing.save()
               SyncLog(
                 entity="organizational_unit",
@@ -163,6 +166,8 @@ def processOrganizationUnits(code):
             
         except Organizational_Units.DoesNotExist:
           print("Organizational Unit %s is new" %unit['code'])
+          item['elasticSync'] = False
+          item['pspedSync'] = False
           Organizational_Units(**item).save()
           SyncLog( 
             entity="organizational_unit", 

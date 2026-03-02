@@ -104,6 +104,7 @@ def processOrganizations(code):
         for key, value in item.items():
           setattr(existing, key, value)
         existing['elasticSync'] = False
+        existing['pspedSync'] = False
         existing.save()
         SyncLog(
           entity="organization",
@@ -115,6 +116,8 @@ def processOrganizations(code):
   except Organizations.DoesNotExist:
     try: 
       print("Organization %s is new" %item['code'])
+      item['elasticSync'] = False
+      item['pspedSync'] = False
       Organizations(**item).save() 
       SyncLog( 
         entity="organization", 

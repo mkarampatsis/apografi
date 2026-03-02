@@ -23,6 +23,7 @@ class Organizations(TimeStampedModel):
   foundationFek = EmbeddedDocumentField(FekDoc, null=True)
   mainAddress = EmbeddedDocumentField(MainAddressDoc, null=True)
   elasticSync = BooleanField(default=False)
+  pspedSync = BooleanField(default=False)
   
   meta = {
     "collection": "organizations",

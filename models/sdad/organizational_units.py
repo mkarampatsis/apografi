@@ -23,6 +23,7 @@ class Organizational_Units(TimeStampedModel):
   secondaryAddresses = EmbeddedDocumentListField(SecondaryAddressesDoc, null=True)
   remitsFinalized = BooleanField(default=False)
   elasticSync = BooleanField(default=False)
+  pspedSync = BooleanField(default=False)
  
   meta = {
     "collection": "organizational-units",

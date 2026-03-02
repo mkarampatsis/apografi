@@ -46,10 +46,16 @@ def processOrganizationalUnit(organizationCode):
       
       bar()
 
-def batch_iterator(batch_size=200):
+def batch_iterator(changed=False, batch_size=200):
   skip = 0
   while True:
-    organizations = list(Organizations.objects.skip(skip).limit(batch_size))
+    
+    if changed:
+      orgs = [ou.organizationCode.code for ou in Organizational_Units.objects(pspedSync=False)]
+      organizations = list(Organizations.objects(code__in=orgs).skip(skip).limit(batch_size))
+    else:
+      organizations = list(Organizations.objects.skip(skip).limit(batch_size))
+    
     if not organizations:
       break
     # try: 
@@ -58,12 +64,17 @@ def batch_iterator(batch_size=200):
     # finally: organizations.close()
     skip += batch_size
 
-def batch_run():
+def batch_run(changed=False):
   print("Ενημέρωση μονάδων psped από το sdad")
 
   start_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+  
+  if changed:
+    print("Processing only changed organizational units")
+  else:
+    print("Processing all organizational units")  
     
-  for organization in batch_iterator():
+  for organization in batch_iterator(changed):
     processOrganizationalUnit(organization.code)
   
   end_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
@@ -83,17 +94,21 @@ def organization_run(organizationCode):
     
 my_parser = argparse.ArgumentParser(
   prog="psped_sync_organizational_units.py",
-  usage="%(prog)s [--all] | [--code] code",
+  usage="%(prog)s [--all] | [--code] code | [--changed]",
   description="Get all organizational units if run in batch else specific organizational units")
 
 my_parser.add_argument("--all", action="store_true")
 my_parser.add_argument("--code", type=str, help="give an organization code to process")
+my_parser.add_argument("--changed", action="store_true", help="process only changed organizational units")
 my_parser.add_argument("--version", action='version', version='%(prog)s 1.0')
 args = my_parser.parse_args()
 
 if args.all:
   print ("Process all")
   batch_run()
+elif args.changed:
+  print("Process changed")
+  batch_run(changed=True)
 else:
   print("Process code: ", args.code)
   organization_run(args.code)

@@ -135,7 +135,7 @@ def processOrganizationUnits(code):
 
         try:
           existing = Organizational_Units.objects.get(code=unit['code'])
-          # print ("Organization unit %s exist" %unit['code'])
+          print ("Organization unit %s exist" %unit['code'])
           
           if existing:
             existing_dict = existing.to_mongo().to_dict()
@@ -149,7 +149,7 @@ def processOrganizationUnits(code):
             diff = json.loads(diff)
             # print (diff)
             if diff:
-              print("DIFF TRUE", diff)
+              # print("DIFF TRUE", diff)
               item = normalize_embedded_ou(item)
               for key, value in item.items():
                 setattr(existing, key, value)

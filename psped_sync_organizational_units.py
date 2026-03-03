@@ -43,7 +43,9 @@ def processOrganizationalUnit(organizationCode):
       else:
           monada = Monada(code=organizational_unit_code, sdad=sdad, remitsFinalized=False, provisionText=None)
           monada.save()
-      
+      # 
+      ou.pspedSync = True 
+      ou.save()
       bar()
 
 def batch_iterator(changed=False, batch_size=200):

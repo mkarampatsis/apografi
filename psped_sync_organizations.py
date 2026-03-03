@@ -32,9 +32,12 @@ def processOrganization(organization):
     subOrganizationOf = subOrganizationOf if subOrganizationOf else None,
     subOrganizationOf_preferredLabel = subOrganizationOf.preferredLabel if subOrganizationOf else None
   )
-
+  # Save foreas to psped
   foreas = Foreas(code=code, sdad=sdad)
   Foreas.objects(code=organization.code).update_one(**foreas.to_mongo(), upsert=True)
+  # Mark organization as synced
+  organization.pspedSync = True
+  organization.save()
 
 def batch_iterator(changed=False):
   if changed:

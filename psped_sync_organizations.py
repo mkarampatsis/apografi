@@ -33,8 +33,7 @@ def processOrganization(organization):
     subOrganizationOf_preferredLabel = subOrganizationOf.preferredLabel if subOrganizationOf else None
   )
   # Save foreas to psped
-  foreas = Foreas(code=code, sdad=sdad)
-  Foreas.objects(code=organization.code).update_one(**foreas.to_mongo(), upsert=True)
+  Foreas.objects(code=code).update_one(set__sdad=sdad, upsert=True)
   # Mark organization as synced
   organization.pspedSync = True
   organization.save()
@@ -75,7 +74,7 @@ def organization_run(code):
   start_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
   processOrganization(organization)
   end_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
-  send_email("sync_organizations_sdad_with_psped", start_time, end_time)
+  # send_email("sync_organizations_sdad_with_psped", start_time, end_time)
   print("Τέλος ενημέρωσης οργανισμών psped από το sdad")
     
 my_parser = argparse.ArgumentParser(

@@ -74,7 +74,7 @@ def organization_run(code):
   start_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
   processOrganization(organization)
   end_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
-  # send_email("sync_organizations_sdad_with_psped", start_time, end_time)
+  send_email("sync_organizations_sdad_with_psped", start_time, end_time)
   print("Τέλος ενημέρωσης οργανισμών psped από το sdad")
     
 my_parser = argparse.ArgumentParser(

@@ -55,7 +55,7 @@ def organization_run(code):
   start_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
   build_tree(foreas)
   end_time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
-  # send_email("build_tree", start_time, end_time)
+  send_email("build_tree", start_time, end_time)
   print("Τέλος ενημέρωσης δεντρου psped")
     
 my_parser = argparse.ArgumentParser(

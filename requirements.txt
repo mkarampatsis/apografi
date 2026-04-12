@@ -1,5 +1,6 @@
 about-time==4.2.1
 alive-progress==3.3.0
+async-timeout==5.0.1
 certifi==2022.9.24
 charset-normalizer==2.1.1
 deepdiff==6.2.1

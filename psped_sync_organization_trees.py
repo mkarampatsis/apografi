@@ -15,18 +15,25 @@ no_exist_foreis = ["05767"]
 dbname = get_database()
 
 def build_tree(foreas):
-  # Save to tree to key
-  print(f"  - Δημίουργια Tree δέντρου για οργανισμό: {foreas.code}...")  
-  tree = foreas.tree_to_json()
+  try:
+    # Save to tree to key
+    print(f"  - Δημίουργια Tree δέντρου για οργανισμό: {foreas.code}...")  
+    tree = foreas.tree_to_json()
+  except Exception as e:
+    print(f"  - Error building tree for {foreas.code}: {e}")
+    return
   
+  try:
   # Save to treeSdad key
-  code = foreas.code
-  print(f"  - Δημίουργια Tree Sdad δέντρου για οργανισμό: {code}...")
-  response = url_get(f"{ORGANIZATION_TREE_URL %code}").json()['data']
-  
-  if response:
-    foreas.treeSdad = response
-    foreas.save(upsert=True)
+    code = foreas.code
+    print(f"  - Δημίουργια Tree Sdad δέντρου για οργανισμό: {code}...")
+    response = url_get(f"{ORGANIZATION_TREE_URL %code}").json()['data']
+    
+    if response:
+      foreas.treeSdad = response
+      foreas.save(upsert=True)
+  except Exception as e:
+    print(f"  - Error building treeSdad for {code}: {e}") 
 
 def batch_iterator():
   foreis = Foreas.objects()

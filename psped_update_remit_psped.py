@@ -29,9 +29,13 @@ connect(
 # --- Iterate through all remits ---
 for remit in Remit.objects:   # <-- MongoEngine syntax
   unit_code = remit.organizationalUnitCode
+  print(f"Processing remit {remit.id} with organizationalUnitCode: {unit_code}")
 
   if not unit_code:
     print(f"Remit {remit.id} has no organizationalUnitCode, skipping.")
+    remit.update(
+      set__status="ΟΡΦΑΝΗ"
+    )
     continue
 
   # Find matching organizational-unit
@@ -39,6 +43,9 @@ for remit in Remit.objects:   # <-- MongoEngine syntax
 
   if not org_unit:
     print(f"No organizational-unit found for code {unit_code}")
+    remit.update(
+      set__status="ΟΡΦΑΝΗ"
+    )
     continue
 
   # Extract organizationCode fields
@@ -46,9 +53,13 @@ for remit in Remit.objects:   # <-- MongoEngine syntax
 
   if not org_code_info:
     print(f"organizational-unit {unit_code} has no organizationCode field.")
+    remit.update(
+      set__status="ΟΡΦΑΝΗ"
+    )
     continue
-  print(org_code_info.to_json())
-  print(org_code_info["code"], org_code_info["preferredLabel"])
+
+  # print(org_code_info.to_json())
+  # print(org_code_info["code"], org_code_info["preferredLabel"])
   organization_field = {
     "code": org_code_info["code"],
     "preferredLabel": org_code_info["preferredLabel"]

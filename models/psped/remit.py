@@ -10,7 +10,7 @@ class COFOG(me.EmbeddedDocument):
     cofog3 = me.StringField(required=True)
 
 class Remit(me.Document):
-    meta = {"collection": "remits", "db_alias": "psped", 'strict': False}
+    meta = {"collection": "remits", "db_alias": "psped", 'allow_inheritance': True}
 
     organization = me.EmbeddedDocumentField(orgData)
     organizational_unit = me.EmbeddedDocumentField(orgData)

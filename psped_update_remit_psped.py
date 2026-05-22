@@ -33,9 +33,11 @@ for remit in Remit.objects:   # <-- MongoEngine syntax
 
   if not unit_code:
     print(f"Remit {remit.id} has no organizationalUnitCode, skipping.")
-    remit.update(
-      set__status="ΟΡΦΑΝΗ"
-    )
+    # remit.update(
+    #   set__status="ΟΡΦΑΝΗ"
+    # )
+    remit.status = "ΟΡΦΑΝΗ"
+    remit.save()
     continue
 
   # Find matching organizational-unit
@@ -43,9 +45,11 @@ for remit in Remit.objects:   # <-- MongoEngine syntax
 
   if not org_unit:
     print(f"No organizational-unit found for code {unit_code}")
-    remit.update(
-      set__status="ΟΡΦΑΝΗ"
-    )
+    # remit.update(
+    #   set__status="ΟΡΦΑΝΗ"
+    # )
+    remit.status = "ΟΡΦΑΝΗ"
+    remit.save()
     continue
 
   # Extract organizationCode fields
@@ -53,9 +57,11 @@ for remit in Remit.objects:   # <-- MongoEngine syntax
 
   if not org_code_info:
     print(f"organizational-unit {unit_code} has no organizationCode field.")
-    remit.update(
-      set__status="ΟΡΦΑΝΗ"
-    )
+    # remit.update(
+    #   set__status="ΟΡΦΑΝΗ"
+    # )
+    remit.status = "ΟΡΦΑΝΗ"
+    remit.save()
     continue
 
   # print(org_code_info.to_json())
@@ -71,9 +77,13 @@ for remit in Remit.objects:   # <-- MongoEngine syntax
   }
 
   # Update remit (MongoEngine way)
-  remit.update(
-    set__organization=organization_field,
-    set__organizational_unit=organizational_unit_field
-  )
+  # remit.update(
+  #   set__organization=organization_field,
+  #   set__organizational_unit=organizational_unit_field
+  # )
+
+  remit.organization = organization_field
+  remit.organizational_unit = organizational_unit_field
+  remit.save()
 
   # print(f"Updated remit {remit.id} with organization {organization_field}")

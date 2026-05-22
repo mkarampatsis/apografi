@@ -76,4 +76,4 @@ for remit in Remit.objects:   # <-- MongoEngine syntax
     set__organizational_unit=organizational_unit_field
   )
 
-  print(f"Updated remit {remit.id} with organization {organization_field}")
+  # print(f"Updated remit {remit.id} with organization {organization_field}")

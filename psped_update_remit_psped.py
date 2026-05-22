@@ -2,7 +2,7 @@ from mongoengine import connect
 from dotenv import load_dotenv
 
 from models.sdad.organizational_units import Organizational_Units
-from models.psped.remit import Remit
+from models.psped.remit import Remit, orgData
 
 import os
 
@@ -66,15 +66,15 @@ for remit in Remit.objects:   # <-- MongoEngine syntax
 
   # print(org_code_info.to_json())
   # print(org_code_info["code"], org_code_info["preferredLabel"])
-  organization_field = {
-    "code": org_code_info["code"],
-    "preferredLabel": org_code_info["preferredLabel"]
-  }
+  organization_field = orgData(
+    code=org_code_info["code"],
+    preferredLabel=org_code_info["preferredLabel"]
+  )
 
-  organizational_unit_field =  {
-    "code": org_unit["code"],
-    "preferredLabel": org_unit["preferredLabel"]
-  }
+  organizational_unit_field = orgData(
+    code=org_unit["code"],
+    preferredLabel=org_unit["preferredLabel"]
+  )
 
   # Update remit (MongoEngine way)
   # remit.update(

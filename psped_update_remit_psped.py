@@ -36,7 +36,7 @@ for remit in Remit.objects:   # <-- MongoEngine syntax
     # remit.update(
     #   set__status="ΟΡΦΑΝΗ"
     # )
-    remit.status = "ΟΡΦΑΝΗ"
+    remit.status = "ΜH ΑΝΑΤΕΘΕΙΜΕΝΗ"
     remit.save()
     continue
 
@@ -48,7 +48,7 @@ for remit in Remit.objects:   # <-- MongoEngine syntax
     # remit.update(
     #   set__status="ΟΡΦΑΝΗ"
     # )
-    remit.status = "ΟΡΦΑΝΗ"
+    remit.status = "ΜH ΑΝΑΤΕΘΕΙΜΕΝΗ"
     remit.save()
     continue
 
@@ -60,7 +60,7 @@ for remit in Remit.objects:   # <-- MongoEngine syntax
     # remit.update(
     #   set__status="ΟΡΦΑΝΗ"
     # )
-    remit.status = "ΟΡΦΑΝΗ"
+    remit.status = "ΜH ΑΝΑΤΕΘΕΙΜΕΝΗ"
     remit.save()
     continue
 

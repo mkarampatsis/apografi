@@ -45,7 +45,6 @@ for remit in Remit.objects:   # <-- MongoEngine syntax
 
   if not org_unit:
     print(f"No organizational-unit found for code {unit_code}")
-    print(type(remit.status), remit.status)
     # remit.update(
     #   set__status="ΟΡΦΑΝΗ"
     # )

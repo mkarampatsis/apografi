@@ -1,5 +1,12 @@
 import mongoengine as me
 
+from dotenv import load_dotenv
+
+import os
+load_dotenv()
+
+ATLAS_DB_PSPED = os.getenv('ATLAS_DB_PSPED')
+
 class orgData(me.EmbeddedDocument):
     code = me.StringField()
     preferredLabel = me.StringField()
@@ -10,7 +17,7 @@ class COFOG(me.EmbeddedDocument):
     cofog3 = me.StringField(required=True)
 
 class Remit(me.Document):
-    meta = {"collection": "remits", "db_alias": "psped", 'strict': False}
+    meta = {"collection": "remits", "db_alias": ATLAS_DB_PSPED, 'strict': False}
 
     organization = me.EmbeddedDocumentField(orgData)
     organizational_unit = me.EmbeddedDocumentField(orgData)

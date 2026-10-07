@@ -20,7 +20,7 @@ ATLAS_DB_PSPED = os.getenv("ATLAS_DB_PSPED")
 # ---------------------------------------------------------
 
 # True for testing and False for actual migration
-DRY_RUN = False
+DRY_RUN = True
 
 
 def migrate_changes():

@@ -19,7 +19,7 @@ ATLAS_DB_PSPED = os.getenv("ATLAS_DB_PSPED")
 # DRY_RUN = False
 # ---------------------------------------------------------
 
-DRY_RUN = False
+DRY_RUN = True
 
 
 def migrate_changes():
@@ -41,6 +41,7 @@ def migrate_changes():
     print("Loading monades...")
 
     monades_by_code = {}
+    foreas_by_code = {}
 
     cursor = monades_collection.find(
         {},
@@ -48,25 +49,28 @@ def migrate_changes():
             "_id": 0,
             "code": 1,
             "sdad.organization_preferredLabel": 1,
+            "sdad.organizational_unit_preferredLabel": 1,
         },
     )
 
     for monada in cursor:
         code = monada.get("code")
-
+  
         if not code:
             continue
 
         sdad = monada.get("sdad") or {}
 
         organization_name = sdad.get("organization_preferredLabel")
+        organizational_unit_name = sdad.get("organizational_unit_preferredLabel")
 
-        if not organization_name:
+        if not organizational_unit_name:
             continue
 
-        monades_by_code[str(code)] = organization_name
+        monades_by_code[str(code)] = organizational_unit_name
+        foreas_by_code[str(code)] = organization_name
 
-    print(f"Loaded {len(monades_by_code):,} monades")
+    print(f"Loaded {len(monades_by_code):,} monades and {len(foreas_by_code):,} foreas.")
 
     # =====================================================
     # 2. Find changes that still contain
@@ -111,9 +115,10 @@ def migrate_changes():
         # Find organization name in our Python dictionary
         # -------------------------------------------------
 
-        organization_name = monades_by_code.get(code)
-
-        if organization_name is None:
+        organization_name = foreas_by_code.get(code)
+        organizational_unit_name = monades_by_code.get(code)
+      
+        if organizational_unit_name is None:
             missing_monada += 1
 
             print(f"[SKIP] No monada found for code: {code}")
@@ -125,14 +130,15 @@ def migrate_changes():
         # -------------------------------------------------
 
         new_key = {
-            "organizationalUnit": organization_name,
+            "organization": organization_name,
+            "organizationalUnit": organizational_unit_name,
             "code": code,
         }
 
         print(
             f"[{'DRY RUN' if DRY_RUN else 'UPDATE'}] "
             f"{change_id} | "
-            f"{code} -> {organization_name}"
+            f"{code} -> {organizational_unit_name} -> {organization_name}"
         )
 
         # -------------------------------------------------

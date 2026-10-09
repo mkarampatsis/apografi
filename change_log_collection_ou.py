@@ -9,7 +9,7 @@ MONGO_URI = os.getenv("MONGO_URI")
 ATLAS_DB_PSPED = os.getenv("ATLAS_DB_PSPED")
 
 # True for testing and False for actual migration
-DRY_RUN = False
+DRY_RUN = True
 
 
 def migrate_changes():
@@ -60,7 +60,9 @@ def migrate_changes():
         monades_by_code[str(code)] = organizational_unit_name
         foreas_by_code[str(code)] = organization_name
 
-    print(f"Loaded {len(monades_by_code):,} monades and {len(foreas_by_code):,} foreas.")
+    print(
+        f"Loaded {len(monades_by_code):,} monades and {len(foreas_by_code):,} foreas."
+    )
 
     # =====================================================
     # 2. Find changes that still contain
@@ -70,7 +72,7 @@ def migrate_changes():
     print("Finding changes...")
 
     changes_cursor = changes_collection.find(
-        {"what.key.code": {"$exists": True}, "what.entity":"organizationalUnit"},
+        {"what.key.code": {"$exists": True}, "what.entity": "organizationalUnit"},
         {
             "_id": 1,
             "what": 1,

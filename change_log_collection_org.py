@@ -60,7 +60,9 @@ def migrate_changes():
         foreis_by_code[str(code)] = organization_name
         suborganizations_by_code[str(code)] = subOrganizationOf_name
 
-    print(f"Loaded {len(foreis_by_code):,} foreis and {len(suborganizations_by_code):,} suborganizations.")
+    print(
+        f"Loaded {len(foreis_by_code):,} foreis and {len(suborganizations_by_code):,} suborganizations."
+    )
 
     # =====================================================
     # 2. Find changes that still contain
@@ -70,7 +72,7 @@ def migrate_changes():
     print("Finding changes...")
 
     changes_cursor = changes_collection.find(
-        {"what.key.code": {"$exists": True}, "what.entity":"organization"},
+        {"what.key.code": {"$exists": True}, "what.entity": "organization"},
         {
             "_id": 1,
             "what": 1,

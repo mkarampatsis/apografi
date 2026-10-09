@@ -9,7 +9,7 @@ MONGO_URI = os.getenv("MONGO_URI")
 ATLAS_DB_PSPED = os.getenv("ATLAS_DB_PSPED")
 
 # True for testing and False for actual migration
-DRY_RUN = True
+DRY_RUN = False
 
 
 def migrate_changes():
@@ -31,7 +31,7 @@ def migrate_changes():
     print("Loading monades...")
 
     monades_by_code = {}
-    foreas_by_code = {}
+    foreis_by_code = {}
 
     cursor = monades_collection.find(
         {},
@@ -45,7 +45,7 @@ def migrate_changes():
 
     for monada in cursor:
         code = monada.get("code")
-  
+
         if not code:
             continue
 
@@ -58,9 +58,12 @@ def migrate_changes():
             continue
 
         monades_by_code[str(code)] = organizational_unit_name
-        foreas_by_code[str(code)] = organization_name
+        foreis_by_code[str(code)] = organization_name
 
-    print(f"Loaded {len(monades_by_code):,} monades and {len(foreas_by_code):,} foreas.")
+    print(monades_by_code.get("816251"), foreis_by_code.get("816251"))
+    print(
+        f"Loaded {len(monades_by_code):,} monades and {len(foreis_by_code):,} foreis."
+    )
 
     # =====================================================
     # 2. Find changes that still contain
@@ -70,7 +73,7 @@ def migrate_changes():
     print("Finding changes...")
 
     changes_cursor = changes_collection.find(
-        {"what.key.organizationalUnitCode": {"$exists": True}, "what.entity":"remit"},
+        {"what.key.organizationalUnitCode": {"$exists": True}, "what.entity": "remit"},
         {
             "_id": 1,
             "what": 1,
@@ -97,6 +100,9 @@ def migrate_changes():
         organizational_unit_code = key.get("organizationalUnitCode")
 
         if organizational_unit_code is None:
+            print(
+                f"[SKIP] No organizationalUnitCode found for change: {organizational_unit_code}"
+            )
             continue
 
         code = str(organizational_unit_code)
@@ -105,9 +111,14 @@ def migrate_changes():
         # Find organization name in our Python dictionary
         # -------------------------------------------------
 
-        organization_name = foreas_by_code.get(code)
+        print(f"Looking for code: {code}")
+        organization_name = foreis_by_code.get(code)
         organizational_unit_name = monades_by_code.get(code)
-      
+
+        print(
+            f"Found organization: {organization_name} | organizational unit: {organizational_unit_name}"
+        )
+
         if organizational_unit_name is None:
             missing_monada += 1
 

@@ -8,17 +8,6 @@ load_dotenv()
 MONGO_URI = os.getenv("MONGO_URI")
 ATLAS_DB_PSPED = os.getenv("ATLAS_DB_PSPED")
 
-# ---------------------------------------------------------
-# IMPORTANT
-# ---------------------------------------------------------
-# First run with True.
-# Nothing will be modified.
-#
-# After checking the output:
-#
-# DRY_RUN = False
-# ---------------------------------------------------------
-
 # True for testing and False for actual migration
 DRY_RUN = True
 

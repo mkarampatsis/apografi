@@ -8,18 +8,8 @@ load_dotenv()
 MONGO_URI = os.getenv("MONGO_URI")
 ATLAS_DB_PSPED = os.getenv("ATLAS_DB_PSPED")
 
-# ---------------------------------------------------------
-# IMPORTANT
-# ---------------------------------------------------------
-# First run with True.
-# Nothing will be modified.
-#
-# After checking the output:
-#
-# DRY_RUN = False
-# ---------------------------------------------------------
-
-DRY_RUN = False
+# True for testing and False for actual migration
+DRY_RUN = True
 
 
 def migrate_changes():
@@ -32,41 +22,45 @@ def migrate_changes():
     db = get_connection(ATLAS_DB_PSPED).get_database(ATLAS_DB_PSPED)
 
     changes_collection = db["changes"]
-    monades_collection = db["monades"]
+    foreis_collection = db["foreis"]
 
     # =====================================================
-    # 1. Load monades
+    # 1. Load foreis
     # =====================================================
 
-    print("Loading monades...")
+    print("Loading foreis...")
 
-    monades_by_code = {}
+    foreis_by_code = {}
+    suborganizations_by_code = {}
 
-    cursor = monades_collection.find(
+    cursor = foreis_collection.find(
         {},
         {
             "_id": 0,
             "code": 1,
             "sdad.organization_preferredLabel": 1,
+            "sdad.subOrganizationOf_preferredLabel": 1,
         },
     )
 
-    for monada in cursor:
-        code = monada.get("code")
+    for forea in cursor:
+        code = forea.get("code")
 
         if not code:
             continue
 
-        sdad = monada.get("sdad") or {}
+        sdad = forea.get("sdad") or {}
 
         organization_name = sdad.get("organization_preferredLabel")
+        subOrganizationOf_name = sdad.get("subOrganizationOf_preferredLabel")
 
         if not organization_name:
             continue
 
-        monades_by_code[str(code)] = organization_name
+        foreis_by_code[str(code)] = organization_name
+        suborganizations_by_code[str(code)] = subOrganizationOf_name
 
-    print(f"Loaded {len(monades_by_code):,} monades")
+    print(f"Loaded {len(foreis_by_code):,} foreis and {len(suborganizations_by_code):,} suborganizations.")
 
     # =====================================================
     # 2. Find changes that still contain
@@ -76,7 +70,7 @@ def migrate_changes():
     print("Finding changes...")
 
     changes_cursor = changes_collection.find(
-        {"what.key.organizationalUnitCode": {"$exists": True}, "what.entity":"remit"},
+        {"what.key.code": {"$exists": True}, "what.entity":"organization"},
         {
             "_id": 1,
             "what": 1,
@@ -89,7 +83,7 @@ def migrate_changes():
 
     total = 0
     updated = 0
-    missing_monada = 0
+    missing_foreis = 0
 
     for change in changes_cursor:
         total += 1
@@ -100,23 +94,23 @@ def migrate_changes():
 
         key = what.get("key") or {}
 
-        organizational_unit_code = key.get("organizationalUnitCode")
+        organization_code = key.get("code")
 
-        if organizational_unit_code is None:
+        if organization_code is None:
             continue
 
-        code = str(organizational_unit_code)
+        code = str(organization_code)
 
         # -------------------------------------------------
         # Find organization name in our Python dictionary
         # -------------------------------------------------
 
-        organization_name = monades_by_code.get(code)
+        organization_name = foreis_by_code.get(code)
 
         if organization_name is None:
-            missing_monada += 1
+            missing_foreis += 1
 
-            print(f"[SKIP] No monada found for code: {code}")
+            print(f"[SKIP] No foreis found for code: {code}")
 
             continue
 
@@ -125,14 +119,15 @@ def migrate_changes():
         # -------------------------------------------------
 
         new_key = {
-            "organizationalUnit": organization_name,
+            "organization": organization_name,
             "code": code,
+            "subOrganizationOf": suborganizations_by_code.get(code) or "",
         }
 
         print(
             f"[{'DRY RUN' if DRY_RUN else 'UPDATE'}] "
             f"{change_id} | "
-            f"{code} -> {organization_name}"
+            f"{code} -> {organization_name} -> {new_key.get('subOrganizationOf', '')}"
         )
 
         # -------------------------------------------------
@@ -159,7 +154,7 @@ def migrate_changes():
 
     print(f"Changes found:     {total:,}")
     print(f"Changes updated:   {updated:,}")
-    print(f"Missing monades:   {missing_monada:,}")
+    print(f"Missing foreis:    {missing_foreis:,}")
     print(f"Dry run:           {DRY_RUN}")
 
     print("=" * 60)
